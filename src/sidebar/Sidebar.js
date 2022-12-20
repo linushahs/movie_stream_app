@@ -5,10 +5,11 @@ import Movie from "./Movie";
 function Sidebar({ changeSearchState, searchString }) {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);
+  const API_KEY = "e9c1419451fdcd93d09f5ee89353e0ba";
 
   const getMovies = async () => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}`
+      `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`
     );
 
     const movies = await response.json();
