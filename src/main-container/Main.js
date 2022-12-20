@@ -12,7 +12,6 @@ function Main() {
     );
 
     const movies = await response.json();
-    console.log(movies);
     setTrendingMovies(movies.results);
   };
 
