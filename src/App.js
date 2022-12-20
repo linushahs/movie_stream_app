@@ -1,23 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import Navbar from "./navbar/Navbar";
+import Main from "./main-container/Main";
+import Sidebar from "./sidebar/Sidebar";
+import SearchedMovies from "./main-container/SearchedMovies";
 
 function App() {
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchString, setSearchString] = useState("");
+
+  const changeSearchState = (str) => {
+    setIsSearching(str === "" ? false : true);
+    setSearchString(str);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App flex">
+      <Navbar />
+      {isSearching ? <SearchedMovies searchString={searchString} /> : <Main />}
+
+      <Sidebar
+        changeSearchState={changeSearchState}
+        searchString={searchString}
+      />
     </div>
   );
 }
