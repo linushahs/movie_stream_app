@@ -3,11 +3,10 @@ import Movie from "./Movie";
 
 function SearchedMovies({ searchString }) {
   const [movies, setMovies] = useState([]);
-  const API_KEY = "e9c1419451fdcd93d09f5ee89353e0ba";
 
   const getMovies = async () => {
     const res = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchString}`
+      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&query=${searchString}`
     );
 
     const data = await res.json();

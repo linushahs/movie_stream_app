@@ -4,11 +4,10 @@ import Movie from "./Movie";
 
 function Main() {
   const [trendingMovies, setTrendingMovies] = useState([]);
-  const API_KEY = "e9c1419451fdcd93d09f5ee89353e0ba";
 
   const getMovies = async () => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/trending/all/week?api_key=${API_KEY}&language=en-US`
+      `https://api.themoviedb.org/3/trending/all/week?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
     );
 
     const movies = await response.json();
