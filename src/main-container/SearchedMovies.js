@@ -12,13 +12,11 @@ function SearchedMovies({ searchString }) {
     );
 
     const data = await res.json();
-    console.log(data);
     setMovies(data.results);
   };
 
-  useEffect(() => {
-    getMovies();
-  }, [searchString]);
+  // eslint-disable-next-line
+  useEffect(() => getMovies, [searchString]);
 
   return (
     <div className="w-full bg-black py-8 pr-4 xl:pr-16 pl-[98px] lg:pl-[270px]  xl:pl-[340px] border-r-[0.5px] border-r-gray-dark/50 ">
