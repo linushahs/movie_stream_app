@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Movie from "./Movie";
+import axios from "axios";
+
+const options = {
+  url: "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc",
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOWMxNDE5NDUxZmRjZDkzZDA5ZjVlZTg5MzUzZTBiYSIsInN1YiI6IjVmODA2MDE2YzgxMTNkMDAzOGFlNTNmYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nQRs-HcDu6UkTY631fHnxO4ylkoeFH0P48MSEPj1h0k",
+  },
+};
 
 function Main() {
   const [trendingMovies, setTrendingMovies] = useState([]);
-  const API_KEY = "e9c1419451fdcd93d09f5ee89353e0ba";
 
   const getMovies = async () => {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/trending/all/week?api_key=${API_KEY}&language=en-US`
-    );
-
-    const movies = await response.json();
-    setTrendingMovies(movies.results);
+    const movies = await axios.request(options);
+    setTrendingMovies(movies.data.results);
   };
 
   useEffect(() => getMovies, []);
 
   return (
-    <div className="w-full bg-black py-8 pr-4 xl:pr-16 pl-[98px] lg:pl-[270px]  xl:pl-[340px] border-r-[0.5px] border-r-gray-dark/50 ">
+    <div className="w-full bg-black py-8 pr-4 xl:pr-16 pl-[98px] lg:pl-[270px]  xl:pl-[320px] border-r-[0.5px] border-r-gray-dark/50 ">
       <header className="">
         <ul className="flex gap-4">
           <li className="text-gray-light hover:text-white cursor-pointer">

@@ -5,8 +5,12 @@ function Movie({ title, poster, rating, releaseDate }) {
 
   return (
     <div className="w-full flex gap-3 mb-4">
-      <div className="left w-[60px]">
-        <img src={img_path} alt="" className="w-full h-[80px] rounded-lg" />
+      <div className="left w-[70px]">
+        <img
+          src={img_path}
+          alt=""
+          className="h-[80px] w-full rounded-lg object-cover"
+        />
       </div>
       <div className="right h-[79px] flex flex-col justify-between">
         <div>

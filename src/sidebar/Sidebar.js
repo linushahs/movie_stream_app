@@ -1,26 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import Movie from "./Movie";
+import axios from "axios";
+
+const options = {
+  url: "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1",
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOWMxNDE5NDUxZmRjZDkzZDA5ZjVlZTg5MzUzZTBiYSIsInN1YiI6IjVmODA2MDE2YzgxMTNkMDAzOGFlNTNmYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nQRs-HcDu6UkTY631fHnxO4ylkoeFH0P48MSEPj1h0k",
+  },
+};
 
 function Sidebar({ changeSearchState, searchString }) {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);
-  const API_KEY = "e9c1419451fdcd93d09f5ee89353e0ba";
 
-  const getMovies = async () => {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`
-    );
-
-    const movies = await response.json();
+  const getTopRatedMovies = async () => {
+    const movies = await axios.request(options);
     const threeMovies = [];
     for (let i = 0; i < 3; i++) {
-      threeMovies.push(movies.results[i]);
+      threeMovies.push(movies.data.results[i]);
     }
     setTopRatedMovies(threeMovies);
   };
 
-  useEffect(() => getMovies, []);
+  useEffect(() => getTopRatedMovies, []);
 
   const handleSearchState = (e) => {
     changeSearchState(e.target.value);

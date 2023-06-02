@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from "react";
 import Movie from "./Movie";
+import axios from "axios";
 
 function SearchedMovies({ searchString }) {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const API_KEY = "e9c1419451fdcd93d09f5ee89353e0ba";
+  const options = {
+    url: `https://api.themoviedb.org/3/search/movie?query=${searchString}&include_adult=false&language=en-US&page=1`,
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOWMxNDE5NDUxZmRjZDkzZDA5ZjVlZTg5MzUzZTBiYSIsInN1YiI6IjVmODA2MDE2YzgxMTNkMDAzOGFlNTNmYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nQRs-HcDu6UkTY631fHnxO4ylkoeFH0P48MSEPj1h0k",
+    },
+  };
 
   const getMovies = async () => {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchString}`
-    );
-
-    const data = await res.json();
-    setMovies(data.results);
+    setLoading(true);
+    await axios.request(options).then((response) => {
+      setLoading(false);
+      setMovies(response.data.results);
+    });
   };
 
   // eslint-disable-next-line
@@ -29,7 +38,9 @@ function SearchedMovies({ searchString }) {
         </ul>
       </header>
       <main className="flex flex-wrap gap-4 mt-4">
-        {movies[0] ? (
+        {loading ? (
+          <h1 className="text-white text-xl ">Loading</h1>
+        ) : movies[0] ? (
           movies.map((movie, id) => (
             <Movie
               key={id}

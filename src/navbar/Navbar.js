@@ -43,7 +43,7 @@ function Navbar() {
   };
 
   return (
-    <div className="p-2 pt-8 lg:p-8 fixed border-r-[0.5px] border-r-gray-dark/50 transition-all bg-black h-screen w-[80px] lg:w-[250px] xl:w-[280px]">
+    <div className="p-2 pt-8 lg:p-8 fixed border-r-[0.5px] border-r-gray-dark/50 transition-all bg-black h-screen w-[80px] lg:w-[250px] xl:w-[260px]">
       <header>
         <div className="flex gap-2 justify-center lg:justify-start items-center">
           <FaVideo className="text-red text-2xl" />
