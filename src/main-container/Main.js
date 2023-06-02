@@ -21,7 +21,7 @@ function Main() {
     setTrendingMovies(movies.data.results);
   };
 
-  useEffect(() => getMovies, []);
+  getMovies();
 
   return (
     <div className="w-full bg-black py-8 pr-4 xl:pr-16 pl-[98px] lg:pl-[270px]  xl:pl-[320px] border-r-[0.5px] border-r-gray-dark/50 ">

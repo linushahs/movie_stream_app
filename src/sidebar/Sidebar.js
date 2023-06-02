@@ -26,7 +26,7 @@ function Sidebar({ changeSearchState, searchString }) {
     setTopRatedMovies(threeMovies);
   };
 
-  useEffect(() => getTopRatedMovies, []);
+  getTopRatedMovies();
 
   const handleSearchState = (e) => {
     changeSearchState(e.target.value);
