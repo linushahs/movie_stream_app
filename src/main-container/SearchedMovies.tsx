@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Movie from "./Movie";
+import Movie from "./components/Movie";
+import SearchedMoviesLoading from "./loading/SearchedMoviesLoading";
 
 function SearchedMovies({ searchString }: { searchString: string }) {
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const options = {
     url: `https://api.themoviedb.org/3/search/movie?query=${searchString}&include_adult=false&language=en-US&page=1`,
@@ -17,9 +18,9 @@ function SearchedMovies({ searchString }: { searchString: string }) {
   };
 
   const getMovies = async () => {
-    setLoading(true);
+    setIsLoading(true);
     await axios.request(options).then((response) => {
-      setLoading(false);
+      setIsLoading(false);
       setMovies(response.data.results);
     });
   };
@@ -29,7 +30,7 @@ function SearchedMovies({ searchString }: { searchString: string }) {
   }, [searchString]);
 
   return (
-    <div className="w-full bg-black py-8 pr-4 xl:pr-16 pl-[98px] lg:pl-[270px]  xl:pl-[340px] border-r-[0.5px] border-r-gray-dark/50 ">
+    <div className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
       <header className="">
         <ul className="flex gap-4">
           <li className="text-gray-light hover:text-white cursor-pointer">
@@ -39,8 +40,8 @@ function SearchedMovies({ searchString }: { searchString: string }) {
         </ul>
       </header>
       <main className="flex flex-wrap gap-4 mt-4">
-        {loading ? (
-          <h1 className="text-white text-xl ">Loading</h1>
+        {isLoading ? (
+          <SearchedMoviesLoading />
         ) : movies[0] ? (
           movies.map((movie: any, id) => (
             <Movie
