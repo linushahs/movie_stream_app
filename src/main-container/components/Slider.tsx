@@ -8,6 +8,7 @@ export default function Slider({ movie }: SliderProps) {
       <img
         src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
         alt=""
+        loading="lazy"
         className="w-full h-[500px] rounded-3xl opacity-70 object-cover"
       />
       <div className="details text-white absolute bottom-0 p-8 flex flex-col justify-end h-full">

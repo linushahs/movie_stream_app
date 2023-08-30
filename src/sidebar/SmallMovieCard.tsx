@@ -1,4 +1,4 @@
-import { MovieProps } from "../main-container/Movie";
+import { MovieProps } from "../main-container/components/Movie";
 
 function SmallMovieCard({ title, poster, rating, releaseDate }: MovieProps) {
   const img_path = `https://image.tmdb.org/t/p/original/${poster}`;
@@ -9,6 +9,7 @@ function SmallMovieCard({ title, poster, rating, releaseDate }: MovieProps) {
         <img
           src={img_path}
           alt=""
+          loading="lazy"
           className="h-[85px] w-full rounded-lg object-cover"
         />
       </div>

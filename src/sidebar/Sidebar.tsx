@@ -1,35 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { FiSearch } from "react-icons/fi";
-import Movie from "./SmallMovieCard";
+import { topRatedOptions } from "@/api/api";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FiSearch } from "react-icons/fi";
+import SidebarLoading from "./SidebarLoading";
 import SmallMovieCard from "./SmallMovieCard";
 
-const options = {
-  url: "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1",
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOWMxNDE5NDUxZmRjZDkzZDA5ZjVlZTg5MzUzZTBiYSIsInN1YiI6IjVmODA2MDE2YzgxMTNkMDAzOGFlNTNmYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nQRs-HcDu6UkTY631fHnxO4ylkoeFH0P48MSEPj1h0k",
-  },
-};
+interface SidebarProps {
+  changeSearchState: (value: string) => void;
+  searchString: string;
+}
 
-function Sidebar({ changeSearchState, searchString }) {
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
+function Sidebar({ changeSearchState, searchString }: SidebarProps) {
+  const [topRatedMovies, setTopRatedMovies] = useState<any>([]);
   const [favorites, setFavorites] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getTopRatedMovies = async () => {
-    const movies = await axios.request(options);
-    const threeMovies = [];
-    for (let i = 0; i < 3; i++) {
-      threeMovies.push(movies.data.results[i]);
-    }
-    setTopRatedMovies(threeMovies);
+    setIsLoading(true);
+    await axios.request(topRatedOptions).then((response) => {
+      const threeMovies: any = [];
+      for (let i = 0; i < 3; i++) {
+        threeMovies.push(response.data.results[i]);
+      }
+      setTopRatedMovies([...threeMovies]);
+      setIsLoading(false);
+    });
   };
 
-  getTopRatedMovies();
+  useEffect(() => {
+    getTopRatedMovies();
+  }, []);
 
-  const handleSearchState = (e) => {
+  const handleSearchState = (e: React.ChangeEvent<HTMLInputElement>) => {
     changeSearchState(e.target.value);
   };
   return (
@@ -51,15 +53,19 @@ function Sidebar({ changeSearchState, searchString }) {
       <main className="mt-8">
         <h2 className=" text-white">Most Rated Movies</h2>
         <div className="flex flex-col gap-y-2 mt-4">
-          {topRatedMovies.map((movie: any, id) => (
-            <SmallMovieCard
-              key={id}
-              title={movie.title}
-              poster={movie.poster_path}
-              rating={movie.vote_average}
-              releaseDate={movie.release_date}
-            />
-          ))}
+          {isLoading ? (
+            <SidebarLoading />
+          ) : (
+            topRatedMovies.map((movie: any) => (
+              <SmallMovieCard
+                key={movie.id}
+                title={movie.title}
+                poster={movie.poster_path}
+                rating={movie.vote_average}
+                releaseDate={movie.release_date}
+              />
+            ))
+          )}
         </div>
         <button className="px-4 py-2 bg-red rounded-lg w-full text-white">
           See more
@@ -72,9 +78,9 @@ function Sidebar({ changeSearchState, searchString }) {
         <h2 className=" text-white">Favorites</h2>
         <div className="movies-list mt-4">
           {favorites[0] ? (
-            topRatedMovies.map((movie: any, id) => (
+            topRatedMovies.map((movie: any) => (
               <SmallMovieCard
-                key={id}
+                key={movie.id}
                 title={movie.title}
                 poster={movie.poster_path}
                 rating={movie.vote_average}

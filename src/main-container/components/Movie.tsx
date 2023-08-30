@@ -13,6 +13,7 @@ function Movie({ poster, title, rating, releaseDate }: MovieProps) {
       <img
         src={img_path}
         alt=""
+        loading="lazy"
         className="w-full h-full rounded-2xl opacity-50 hover:scale-125 hover:rounded-2xl transition-all"
       />
       <button className="absolute top-4 right-4 py-0.5 px-2.5 text-xl text-white bg-gray-light/70 rounded-lg">
