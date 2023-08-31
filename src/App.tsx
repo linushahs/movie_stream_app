@@ -1,21 +1,32 @@
-import { useState } from "react";
-import Navbar from "./navbar/Navbar";
-import SearchedMovies from "./main-container/SearchedMovies";
-import Sidebar from "./sidebar/Sidebar";
+import { Suspense, lazy, useState } from "react";
 import Main from "./main-container/Main";
+import SearchedMoviesLoading from "./main-container/loading/SearchedMoviesLoading";
+import Navbar from "./navbar/Navbar";
+import Sidebar from "./sidebar/Sidebar";
+
+const LazySearchedMovies = lazy(
+  () => import("./main-container/SearchedMovies")
+);
 
 function App() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchString, setSearchString] = useState("");
 
   const changeSearchState = (str: string) => {
-    setIsSearching(str === "" ? false : true);
     setSearchString(str);
+    setIsSearching(str === "" ? false : true);
   };
+
   return (
     <div className="App flex">
       <Navbar />
-      {isSearching ? <SearchedMovies searchString={searchString} /> : <Main />}
+      {isSearching ? (
+        <Suspense fallback={<SearchedMoviesLoading />}>
+          <LazySearchedMovies searchString={searchString} />
+        </Suspense>
+      ) : (
+        <Main />
+      )}
 
       <Sidebar
         changeSearchState={changeSearchState}

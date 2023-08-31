@@ -1,3 +1,4 @@
+import { searchOptions } from "@/api/api";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Movie from "./components/Movie";
@@ -7,18 +8,9 @@ function SearchedMovies({ searchString }: { searchString: string }) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const options = {
-    url: `https://api.themoviedb.org/3/search/movie?query=${searchString}&include_adult=false&language=en-US&page=1`,
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOWMxNDE5NDUxZmRjZDkzZDA5ZjVlZTg5MzUzZTBiYSIsInN1YiI6IjVmODA2MDE2YzgxMTNkMDAzOGFlNTNmYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nQRs-HcDu6UkTY631fHnxO4ylkoeFH0P48MSEPj1h0k",
-    },
-  };
-
   const getMovies = async () => {
     setIsLoading(true);
+    const options = searchOptions(searchString);
     await axios.request(options).then((response) => {
       setIsLoading(false);
       setMovies(response.data.results);
@@ -26,7 +18,13 @@ function SearchedMovies({ searchString }: { searchString: string }) {
   };
 
   useEffect(() => {
-    getMovies();
+    const timer = setTimeout(() => {
+      getMovies();
+    }, 800);
+
+    return () => {
+      clearTimeout(timer); // Clear the timer if the component unmounts or searchString changes before 2 seconds
+    };
   }, [searchString]);
 
   return (
@@ -53,7 +51,9 @@ function SearchedMovies({ searchString }: { searchString: string }) {
             />
           ))
         ) : (
-          <div>No movies</div>
+          <div className="h-20 w-full flex justify-center items-center text-gray-light">
+            No movies found
+          </div>
         )}
       </main>
     </div>

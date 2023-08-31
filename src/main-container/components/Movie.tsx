@@ -1,3 +1,5 @@
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
 export interface MovieProps {
   poster: string;
   title: string;
@@ -10,9 +12,9 @@ function Movie({ poster, title, rating, releaseDate }: MovieProps) {
 
   return (
     <div className="min-w-[120px] lg:min-w-[180px] flex-1 h-[280px] rounded-2xl relative overflow-hidden">
-      <img
+      <LazyLoadImage
         src={img_path}
-        alt=""
+        alt="image"
         loading="lazy"
         className="w-full h-full rounded-2xl opacity-50 hover:scale-125 hover:rounded-2xl transition-all"
       />

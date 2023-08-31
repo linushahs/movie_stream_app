@@ -7,9 +7,9 @@ export default function Slider({ movie }: SliderProps) {
     <div className="latest relative w-full h-auto bg-cover rounded-xl">
       <img
         src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-        alt=""
+        alt="slider_img"
+        className="min-w-full h-[500px] rounded-3xl opacity-70 object-cover"
         loading="lazy"
-        className="w-full h-[500px] rounded-3xl opacity-70 object-cover"
       />
       <div className="details text-white absolute bottom-0 p-8 flex flex-col justify-end h-full">
         <h1 className="uppercase text-xl">{movie.name || movie.title}</h1>
