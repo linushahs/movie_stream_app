@@ -1,10 +1,10 @@
 import { searchOptions } from "@/api/api";
+import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Movie from "./components/Movie";
-import SearchedMoviesLoading from "./loading/SearchedMoviesLoading";
+import Movie from "./Movie";
 
-function SearchedMovies({ searchString }: { searchString: string }) {
+function SearchedMoviesContainer({ searchString }: { searchString: string }) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -60,4 +60,4 @@ function SearchedMovies({ searchString }: { searchString: string }) {
   );
 }
 
-export default SearchedMovies;
+export default SearchedMoviesContainer;

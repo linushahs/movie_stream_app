@@ -2,7 +2,7 @@ import { topRatedOptions } from "@/api/api";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import SidebarLoading from "./SidebarLoading";
+import SidebarLoading from "@/loading/SidebarLoading";
 import SmallMovieCard from "./SmallMovieCard";
 
 interface SidebarProps {
@@ -44,7 +44,7 @@ function Sidebar({ changeSearchState, searchString }: SidebarProps) {
           placeholder="Search"
           value={searchString}
           onChange={(e) => handleSearchState(e)}
-          className="border-none outline-none text-white bg-black w-full rounded-xl"
+          className="border-none outline-none text-white bg-black w-full rounded-xl placeholder:text-gray-light"
         />
       </header>
 

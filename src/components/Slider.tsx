@@ -3,10 +3,12 @@ interface SliderProps {
 }
 
 export default function Slider({ movie }: SliderProps) {
+  const img_path = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
+
   return (
     <div className="latest relative w-full h-auto bg-cover rounded-xl">
       <img
-        src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+        src={img_path}
         alt="slider_img"
         className="min-w-full h-[500px] rounded-3xl opacity-70 object-cover"
         loading="lazy"

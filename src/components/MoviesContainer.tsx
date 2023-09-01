@@ -1,19 +1,19 @@
+import Header from "@/layout/Header";
+import MoviesLoading from "@/loading/MoviesLoading";
+import SliderLoading from "@/loading/SliderLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { useRecoilState } from "recoil";
-import { twMerge } from "tailwind-merge";
+import { useRecoilValue } from "recoil";
 import { movieOptions, tvOptions } from "../api/api";
 import { categoryState } from "../stores/store";
-import Movie from "./components/Movie";
-import Slider from "./components/Slider";
-import MoviesLoading from "./loading/MoviesLoading";
-import SliderLoading from "./loading/SliderLoading";
+import Movie from "./Movie";
+import Slider from "./Slider";
 
-function Main() {
+function MoviesContainer() {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trendingTvShows, setTrendingTvShows] = useState([]);
-  const [category, setCategory] = useRecoilState(categoryState);
+  const category = useRecoilValue(categoryState);
   const [isLoading, setIsLoading] = useState(true);
 
   const getMovies = async () => {
@@ -33,58 +33,30 @@ function Main() {
   };
 
   useEffect(() => {
-    if (category === "movie") {
+    setIsLoading(true);
+    if (category !== "movie") {
       console.log("Fetching movies...");
       getMovies();
     } else {
       console.log("Fetching tv shows...");
       getTvShows();
     }
-  }, []);
+  }, [category]);
 
-  const handleTvShowsClick = () => {
-    setCategory("tv");
-    getTvShows();
-  };
-
-  const handleMoviesClick = () => {
-    setCategory("movie");
-    getMovies();
-  };
+  console.log(trendingTvShows);
 
   return (
     <div className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
-      <header className="">
-        <ul className="flex gap-4 text-gray-light">
-          <li
-            onClick={handleTvShowsClick}
-            className={twMerge(
-              "text-gray-light hover:text-white cursor-pointer",
-              category === "tv" && "text-white"
-            )}
-          >
-            TV Series
-          </li>
-          <li
-            onClick={handleMoviesClick}
-            className={twMerge(
-              "text-gray-light hover:text-white cursor-pointer",
-              category === "movie" && "text-white"
-            )}
-          >
-            Movies
-          </li>
-        </ul>
-      </header>
+      <Header />
       <main className="mt-4">
         {/* ----------------------------------> */}
         {/* //Latest section of movies slider goes here */}
         {isLoading ? (
           <SliderLoading />
         ) : category === "movie" ? (
-          <Slider movie={trendingMovies?.[0]} />
+          trendingMovies.length && <Slider movie={trendingMovies?.[0]} />
         ) : (
-          <Slider movie={trendingTvShows?.[1]} />
+          trendingTvShows.length && <Slider movie={trendingTvShows?.[1]} />
         )}
 
         {/* Latest section of movies ends here -------------->  */}
@@ -130,4 +102,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default MoviesContainer;

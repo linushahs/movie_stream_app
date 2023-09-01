@@ -1,11 +1,11 @@
 import { Suspense, lazy, useState } from "react";
-import Main from "./main-container/Main";
-import SearchedMoviesLoading from "./main-container/loading/SearchedMoviesLoading";
-import Navbar from "./navbar/Navbar";
-import Sidebar from "./sidebar/Sidebar";
+import SearchedMoviesLoading from "./loading/SearchedMoviesLoading";
+import Navbar from "./layout/navbar/Navbar";
+import Sidebar from "./layout/sidebar/Sidebar";
+import MoviesContainer from "./components/MoviesContainer";
 
 const LazySearchedMovies = lazy(
-  () => import("./main-container/SearchedMovies")
+  () => import("@/components/SearchedMoviesContainer")
 );
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
           <LazySearchedMovies searchString={searchString} />
         </Suspense>
       ) : (
-        <Main />
+        <MoviesContainer />
       )}
 
       <Sidebar

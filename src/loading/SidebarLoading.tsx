@@ -3,8 +3,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function SidebarLoading() {
   return (
     <main className="flex flex-col">
-      {new Array(3).fill(0).map((_) => (
-        <div className="w-full flex gap-3 mb-4">
+      {new Array(3).fill(0).map((_, id) => (
+        <div key={id} className="w-full flex gap-3 mb-4">
           <div className="left min-w-[70px]">
             <Skeleton className="h-[85px] w-full rounded-lg" />
           </div>
