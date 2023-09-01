@@ -11,10 +11,10 @@ function SearchedMoviesContainer({ searchString }: { searchString: string }) {
   const getMovies = async () => {
     setIsLoading(true);
     const options = searchOptions(searchString);
-    await axios.request(options).then((response) => {
-      setIsLoading(false);
-      setMovies(response.data.results);
-    });
+    // await axios.request(options).then((response) => {
+    //   setIsLoading(false);
+    //   setMovies(response.data.results);
+    // });
   };
 
   useEffect(() => {

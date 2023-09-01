@@ -3,6 +3,7 @@ import SearchedMoviesLoading from "./loading/SearchedMoviesLoading";
 import Navbar from "./layout/navbar/Navbar";
 import Sidebar from "./layout/sidebar/Sidebar";
 import MoviesContainer from "./components/MoviesContainer";
+import MovieDetails from "./components/MovieDetails";
 
 const LazySearchedMovies = lazy(
   () => import("@/components/SearchedMoviesContainer")
@@ -25,7 +26,7 @@ function App() {
           <LazySearchedMovies searchString={searchString} />
         </Suspense>
       ) : (
-        <MoviesContainer />
+        <MovieDetails />
       )}
 
       <Sidebar
