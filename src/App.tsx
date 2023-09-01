@@ -4,6 +4,7 @@ import Navbar from "./layout/navbar/Navbar";
 import Sidebar from "./layout/sidebar/Sidebar";
 import MoviesContainer from "./components/MoviesContainer";
 import MovieDetails from "./components/MovieDetails";
+import { Outlet, useMatches } from "react-router-dom";
 
 const LazySearchedMovies = lazy(
   () => import("@/components/SearchedMoviesContainer")
@@ -21,13 +22,14 @@ function App() {
   return (
     <div className="App flex">
       <Navbar />
-      {isSearching ? (
+
+      {/* {isSearching ? (
         <Suspense fallback={<SearchedMoviesLoading />}>
           <LazySearchedMovies searchString={searchString} />
         </Suspense>
       ) : (
         <MovieDetails />
-      )}
+      )} */}
 
       <Sidebar
         changeSearchState={changeSearchState}

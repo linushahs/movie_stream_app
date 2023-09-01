@@ -9,8 +9,10 @@ import { movieOptions, tvOptions } from "../api/api";
 import { categoryState } from "../stores/store";
 import Movie from "./Movie";
 import Slider from "./Slider";
+import { useParams, useMatch, useMatches } from "react-router-dom";
 
 function MoviesContainer() {
+  const [, { pathname }] = useMatches();
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trendingTvShows, setTrendingTvShows] = useState([]);
   const category = useRecoilValue(categoryState);
@@ -32,16 +34,16 @@ function MoviesContainer() {
     });
   };
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   if (category !== "movie") {
-  //     console.log("Fetching movies...");
-  //     getMovies();
-  //   } else {
-  //     console.log("Fetching tv shows...");
-  //     getTvShows();
-  //   }
-  // }, [category]);
+  useEffect(() => {
+    setIsLoading(true);
+    if (pathname === "/movies") {
+      console.log("Fetching movies...");
+      getMovies();
+    } else if (pathname === "/tv-series") {
+      console.log("Fetching tv shows...");
+      getTvShows();
+    }
+  }, [pathname]);
 
   return (
     <div className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
