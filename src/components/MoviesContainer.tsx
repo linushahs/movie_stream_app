@@ -32,18 +32,16 @@ function MoviesContainer() {
     });
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-    if (category !== "movie") {
-      console.log("Fetching movies...");
-      getMovies();
-    } else {
-      console.log("Fetching tv shows...");
-      getTvShows();
-    }
-  }, [category]);
-
-  console.log(trendingTvShows);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   if (category !== "movie") {
+  //     console.log("Fetching movies...");
+  //     getMovies();
+  //   } else {
+  //     console.log("Fetching tv shows...");
+  //     getTvShows();
+  //   }
+  // }, [category]);
 
   return (
     <div className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
