@@ -4,18 +4,18 @@ import SliderLoading from "@/loading/SliderLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { useRecoilValue } from "recoil";
+import { useMatches } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import { movieOptions, tvOptions } from "../api/api";
 import { categoryState } from "../stores/store";
 import Movie from "./Movie";
 import Slider from "./Slider";
-import { useParams, useMatch, useMatches } from "react-router-dom";
 
 function MoviesContainer() {
   const [, { pathname }] = useMatches();
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trendingTvShows, setTrendingTvShows] = useState([]);
-  const category = useRecoilValue(categoryState);
+  const [category, setCategory] = useRecoilState(categoryState);
   const [isLoading, setIsLoading] = useState(true);
 
   const getMovies = async () => {
@@ -36,11 +36,13 @@ function MoviesContainer() {
 
   useEffect(() => {
     setIsLoading(true);
-    if (pathname === "/movies") {
+    if (pathname === "/movies" || pathname === "/") {
       console.log("Fetching movies...");
+      setCategory("movie");
       getMovies();
     } else if (pathname === "/tv-series") {
       console.log("Fetching tv shows...");
+      setCategory("tv");
       getTvShows();
     }
   }, [pathname]);
@@ -56,7 +58,7 @@ function MoviesContainer() {
         ) : category === "movie" ? (
           trendingMovies.length && <Slider movie={trendingMovies?.[0]} />
         ) : (
-          trendingTvShows.length && <Slider movie={trendingTvShows?.[1]} />
+          trendingTvShows.length && <Slider movie={trendingTvShows?.[0]} />
         )}
 
         {/* Latest section of movies ends here -------------->  */}
@@ -76,6 +78,7 @@ function MoviesContainer() {
               trendingMovies?.map((movie: any) => (
                 <Movie
                   key={movie.id}
+                  id={movie.id}
                   poster={movie.poster_path}
                   title={movie.title || movie.name}
                   rating={movie.vote_average.toFixed(1)}
@@ -87,6 +90,7 @@ function MoviesContainer() {
                 return (
                   <Movie
                     key={tvShow.id}
+                    id={tvShow.id}
                     poster={tvShow.poster_path}
                     title={tvShow.name}
                     rating={tvShow.vote_average.toFixed(1)}

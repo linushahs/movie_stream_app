@@ -15,7 +15,7 @@ function Header() {
 
   const handleMoviesClick = () => {
     setCategory("movie");
-    navigate("/movies");
+    navigate("/");
   };
   return (
     <header className="">
@@ -33,7 +33,7 @@ function Header() {
           onClick={handleMoviesClick}
           className={twMerge(
             "text-gray-light hover:text-white cursor-pointer",
-            pathname === "/movies" && "text-white"
+            pathname === "/" && "text-white"
           )}
         >
           Movies

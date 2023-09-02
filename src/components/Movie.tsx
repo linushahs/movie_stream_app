@@ -1,22 +1,28 @@
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useNavigate } from "react-router-dom";
 
 export interface MovieProps {
+  id: number;
   poster: string;
   title: string;
   rating: string;
   releaseDate: string;
 }
 
-function Movie({ poster, title, rating, releaseDate }: MovieProps) {
+function Movie({ id, poster, title, rating, releaseDate }: MovieProps) {
   const img_path = `https://image.tmdb.org/t/p/original/${poster}`;
+  const navigate = useNavigate();
 
   return (
-    <div className="min-w-[120px] lg:min-w-[180px] flex-1 h-[280px] rounded-2xl relative overflow-hidden">
+    <div
+      onClick={() => navigate(`/movie/${id}`)}
+      className="group min-w-[120px] lg:min-w-[180px] flex-1 h-[280px] rounded-2xl relative overflow-hidden cursor-pointer  "
+    >
       <LazyLoadImage
         src={img_path}
         alt="image"
         loading="lazy"
-        className="w-full h-full rounded-2xl opacity-50 hover:scale-125 hover:rounded-2xl transition-all"
+        className="w-full h-full rounded-2xl opacity-50 transition-all group-hover:scale-125"
       />
       <button className="absolute top-4 right-4 py-0.5 px-2.5 text-xl text-white bg-gray-light/70 rounded-lg">
         +

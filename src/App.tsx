@@ -23,13 +23,13 @@ function App() {
     <div className="App flex">
       <Navbar />
 
-      {/* {isSearching ? (
+      {isSearching ? (
         <Suspense fallback={<SearchedMoviesLoading />}>
           <LazySearchedMovies searchString={searchString} />
         </Suspense>
       ) : (
-        <MovieDetails />
-      )} */}
+        <Outlet />
+      )}
 
       <Sidebar
         changeSearchState={changeSearchState}

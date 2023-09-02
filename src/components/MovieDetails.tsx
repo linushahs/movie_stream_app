@@ -1,22 +1,63 @@
+import { movieDetailsOptions } from "@/api/api";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { useState } from "react";
 
 function MovieDetails() {
+  const [movieDetails, setMovieDetails] = useState<any>([]);
   const [isFavoritesClicked, setIsFavoriesClicked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [duration, setDuration] = useState("");
+  const { movieId } = useParams();
+  const navigate = useNavigate();
+
+  const getMovieDetails = async () => {
+    if (!movieId) return;
+
+    console.log(movieId);
+    setIsLoading(true);
+    const options = movieDetailsOptions(movieId);
+    await axios
+      .request(options)
+      .then((res) => {
+        setMovieDetails(res.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  useEffect(() => {
+    getMovieDetails();
+  }, [movieId]);
+
+  useEffect(() => {
+    const runtime = parseInt(movieDetails.runtime);
+    const hour = Math.floor(runtime / 60);
+    const minute = runtime - hour * 60;
+    setDuration(`${hour}hr ${minute}min`);
+  }, [movieDetails]);
+
+  if (isLoading) return <h1>Loading...</h1>;
 
   return (
     <main className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
-      <button className="flex items-center justify-center border-2 border-gray-600 rounded-full p-2 cursor-pointer mb-6">
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center justify-center border-2 border-gray-600 rounded-full p-2 cursor-pointer mb-6"
+      >
         <BiArrowBack className="text-lg text-gray-light" />
       </button>
 
       {/* Details section ------------>  */}
       <div className="dark text-white flex gap-6">
         <img
-          src="https://image.tmdb.org/t/p/original/kyeqWdyUXW608qlYkRqosgbbJyK.jpg"
+          src={`https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`}
           alt="poster"
           width={300}
           className="rounded-2xl"
@@ -24,15 +65,18 @@ function MovieDetails() {
 
         <article>
           <div className="flex gap-3 items-center">
-            <h2 className="text-3xl">Avenger's Infinity War</h2>
+            <h2 className="text-3xl">{movieDetails.title}</h2>
             <span className="flex items-center gap-1 text-md px-2 py-1 bg-dark rounded-md font-medium">
-              9.8 <AiFillStar className="w-4 h-4 text-yellow" />
+              {movieDetails.vote_average?.toFixed(1)}{" "}
+              <AiFillStar className="w-4 h-4 text-yellow" />
             </span>
           </div>
 
           <ul className="my-2 flex items-center divide-x divide-gray-dark text-gray-dark font-medium">
-            <li className="pr-2">2020</li>
-            <li className="px-2">2h 13min</li>
+            <li className="pr-2">
+              {movieDetails.release_date?.substring(0, 4)}
+            </li>
+            <li className="px-2">{duration}</li>
             <li className="pl-2">18+</li>
           </ul>
 
@@ -49,16 +93,15 @@ function MovieDetails() {
             </TabsList>
             <TabsContent value="overview">
               <div className="w-full">
-                <p className="text-gray-light pt-2">
-                  An exploratory dive into the deepest depths of the ocean of a
-                  daring research team spirals into chaos when a malevolent
-                  mining operation threatens their mission and forces them into
-                  a high-stakes battle for survival.{" "}
-                </p>
+                <p className="text-gray-light pt-2">{movieDetails.overview}</p>
                 <ul className="mt-6">
                   <li className="flex items-center">
                     <strong className="w-[130px] text-gray-dark">Genre:</strong>
-                    <p>Action, Genre, Comedy</p>
+                    <p>
+                      {movieDetails.genres
+                        .map((genre: any) => genre.name)
+                        .join(", ")}
+                    </p>
                   </li>
                   <li className="flex items-center mt-2">
                     <strong className="w-[130px] text-gray-dark">

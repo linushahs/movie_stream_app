@@ -1,4 +1,5 @@
 import App from "@/App";
+import MovieDetails from "@/components/MovieDetails";
 import MoviesContainer from "@/components/MoviesContainer";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -8,12 +9,16 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "movies",
+        path: "",
         element: <MoviesContainer />,
       },
       {
         path: "tv-series",
         element: <MoviesContainer />,
+      },
+      {
+        path: "movie/:movieId",
+        element: <MovieDetails />,
       },
     ],
   },

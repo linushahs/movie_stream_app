@@ -28,3 +28,17 @@ export const searchOptions = (searchString: string) => {
     ...getMethod,
   };
 };
+
+export const movieDetailsOptions = (id: string) => {
+  return {
+    url: `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+    ...getMethod,
+  };
+};
+
+export const tvShowDetailsOptions = (id: string) => {
+  return {
+    url: `https://api.themoviedb.org/3/tv/${id}?language=en-US`,
+    ...getMethod,
+  };
+};
