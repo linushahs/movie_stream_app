@@ -1,27 +1,31 @@
-import React, { useState } from "react";
-import Menu from "./Menu";
+import { useState } from "react";
 import { FaVideo } from "react-icons/fa";
+import Menu from "./Menu";
+import { FiCompass, FiHome } from "react-icons/fi";
+import { MdOutlineHomeWork } from "react-icons/md";
+import { RxStopwatch } from "react-icons/rx";
+import { twMerge } from "tailwind-merge";
 
 function Navbar() {
   const [menus, setMenus] = useState([
     {
       name: "Home",
-      icon: "FiHome",
+      icon: <FiHome />,
       isClicked: true,
     },
     {
       name: "Community",
-      icon: "MdOutlineHomeWork",
+      icon: <MdOutlineHomeWork />,
       isClicked: false,
     },
     {
       name: "Discover",
-      icon: "FiCompass",
+      icon: <FiCompass />,
       isClicked: false,
     },
     {
       name: "Coming Soon",
-      icon: "RxStopwatch",
+      icon: <RxStopwatch />,
       isClicked: false,
     },
   ]);
@@ -59,10 +63,15 @@ function Navbar() {
             <Menu
               key={id}
               name={menu.name}
-              icon={menu.icon}
               isClicked={menu.isClicked}
               changeMenuState={changeMenuState}
-            />
+            >
+              <span
+                className={twMerge(menu.isClicked && "text-red", "text-xl")}
+              >
+                {menu.icon}
+              </span>
+            </Menu>
           ))}
         </ul>
       </div>

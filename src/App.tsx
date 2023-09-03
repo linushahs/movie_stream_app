@@ -1,11 +1,9 @@
-import { Suspense, lazy, useState, useEffect } from "react";
-import SearchedMoviesLoading from "./loading/SearchedMoviesLoading";
-import Navbar from "./layout/navbar/Navbar";
-import Sidebar from "./layout/sidebar/Sidebar";
-import MoviesContainer from "./components/MoviesContainer";
-import MovieDetails from "./components/MovieDetails";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import Navbar from "./layout/navbar/Navbar";
+import Sidebar from "./layout/sidebar/Sidebar";
+import SearchedMoviesLoading from "./loading/SearchedMoviesLoading";
 import { searchQueryState } from "./stores/store";
 
 const LazySearchedMovies = lazy(

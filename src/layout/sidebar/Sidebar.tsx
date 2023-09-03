@@ -7,11 +7,9 @@ import SmallMovieCard from "./SmallMovieCard";
 import { useRecoilState } from "recoil";
 import { searchQueryState } from "@/stores/store";
 
-interface SidebarProps {}
-
 function Sidebar() {
   const [topRatedMovies, setTopRatedMovies] = useState<any>([]);
-  const [favorites, setFavorites] = useState([]);
+  const [favorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
 

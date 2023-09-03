@@ -1,12 +1,11 @@
 import { categoryState } from "@/stores/store";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
-import { useNavigate, useMatches } from "react-router-dom";
 
 function Header() {
   const [category, setCategory] = useRecoilState(categoryState);
   const navigate = useNavigate();
-  const [, { pathname }] = useMatches();
 
   const handleTvShowsClick = () => {
     setCategory("tv");
@@ -24,7 +23,7 @@ function Header() {
           onClick={handleTvShowsClick}
           className={twMerge(
             "text-gray-light hover:text-white cursor-pointer",
-            pathname === "/tv-series" && "text-white"
+            category === "tv" && "text-white"
           )}
         >
           TV Series
@@ -33,7 +32,7 @@ function Header() {
           onClick={handleMoviesClick}
           className={twMerge(
             "text-gray-light hover:text-white cursor-pointer",
-            pathname === "/" && "text-white"
+            category === "movie" && "text-white"
           )}
         >
           Movies
