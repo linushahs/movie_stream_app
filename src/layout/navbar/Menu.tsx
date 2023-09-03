@@ -1,9 +1,15 @@
-import React from "react";
-import { FiHome, FiCompass } from "react-icons/fi";
+import { FiCompass, FiHome } from "react-icons/fi";
 import { MdOutlineHomeWork } from "react-icons/md";
 import { RxStopwatch } from "react-icons/rx";
 
-function Menu({ name, icon, isClicked, changeMenuState }) {
+interface MenuProps {
+  name: string;
+  icon: string;
+  isClicked: boolean;
+  changeMenuState: (state: string) => void;
+}
+
+function Menu({ name, icon, isClicked, changeMenuState }: MenuProps) {
   const icons = {
     FiHome: <FiHome className={isClicked ? "text-xl  text-red" : "text-xl"} />,
     FiCompass: (

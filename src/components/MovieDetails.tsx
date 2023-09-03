@@ -1,4 +1,4 @@
-import { movieDetailsOptions } from "@/api/api";
+import { ageRatingOptions, movieDetailsOptions } from "@/api/api";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
@@ -6,21 +6,24 @@ import { BiArrowBack } from "react-icons/bi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 
 function MovieDetails() {
   const [movieDetails, setMovieDetails] = useState<any>([]);
   const [isFavoritesClicked, setIsFavoriesClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [duration, setDuration] = useState("");
-  const { movieId } = useParams();
+  const [ageRating, setAgeRating] = useState("");
+  const [starringCast, setStarringCast] = useState([]);
+  const [director, setDirector] = useState<any>([]);
+  const { showId } = useParams();
   const navigate = useNavigate();
 
   const getMovieDetails = async () => {
-    if (!movieId) return;
+    if (!showId) return;
 
-    console.log(movieId);
     setIsLoading(true);
-    const options = movieDetailsOptions(movieId);
+    const options = movieDetailsOptions(showId);
     await axios
       .request(options)
       .then((res) => {
@@ -32,18 +35,56 @@ function MovieDetails() {
       });
   };
 
-  useEffect(() => {
-    getMovieDetails();
-  }, [movieId]);
+  const getAgeRating = async () => {
+    if (!showId) return;
+
+    setIsLoading(true);
+    const options = ageRatingOptions(showId);
+    await axios
+      .request(options)
+      .then((res) => {
+        const results = res.data.results;
+        const [USRating] = results.filter(
+          (obj: any) => obj["iso_3166_1"] === "US"
+        );
+
+        if (USRating && USRating.release_dates) {
+          setAgeRating(USRating.release_dates[0].certification);
+        }
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   useEffect(() => {
+    getMovieDetails();
+    getAgeRating();
+  }, [showId]);
+
+  useEffect(() => {
+    //movie duration
     const runtime = parseInt(movieDetails.runtime);
     const hour = Math.floor(runtime / 60);
     const minute = runtime - hour * 60;
     setDuration(`${hour}hr ${minute}min`);
+
+    //starring cast and director
+    if (movieDetails.credits) {
+      const cast: any = [];
+      const directors = movieDetails.credits.crew.filter(
+        (crew: any) => crew.known_for_department === "Directing"
+      );
+      for (let i = 0; i < 3; i++) {
+        cast.push(movieDetails.credits.cast[i]);
+      }
+      setStarringCast(cast);
+      setDirector(directors.filter((_: any, id: number) => id < 2));
+    }
   }, [movieDetails]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <MovieDetailsLoading />;
 
   return (
     <main className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
@@ -60,7 +101,8 @@ function MovieDetails() {
           src={`https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`}
           alt="poster"
           width={300}
-          className="rounded-2xl"
+          className="rounded-xl"
+          loading="lazy"
         />
 
         <article>
@@ -77,7 +119,7 @@ function MovieDetails() {
               {movieDetails.release_date?.substring(0, 4)}
             </li>
             <li className="px-2">{duration}</li>
-            <li className="pl-2">18+</li>
+            <li className="pl-2">{ageRating}</li>
           </ul>
 
           {/* tabs section ----------->  */}
@@ -96,24 +138,26 @@ function MovieDetails() {
                 <p className="text-gray-light pt-2">{movieDetails.overview}</p>
                 <ul className="mt-6">
                   <li className="flex items-center">
-                    <strong className="w-[130px] text-gray-dark">Genre:</strong>
+                    <strong className="w-[130px] text-gray-dark">
+                      Starring:
+                    </strong>
                     <p>
-                      {movieDetails.genres
-                        .map((genre: any) => genre.name)
-                        .join(", ")}
+                      {starringCast.map((cast: any) => cast.name).join(", ")}
                     </p>
                   </li>
                   <li className="flex items-center mt-2">
                     <strong className="w-[130px] text-gray-dark">
-                      Created by:
+                      Directed by:
                     </strong>
-                    <p>Stan Lee</p>
+                    <p>{director.map((d: any) => d.name).join(", ")}</p>
                   </li>
                   <li className="flex items-center mt-2">
-                    <strong className="w-[130px] text-gray-dark">
-                      Created by:
-                    </strong>
-                    <p>Stan Lee</p>
+                    <strong className="w-[130px] text-gray-dark">Genre:</strong>
+                    <p>
+                      {movieDetails.genres
+                        ?.map((genre: any) => genre.name)
+                        .join(", ")}
+                    </p>
                   </li>
                 </ul>
               </div>
@@ -146,7 +190,7 @@ function MovieDetails() {
           {new Array(5).fill(0).map((_, id) => (
             <div
               key={id}
-              className="min-w-[120px] lg:min-w-[180px] flex-1 h-[280px] rounded-2xl relative overflow-hidden"
+              className="min-w-[120px] lg:min-w-[180px] flex-1 h-[280px] rounded-xl relative overflow-hidden"
             >
               <LazyLoadImage
                 src={

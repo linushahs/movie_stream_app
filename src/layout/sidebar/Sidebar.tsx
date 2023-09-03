@@ -4,16 +4,16 @@ import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import SidebarLoading from "@/loading/SidebarLoading";
 import SmallMovieCard from "./SmallMovieCard";
+import { useRecoilState } from "recoil";
+import { searchQueryState } from "@/stores/store";
 
-interface SidebarProps {
-  changeSearchState: (value: string) => void;
-  searchString: string;
-}
+interface SidebarProps {}
 
-function Sidebar({ changeSearchState, searchString }: SidebarProps) {
+function Sidebar() {
   const [topRatedMovies, setTopRatedMovies] = useState<any>([]);
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
 
   const getTopRatedMovies = async () => {
     setIsLoading(true);
@@ -32,8 +32,9 @@ function Sidebar({ changeSearchState, searchString }: SidebarProps) {
   }, []);
 
   const handleSearchState = (e: React.ChangeEvent<HTMLInputElement>) => {
-    changeSearchState(e.target.value);
+    setSearchQuery(e.target.value);
   };
+
   return (
     <div className="hidden lg:block py-8 bg-black lg:px-8 xl:px-16 lg:w-[420px]">
       <header className="relative px-2 py-1.5 w-[220px] flex justify-center gap-2 items-center border-2 border-gray-dark rounded-3xl">
@@ -42,9 +43,9 @@ function Sidebar({ changeSearchState, searchString }: SidebarProps) {
           type="text"
           name="search"
           placeholder="Search"
-          value={searchString}
+          value={searchQuery}
           onChange={(e) => handleSearchState(e)}
-          className="border-none outline-none text-white bg-black w-full rounded-xl placeholder:text-gray-light"
+          className="pl-1 border-none outline-none text-white bg-black w-full rounded-xl placeholder:text-gray-light"
         />
       </header>
 
@@ -59,6 +60,7 @@ function Sidebar({ changeSearchState, searchString }: SidebarProps) {
             topRatedMovies.map((movie: any) => (
               <SmallMovieCard
                 key={movie.id}
+                id={movie.id}
                 title={movie.title}
                 poster={movie.poster_path}
                 rating={movie.vote_average}
@@ -81,6 +83,7 @@ function Sidebar({ changeSearchState, searchString }: SidebarProps) {
             topRatedMovies.map((movie: any) => (
               <SmallMovieCard
                 key={movie.id}
+                id={movie.id}
                 title={movie.title}
                 poster={movie.poster_path}
                 rating={movie.vote_average}

@@ -22,16 +22,23 @@ export const topRatedOptions = {
   ...getMethod,
 };
 
-export const searchOptions = (searchString: string) => {
+export const searchMoviesOptions = (searchString: string) => {
   return {
     url: `https://api.themoviedb.org/3/search/movie?query=${searchString}&include_adult=false&language=en-US&page=1`,
     ...getMethod,
   };
 };
 
+export const searchTvShowsOptions = (searchString: string) => {
+  return {
+    url: `https://api.themoviedb.org/3/search/tv?query=${searchString}&include_adult=false&language=en-US&page=1`,
+    ...getMethod,
+  };
+};
+
 export const movieDetailsOptions = (id: string) => {
   return {
-    url: `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+    url: `https://api.themoviedb.org/3/movie/${id}?append_to_response=credits&language=en-US`,
     ...getMethod,
   };
 };
@@ -39,6 +46,13 @@ export const movieDetailsOptions = (id: string) => {
 export const tvShowDetailsOptions = (id: string) => {
   return {
     url: `https://api.themoviedb.org/3/tv/${id}?language=en-US`,
+    ...getMethod,
+  };
+};
+
+export const ageRatingOptions = (id: string) => {
+  return {
+    url: `https://api.themoviedb.org/3/movie/${id}/release_dates`,
     ...getMethod,
   };
 };

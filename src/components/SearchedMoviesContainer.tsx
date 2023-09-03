@@ -1,42 +1,49 @@
-import { searchOptions } from "@/api/api";
+import { searchMoviesOptions, searchTvShowsOptions } from "@/api/api";
 import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Movie from "./Movie";
+import { useRecoilValue } from "recoil";
+import { categoryState, searchQueryState } from "@/stores/store";
+import Header from "@/layout/Header";
 
-function SearchedMoviesContainer({ searchString }: { searchString: string }) {
+function SearchedMoviesContainer() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const category = useRecoilValue(categoryState);
+  const searchQuery = useRecoilValue(searchQueryState);
 
   const getMovies = async () => {
     setIsLoading(true);
-    const options = searchOptions(searchString);
-    // await axios.request(options).then((response) => {
-    //   setIsLoading(false);
-    //   setMovies(response.data.results);
-    // });
+    const options = searchMoviesOptions(searchQuery);
+    await axios.request(options).then((response) => {
+      setIsLoading(false);
+      setMovies(response.data.results);
+    });
+  };
+
+  const getTvShows = async () => {
+    setIsLoading(true);
+    const options = searchTvShowsOptions(searchQuery);
+    await axios.request(options).then((response) => {
+      setIsLoading(false);
+      setMovies(response.data.results);
+    });
   };
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      getMovies();
+      category === "movie" ? getMovies() : getTvShows();
     }, 800);
 
     return () => {
-      clearTimeout(timer); // Clear the timer if the component unmounts or searchString changes before 2 seconds
+      clearTimeout(timer); // Clear the timer if the component unmounts or searchQuery changes before 2 seconds
     };
-  }, [searchString]);
+  }, [searchQuery]);
 
   return (
     <div className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
-      <header className="">
-        <ul className="flex gap-4">
-          <li className="text-gray-light hover:text-white cursor-pointer">
-            TV Series
-          </li>
-          <li className="text-white hover:text-white cursor-pointer">Movies</li>
-        </ul>
-      </header>
+      <Header />
       <main className="flex flex-wrap gap-4 mt-4">
         {isLoading ? (
           <SearchedMoviesLoading />
@@ -44,6 +51,7 @@ function SearchedMoviesContainer({ searchString }: { searchString: string }) {
           movies.map((movie: any, id) => (
             <Movie
               key={id}
+              id={movie.id}
               poster={movie.poster_path}
               title={movie.title || movie.name}
               rating={movie.vote_average.toFixed(1)}

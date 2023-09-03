@@ -13,9 +13,8 @@ export default function SidebarLoading() {
               <Skeleton className="w-full h-4" />
               <Skeleton className="w-full h-4 mt-2" />
             </div>
-            <p className="text-sm  text-white">
-              <Skeleton className="w-[50px] h-4" />
-            </p>
+
+            <Skeleton className="w-[50px] h-4" />
           </div>
         </div>
       ))}

@@ -1,10 +1,12 @@
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useState, useEffect } from "react";
 import SearchedMoviesLoading from "./loading/SearchedMoviesLoading";
 import Navbar from "./layout/navbar/Navbar";
 import Sidebar from "./layout/sidebar/Sidebar";
 import MoviesContainer from "./components/MoviesContainer";
 import MovieDetails from "./components/MovieDetails";
-import { Outlet, useMatches } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { searchQueryState } from "./stores/store";
 
 const LazySearchedMovies = lazy(
   () => import("@/components/SearchedMoviesContainer")
@@ -12,12 +14,11 @@ const LazySearchedMovies = lazy(
 
 function App() {
   const [isSearching, setIsSearching] = useState(false);
-  const [searchString, setSearchString] = useState("");
+  const searchQuery = useRecoilValue(searchQueryState);
 
-  const changeSearchState = (str: string) => {
-    setSearchString(str);
-    setIsSearching(str === "" ? false : true);
-  };
+  useEffect(() => {
+    setIsSearching(searchQuery === "" ? false : true);
+  }, [searchQuery]);
 
   return (
     <div className="App flex">
@@ -25,16 +26,13 @@ function App() {
 
       {isSearching ? (
         <Suspense fallback={<SearchedMoviesLoading />}>
-          <LazySearchedMovies searchString={searchString} />
+          <LazySearchedMovies />
         </Suspense>
       ) : (
         <Outlet />
       )}
 
-      <Sidebar
-        changeSearchState={changeSearchState}
-        searchString={searchString}
-      />
+      <Sidebar />
     </div>
   );
 }

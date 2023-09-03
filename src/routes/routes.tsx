@@ -17,7 +17,11 @@ export const router = createBrowserRouter([
         element: <MoviesContainer />,
       },
       {
-        path: "movie/:movieId",
+        path: "movie/:showId",
+        element: <MovieDetails />,
+      },
+      {
+        path: "tv/:showId",
         element: <MovieDetails />,
       },
     ],
