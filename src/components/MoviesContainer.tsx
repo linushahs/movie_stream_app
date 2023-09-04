@@ -36,12 +36,10 @@ function MoviesContainer() {
 
   useEffect(() => {
     setIsLoading(true);
-    if (pathname === "/movies" || pathname === "/") {
-      console.log("Fetching movies...");
+    if (pathname === "/") {
       setCategory("movie");
       getMovies();
     } else if (pathname === "/tv-series") {
-      console.log("Fetching tv shows...");
       setCategory("tv");
       getTvShows();
     }

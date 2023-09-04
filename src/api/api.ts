@@ -27,8 +27,13 @@ export const trendingTvOptions = {
   ...getMethod,
 };
 
-export const topRatedOptions = {
+export const topRatedMovieOptions = {
   url: "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1",
+  ...getMethod,
+};
+
+export const topRatedTvShowOptions = {
+  url: "https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1",
   ...getMethod,
 };
 
