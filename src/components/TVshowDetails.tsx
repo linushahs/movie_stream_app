@@ -70,11 +70,11 @@ function TVShowDetails() {
       });
   };
 
-  const getSeasonDetails = async () => {
+  const getSeasonDetails = async (seasonNo: number) => {
     if (!tvId) return;
 
     setIsLoading(true);
-    const options = seasonDetailsOptions(tvId, 1);
+    const options = seasonDetailsOptions(tvId, seasonNo);
     await axios
       .request(options)
       .then((res) => {
@@ -87,10 +87,15 @@ function TVShowDetails() {
       });
   };
 
+  const handleSeasonSelection = (seasonNo: number) => {
+    console.log("clicked");
+    getSeasonDetails(seasonNo);
+  };
+
   useEffect(() => {
     getTVShowDetails();
     getAgeRating();
-    getSeasonDetails();
+    getSeasonDetails(1);
   }, [tvId]);
 
   useEffect(() => {
@@ -229,11 +234,12 @@ function TVShowDetails() {
             <SelectValue placeholder="Seasons" />
           </SelectTrigger>
           <SelectContent className="bg-dark text-white">
-            {tvShowDetails.seasons.map((s: any) => (
-              <SelectItem key={s.id} value={s.name} className="text-md">
-                {s.name}
-              </SelectItem>
-            ))}
+            {tvShowDetails.seasons &&
+              tvShowDetails.seasons.map((s: any) => (
+                <SelectItem key={s.id} value={s.name} className="text-md">
+                  {s.name}
+                </SelectItem>
+              ))}
           </SelectContent>
         </Select>
 
@@ -249,7 +255,7 @@ function TVShowDetails() {
             seasonDetails.episodes.map((episode: any) => (
               <SwiperSlide
                 key={episode.id}
-                className="!w-[550px] aspect-[] rounded-lg bg-gray-dark flex items-center justify-center"
+                className="!w-[550px] aspect-[16/9] rounded-xl  bg-gray-dark flex items-center justify-center object-cover"
               >
                 <img
                   src={`https://image.tmdb.org/t/p/original/${episode.still_path}`}
