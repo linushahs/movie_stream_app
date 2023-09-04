@@ -1,8 +1,10 @@
-import { movieDetailsOptions } from "@/api/api";
+import { movieDetailsOptions, tvShowDetailsOptions } from "@/api/api";
+import { categoryState } from "@/stores/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 
 interface SliderProps {
   movie: any;
@@ -12,6 +14,7 @@ export default function Slider({ movie }: SliderProps) {
   const img_path = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
   const navigate = useNavigate();
   const [genres, setGenres] = useState([]);
+  const category = useRecoilValue(categoryState);
 
   const getMovieDetails = async () => {
     if (!movie.id) return;
@@ -26,13 +29,30 @@ export default function Slider({ movie }: SliderProps) {
       });
   };
 
+  const getTvShowDetails = async () => {
+    if (!movie.id) return;
+    const options = tvShowDetailsOptions(movie.id);
+    await axios
+      .request(options)
+      .then((res) => {
+        setGenres(res.data.genres);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   useEffect(() => {
-    getMovieDetails();
+    category === "movie" ? getMovieDetails() : getTvShowDetails();
   }, []);
 
   return (
     <div
-      onClick={() => navigate(`/movie/${movie.id}`)}
+      onClick={() =>
+        navigate(
+          category === "movie" ? `/movie/${movie.id}` : `/tv/${movie.id}`
+        )
+      }
       className="relative w-full h-auto bg-cover rounded-xl cursor-pointer"
     >
       <img

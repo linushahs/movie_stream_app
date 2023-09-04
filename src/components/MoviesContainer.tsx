@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useMatches } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { movieOptions, tvOptions } from "../api/api";
+import { trendingMovieOptions, trendingTvOptions } from "../api/api";
 import { categoryState } from "../stores/store";
 import Movie from "./Movie";
 import Slider from "./Slider";
@@ -20,7 +20,7 @@ function MoviesContainer() {
 
   const getMovies = async () => {
     setIsLoading(true); // Set isLoading to true before making the request
-    await axios.request(movieOptions).then((res) => {
+    await axios.request(trendingMovieOptions).then((res) => {
       setTrendingMovies(res.data.results);
       setIsLoading(false);
     });
@@ -28,7 +28,7 @@ function MoviesContainer() {
 
   const getTvShows = async () => {
     setIsLoading(true);
-    await axios.request(tvOptions).then((res) => {
+    await axios.request(trendingTvOptions).then((res) => {
       setTrendingTvShows(res.data.results);
       setIsLoading(false);
     });
