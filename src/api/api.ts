@@ -45,7 +45,7 @@ export const movieDetailsOptions = (id: string) => {
 
 export const tvShowDetailsOptions = (id: string) => {
   return {
-    url: `https://api.themoviedb.org/3/tv/${id}?language=en-US`,
+    url: `https://api.themoviedb.org/3/tv/${id}?append_to_response=credits&language=en-US`,
     ...getMethod,
   };
 };
@@ -53,6 +53,13 @@ export const tvShowDetailsOptions = (id: string) => {
 export const ageRatingOptions = (id: string) => {
   return {
     url: `https://api.themoviedb.org/3/movie/${id}/release_dates`,
+    ...getMethod,
+  };
+};
+
+export const seasonDetailsOptions = (id: string, seasonNo: number) => {
+  return {
+    url: `https://api.themoviedb.org/3/tv/${id}/season/${seasonNo}?language=en-US`,
     ...getMethod,
   };
 };

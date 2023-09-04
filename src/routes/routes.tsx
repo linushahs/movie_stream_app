@@ -1,6 +1,7 @@
 import App from "@/App";
 import MovieDetails from "@/components/MovieDetails";
 import MoviesContainer from "@/components/MoviesContainer";
+import TVShowDetails from "@/components/TVshowDetails";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -17,12 +18,12 @@ export const router = createBrowserRouter([
         element: <MoviesContainer />,
       },
       {
-        path: "movie/:showId",
+        path: "movie/:movieId",
         element: <MovieDetails />,
       },
       {
-        path: "tv/:showId",
-        element: <MovieDetails />,
+        path: "tv/:tvId",
+        element: <TVShowDetails />,
       },
     ],
   },

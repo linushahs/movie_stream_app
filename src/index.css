@@ -74,3 +74,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+.swiper {
+  position: static !important;
+  margin-left: 0 !important;
+  width: calc(100vw - 260px - 420px) !important;
+}

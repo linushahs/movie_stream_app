@@ -5,6 +5,11 @@ import { RecoilRoot } from "recoil";
 import "./index.css";
 import { router } from "./routes/routes.tsx";
 
+//css styles
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RecoilRoot>

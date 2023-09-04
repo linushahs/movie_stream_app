@@ -1,33 +1,45 @@
-import { ageRatingOptions, movieDetailsOptions } from "@/api/api";
+import {
+  ageRatingOptions,
+  seasonDetailsOptions,
+  tvShowDetailsOptions,
+} from "@/api/api";
+import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+} from "./ui/select";
+import { A11y, Navigation, Pagination, Scrollbar } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-function MovieDetails() {
-  const [movieDetails, setMovieDetails] = useState<any>([]);
+function TVShowDetails() {
+  const [tvShowDetails, setTvShowDetails] = useState<any>({});
   const [isFavoritesClicked, setIsFavoriesClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [duration, setDuration] = useState("");
   const [ageRating, setAgeRating] = useState("");
   const [starringCast, setStarringCast] = useState([]);
-  const [director, setDirector] = useState<any>([]);
-  const { movieId } = useParams();
+  const [createdBy, setCreatedBy] = useState([]);
+  const [seasonDetails, setSeasonDetails] = useState<any>();
+  const { tvId } = useParams();
   const navigate = useNavigate();
 
-  const getMovieDetails = async () => {
-    if (!movieId) return;
+  const getTVShowDetails = async () => {
+    if (!tvId) return;
 
     setIsLoading(true);
-    const options = movieDetailsOptions(movieId);
+    const options = tvShowDetailsOptions(tvId);
     await axios
       .request(options)
       .then((res) => {
-        setMovieDetails(res.data);
+        setTvShowDetails(res.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -36,10 +48,10 @@ function MovieDetails() {
   };
 
   const getAgeRating = async () => {
-    if (!movieId) return;
+    if (!tvId) return;
 
     setIsLoading(true);
-    const options = ageRatingOptions(movieId);
+    const options = ageRatingOptions(tvId);
     await axios
       .request(options)
       .then((res) => {
@@ -58,31 +70,57 @@ function MovieDetails() {
       });
   };
 
+  const getSeasonDetails = async () => {
+    if (!tvId) return;
+
+    setIsLoading(true);
+    const options = seasonDetailsOptions(tvId, 1);
+    await axios
+      .request(options)
+      .then((res) => {
+        const results = res.data;
+        setSeasonDetails(results);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   useEffect(() => {
-    getMovieDetails();
+    getTVShowDetails();
     getAgeRating();
-  }, [movieId]);
+    getSeasonDetails();
+  }, [tvId]);
 
   useEffect(() => {
-    //movie duration
-    const runtime = parseInt(movieDetails.runtime);
-    const hour = Math.floor(runtime / 60);
-    const minute = runtime - hour * 60;
-    setDuration(`${hour}hr ${minute}min`);
-
     //starring cast and director
-    if (movieDetails.credits) {
+    if (tvShowDetails.credits) {
       const cast: any = [];
-      const directors = movieDetails.credits.crew.filter(
-        (crew: any) => crew.known_for_department === "Directing"
-      );
-      for (let i = 0; i < 3; i++) {
-        cast.push(movieDetails.credits.cast[i]);
+
+      if (tvShowDetails.credits.cast.length >= 3) {
+        for (let i = 0; i < 3; i++) {
+          cast.push(tvShowDetails.credits.cast[i]);
+        }
+
+        setStarringCast(cast);
+      } else {
+        setStarringCast(tvShowDetails.credits.cast);
       }
-      setStarringCast(cast);
-      setDirector(directors.filter((_: any, id: number) => id < 2));
     }
-  }, [movieDetails]);
+
+    //created by
+    const createdByRes = tvShowDetails.created_by;
+    if (createdByRes) {
+      let createdByInst = [];
+      if (createdByRes.length) {
+        createdByInst = createdByRes.map((obj: any) => obj);
+        setCreatedBy(createdByInst);
+      } else {
+        createdByInst.push(createdByRes);
+      }
+    }
+  }, [tvShowDetails]);
 
   if (isLoading) return <MovieDetailsLoading />;
 
@@ -96,29 +134,31 @@ function MovieDetails() {
       </button>
 
       {/* Details section ------------>  */}
-      <div className="dark text-white flex gap-6">
+      <div className="dark text-white flex items-start gap-6">
         <img
-          src={`https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`}
+          src={`https://image.tmdb.org/t/p/original/${tvShowDetails.poster_path}`}
           alt="poster"
-          width={300}
-          className="rounded-xl"
+          width={330}
+          className="rounded-xl aspect-[2/3]"
           loading="lazy"
         />
 
         <article>
           <div className="flex gap-3 items-center">
-            <h2 className="text-3xl">{movieDetails.title}</h2>
+            <h2 className="text-3xl">
+              {tvShowDetails.name || tvShowDetails.title}
+            </h2>
             <span className="flex items-center gap-1 text-md px-2 py-1 bg-dark rounded-md font-medium">
-              {movieDetails.vote_average?.toFixed(1)}{" "}
+              {tvShowDetails.vote_average?.toFixed(1)}{" "}
               <AiFillStar className="w-4 h-4 text-yellow" />
             </span>
           </div>
 
           <ul className="my-2 flex items-center divide-x divide-gray-dark text-gray-dark font-medium">
             <li className="pr-2">
-              {movieDetails.release_date?.substring(0, 4)}
+              {tvShowDetails.first_air_date?.substring(0, 4)}
             </li>
-            <li className="px-2">{duration}</li>
+            <li className="px-2">{tvShowDetails.number_of_seasons} seasons</li>
             <li className="pl-2">{ageRating}</li>
           </ul>
 
@@ -135,7 +175,7 @@ function MovieDetails() {
             </TabsList>
             <TabsContent value="overview">
               <div className="w-full">
-                <p className="text-gray-light pt-2">{movieDetails.overview}</p>
+                <p className="text-gray-light pt-2">{tvShowDetails.overview}</p>
                 <ul className="mt-6">
                   <li className="flex items-center">
                     <strong className="w-[130px] text-gray-dark">
@@ -147,14 +187,14 @@ function MovieDetails() {
                   </li>
                   <li className="flex items-center mt-2">
                     <strong className="w-[130px] text-gray-dark">
-                      Directed by:
+                      Created by:
                     </strong>
-                    <p>{director.map((d: any) => d.name).join(", ")}</p>
+                    <p>{createdBy.map((c: any) => c.name).join(", ")}</p>
                   </li>
                   <li className="flex items-center mt-2">
                     <strong className="w-[130px] text-gray-dark">Genre:</strong>
                     <p>
-                      {movieDetails.genres
+                      {tvShowDetails.genres
                         ?.map((genre: any) => genre.name)
                         .join(", ")}
                     </p>
@@ -168,7 +208,7 @@ function MovieDetails() {
           {/* add to favorites button -------->  */}
           <button
             onClick={() => setIsFavoriesClicked(!isFavoritesClicked)}
-            className="mt-6 px-3 py-1.5 rounded-lg hover:bg-dark/50 transition-colors bg-dark text-white "
+            className="mt-6 px-3 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
           >
             <span className="flex items-center gap-2">
               {isFavoritesClicked ? (
@@ -183,42 +223,53 @@ function MovieDetails() {
       </div>
 
       {/* Similar movies ------------->  */}
-      <div className="mt-8">
-        <h2 className="text-xl text-white">Similar movies</h2>
+      <div className="mt-8 w-full !relative">
+        <Select>
+          <SelectTrigger className="w-[150px] text-lg text-white bg-dark">
+            <SelectValue placeholder="Seasons" />
+          </SelectTrigger>
+          <SelectContent className="bg-dark text-white">
+            {tvShowDetails.seasons.map((s: any) => (
+              <SelectItem key={s.id} value={s.name} className="text-md">
+                {s.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-        <div className="flex gap-4 mt-4">
-          {new Array(5).fill(0).map((_, id) => (
-            <div
-              key={id}
-              className="min-w-[120px] lg:min-w-[180px] flex-1 h-[280px] rounded-xl relative overflow-hidden"
-            >
-              <LazyLoadImage
-                src={
-                  "https://image.tmdb.org/t/p/original/kyeqWdyUXW608qlYkRqosgbbJyK.jpg"
-                }
-                alt="image"
-                loading="lazy"
-                className="w-full h-full rounded-2xl opacity-50 hover:scale-125 hover:rounded-2xl transition-all"
-              />
-              <button className="absolute top-4 right-4 py-0.5 px-2.5 text-xl text-white bg-gray-light/70 rounded-lg">
-                +
-              </button>
-              <div className="details w-full flex flex-col gap-1 absolute bottom-6 text-center">
-                <h3 className="text-center text-white">Avatar</h3>
-                <p className="text-xs text-gray-light">2020-05-09</p>
-                <p className="text-sm mt-1 text-white">
-                  <span className="bg-yellow px-2 rounded-md text-black font-bold ">
-                    IMDB
-                  </span>
-                  &nbsp; 9.8
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <Swiper
+          modules={[Navigation, Pagination, Scrollbar, A11y]}
+          spaceBetween={20}
+          slidesPerView={"auto"}
+          navigation
+          scrollbar={{ draggable: true }}
+          className="h-full mt-4 rounded-lg"
+        >
+          {seasonDetails &&
+            seasonDetails.episodes.map((episode: any) => (
+              <SwiperSlide
+                key={episode.id}
+                className="!w-[550px] aspect-[] rounded-lg bg-gray-dark flex items-center justify-center"
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/original/${episode.still_path}`}
+                  alt="thumbnail"
+                  className="w-full h-full rounded-lg opacity-60"
+                  loading="lazy"
+                />
+
+                <div className="absolute bottom-3 left-3 text-white">
+                  <h1 className="text-xl font-medium">
+                    S{episode.season_number}E{episode.episode_number}
+                  </h1>
+                  <h2 className="text-lg">{episode.name}</h2>
+                </div>
+              </SwiperSlide>
+            ))}
+        </Swiper>
       </div>
     </main>
   );
 }
 
-export default MovieDetails;
+export default TVShowDetails;
