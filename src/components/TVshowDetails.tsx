@@ -257,14 +257,15 @@ function TVShowDetails() {
                 key={episode.id}
                 className="!w-[550px] aspect-[16/9] rounded-xl  bg-gray-dark flex items-center justify-center object-cover"
               >
+                <div className="absolute w-full h-full top-0 left-0 bg-black/40 z-30"></div>
                 <img
                   src={`https://image.tmdb.org/t/p/original/${episode.still_path}`}
                   alt="thumbnail"
-                  className="w-full h-full rounded-lg opacity-60"
+                  className="w-full h-full rounded-lg"
                   loading="lazy"
                 />
 
-                <div className="absolute bottom-3 left-3 text-white">
+                <div className="absolute bottom-3 left-3 text-white z-40">
                   <h1 className="text-xl font-medium">
                     S{episode.season_number}E{episode.episode_number}
                   </h1>

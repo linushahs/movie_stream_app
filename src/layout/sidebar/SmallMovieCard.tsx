@@ -1,10 +1,29 @@
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { MovieProps } from "../../components/Movie";
+import { categoryState, searchQueryState } from "@/stores/store";
+import { useNavigate } from "react-router-dom";
 
-function SmallMovieCard({ title, poster, rating, releaseDate }: MovieProps) {
+function SmallMovieCard({
+  id,
+  title,
+  poster,
+  rating,
+  releaseDate,
+}: MovieProps) {
   const img_path = `https://image.tmdb.org/t/p/original/${poster}`;
+  const navigate = useNavigate();
+  const category = useRecoilValue(categoryState);
+  const setSearchQuery = useSetRecoilState(searchQueryState);
 
+  const handleNavigation = () => {
+    setSearchQuery("");
+    navigate(category === "movie" ? `/movie/${id}` : `/tv/${id}`);
+  };
   return (
-    <div className="w-full flex gap-3 mb-4">
+    <div
+      onClick={handleNavigation}
+      className="w-full flex gap-3 mb-4 cursor-pointer"
+    >
       <div className="left min-w-[70px]">
         <img
           src={img_path}
