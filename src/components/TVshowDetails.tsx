@@ -22,6 +22,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ScrollArea } from "./ui/scroll-area";
 import { twMerge } from "tailwind-merge";
+import CastItem from "./CastItem";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});
@@ -32,6 +33,7 @@ function TVShowDetails() {
   const [createdBy, setCreatedBy] = useState([]);
   const [seasonDetails, setSeasonDetails] = useState<any>();
   const [isSeasonEpisodeLoading, setIsSeasonEpisodeLoading] = useState(false);
+  const [topCast, setTopCast] = useState([]);
   const { tvId } = useParams();
   const navigate = useNavigate();
 
@@ -92,7 +94,6 @@ function TVShowDetails() {
   };
 
   const handleSeasonSelection = (seasonNo: string) => {
-    console.log("clicked");
     getSeasonDetails(seasonNo);
   };
 
@@ -128,6 +129,15 @@ function TVShowDetails() {
       } else {
         createdByInst.push(createdByRes);
       }
+    }
+
+    //top cast
+    if (tvShowDetails.credits) {
+      const cast: any = [];
+      for (let i = 0; i < 8; i++) {
+        cast.push(tvShowDetails.credits.cast[i]);
+      }
+      setTopCast(cast);
     }
   }, [tvShowDetails]);
 
@@ -173,7 +183,7 @@ function TVShowDetails() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="overview" className=" mt-8">
+          <Tabs defaultValue="cast" className=" mt-8">
             <TabsList className="w-[300px] h-auto">
               <TabsTrigger value="overview" className="w-full text-base">
                 Overview
@@ -211,7 +221,35 @@ function TVShowDetails() {
                 </ul>
               </div>
             </TabsContent>
-            <TabsContent value="cast">Change your cast here.</TabsContent>
+            <TabsContent value="cast" className="overflow-hidden">
+              <div className="mt-4 flex flex-wrap gap-x-10">
+                {createdBy.map((d: any) => (
+                  <CastItem
+                    key={d.id}
+                    name={d.name}
+                    role={"Creator"}
+                    profile_path={d.profile_path}
+                    clip_string={false}
+                  />
+                ))}
+              </div>
+              <h2 className="text-lg font-medium text-gray-light mt-4">
+                Top Cast
+              </h2>
+
+              {/* Top cast slider with navigation ---------->  */}
+              <div className="w-full flex flex-wrap gap-4  mt-4">
+                {topCast.map((t: any) => (
+                  <CastItem
+                    key={t.id}
+                    name={t.name}
+                    role={t.character}
+                    profile_path={t.profile_path}
+                    className="w-[210px]"
+                  />
+                ))}
+              </div>
+            </TabsContent>
           </Tabs>
 
           {/* add to favorites button -------->  */}

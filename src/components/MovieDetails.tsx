@@ -181,6 +181,7 @@ function MovieDetails() {
                     name={d.name}
                     role={d.job}
                     profile_path={d.profile_path}
+                    clip_string={false}
                   />
                 ))}
               </div>
