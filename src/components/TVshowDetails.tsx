@@ -21,6 +21,7 @@ import {
 } from "./ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ScrollArea } from "./ui/scroll-area";
+import { twMerge } from "tailwind-merge";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});
@@ -237,7 +238,11 @@ function TVShowDetails() {
             <SelectValue placeholder="Seasons" />
           </SelectTrigger>
           <SelectContent className="bg-dark text-white">
-            <ScrollArea className="h-[300px]">
+            <ScrollArea
+              className={twMerge(
+                tvShowDetails.seasons.length > 6 ? "h-[250px]" : "h-fit"
+              )}
+            >
               {tvShowDetails.seasons &&
                 tvShowDetails.seasons.map((s: any) => (
                   <SelectItem
