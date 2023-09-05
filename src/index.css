@@ -76,7 +76,11 @@
 }
 
 .swiper {
-  position: static !important;
+  position: relative !important;
   margin-left: 0 !important;
   width: calc(100vw - 260px - 420px) !important;
+}
+
+.cast-swiper {
+  width: calc(100vw - 260px - 420px - 350px) !important;
 }

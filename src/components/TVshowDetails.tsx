@@ -231,7 +231,7 @@ function TVShowDetails() {
         </article>
       </div>
 
-      {/* Similar movies ------------->  */}
+      {/* seasons, episods ------------->  */}
       <div className="mt-8 w-full !relative">
         <Select onValueChange={handleSeasonSelection} defaultValue={"1"}>
           <SelectTrigger className="min-w-[150px] max-w-fit text-lg text-white bg-dark">
@@ -265,7 +265,7 @@ function TVShowDetails() {
             spaceBetween={20}
             slidesPerView={"auto"}
             scrollbar={{ draggable: true }}
-            className="h-full mt-4 rounded-lg"
+            className=" h-full mt-4 rounded-lg"
           >
             {seasonDetails &&
               seasonDetails.episodes.map((episode: any) => (

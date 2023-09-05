@@ -1,20 +1,22 @@
 import { ageRatingOptions, movieDetailsOptions } from "@/api/api";
+import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate, useParams } from "react-router-dom";
+import CastItem from "./CastItem";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 
 function MovieDetails() {
   const [movieDetails, setMovieDetails] = useState<any>([]);
   const [isFavoritesClicked, setIsFavoriesClicked] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [duration, setDuration] = useState("");
   const [ageRating, setAgeRating] = useState("");
   const [starringCast, setStarringCast] = useState([]);
+  const [topCast, setTopCast] = useState([]);
   const [director, setDirector] = useState<any>([]);
   const { movieId } = useParams();
   const navigate = useNavigate();
@@ -74,13 +76,22 @@ function MovieDetails() {
     if (movieDetails.credits) {
       const cast: any = [];
       const directors = movieDetails.credits.crew.filter(
-        (crew: any) => crew.known_for_department === "Directing"
+        (crew: any) => crew.job === "Director"
       );
       for (let i = 0; i < 3; i++) {
         cast.push(movieDetails.credits.cast[i]);
       }
       setStarringCast(cast);
       setDirector(directors.filter((_: any, id: number) => id < 2));
+    }
+
+    //top cast
+    if (movieDetails.credits) {
+      const cast: any = [];
+      for (let i = 0; i < 8; i++) {
+        cast.push(movieDetails.credits.cast[i]);
+      }
+      setTopCast(cast);
     }
   }, [movieDetails]);
 
@@ -96,12 +107,12 @@ function MovieDetails() {
       </button>
 
       {/* Details section ------------>  */}
-      <div className="dark text-white flex gap-6">
+      <div className="dark text-white flex items-start gap-6">
         <img
           src={`https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`}
           alt="poster"
-          width={300}
-          className="rounded-xl"
+          width={320}
+          className=" rounded-xl bg-gray-dark aspect-[2/3]"
           loading="lazy"
         />
 
@@ -124,7 +135,7 @@ function MovieDetails() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="overview" className=" mt-8">
+          <Tabs defaultValue="cast" className="tabs mt-8">
             <TabsList className="w-[300px] h-auto">
               <TabsTrigger value="overview" className="w-full text-base">
                 Overview
@@ -162,7 +173,34 @@ function MovieDetails() {
                 </ul>
               </div>
             </TabsContent>
-            <TabsContent value="cast">Change your cast here.</TabsContent>
+            <TabsContent value="cast" className="overflow-hidden">
+              <div className="mt-4 flex flex-wrap gap-x-10">
+                {director.map((d: any) => (
+                  <CastItem
+                    key={d.id}
+                    name={d.name}
+                    role={d.job}
+                    profile_path={d.profile_path}
+                  />
+                ))}
+              </div>
+              <h2 className="text-lg font-medium text-gray-light mt-4">
+                Top Cast
+              </h2>
+
+              {/* Top cast slider with navigation ---------->  */}
+              <div className="w-full flex flex-wrap gap-4  mt-4">
+                {topCast.map((t: any) => (
+                  <CastItem
+                    key={t.id}
+                    name={t.name}
+                    role={t.character}
+                    profile_path={t.profile_path}
+                    className="w-[210px]"
+                  />
+                ))}
+              </div>
+            </TabsContent>
           </Tabs>
 
           {/* add to favorites button -------->  */}
@@ -186,7 +224,7 @@ function MovieDetails() {
       <div className="mt-8">
         <h2 className="text-xl text-white">Similar movies</h2>
 
-        <div className="flex gap-4 mt-4">
+        <div className="flex flex-wrap gap-4 mt-4">
           {new Array(5).fill(0).map((_, id) => (
             <div
               key={id}
