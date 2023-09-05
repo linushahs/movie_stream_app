@@ -4,21 +4,23 @@ import {
   tvShowDetailsOptions,
 } from "@/api/api";
 import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
+import SeasonEpisodeLoading from "@/loading/SeasonEpisodeLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { A11y, Scrollbar } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import {
   Select,
   SelectContent,
+  SelectItem,
   SelectTrigger,
   SelectValue,
-  SelectItem,
 } from "./ui/select";
-import { A11y, Navigation, Pagination, Scrollbar } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { ScrollArea } from "./ui/scroll-area";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});
@@ -28,6 +30,7 @@ function TVShowDetails() {
   const [starringCast, setStarringCast] = useState([]);
   const [createdBy, setCreatedBy] = useState([]);
   const [seasonDetails, setSeasonDetails] = useState<any>();
+  const [isSeasonEpisodeLoading, setIsSeasonEpisodeLoading] = useState(false);
   const { tvId } = useParams();
   const navigate = useNavigate();
 
@@ -73,14 +76,14 @@ function TVShowDetails() {
   const getSeasonDetails = async (seasonNo: number) => {
     if (!tvId) return;
 
-    setIsLoading(true);
+    setIsSeasonEpisodeLoading(true);
     const options = seasonDetailsOptions(tvId, seasonNo);
     await axios
       .request(options)
       .then((res) => {
         const results = res.data;
         setSeasonDetails(results);
-        setIsLoading(false);
+        setIsSeasonEpisodeLoading(false);
       })
       .catch((err) => {
         alert(err);
@@ -229,51 +232,60 @@ function TVShowDetails() {
 
       {/* Similar movies ------------->  */}
       <div className="mt-8 w-full !relative">
-        <Select>
-          <SelectTrigger className="w-[150px] text-lg text-white bg-dark">
+        <Select onValueChange={handleSeasonSelection} defaultValue={1}>
+          <SelectTrigger className="min-w-[150px] max-w-fit text-lg text-white bg-dark">
             <SelectValue placeholder="Seasons" />
           </SelectTrigger>
           <SelectContent className="bg-dark text-white">
-            {tvShowDetails.seasons &&
-              tvShowDetails.seasons.map((s: any) => (
-                <SelectItem key={s.id} value={s.name} className="text-md">
-                  {s.name}
-                </SelectItem>
-              ))}
+            <ScrollArea className="h-[300px]">
+              {tvShowDetails.seasons &&
+                tvShowDetails.seasons.map((s: any) => (
+                  <SelectItem
+                    key={s.id}
+                    value={s.season_number}
+                    className="text-md"
+                  >
+                    {s.name}
+                  </SelectItem>
+                ))}
+            </ScrollArea>
           </SelectContent>
         </Select>
 
-        <Swiper
-          modules={[Navigation, Pagination, Scrollbar, A11y]}
-          spaceBetween={20}
-          slidesPerView={"auto"}
-          navigation
-          scrollbar={{ draggable: true }}
-          className="h-full mt-4 rounded-lg"
-        >
-          {seasonDetails &&
-            seasonDetails.episodes.map((episode: any) => (
-              <SwiperSlide
-                key={episode.id}
-                className="!w-[550px] aspect-[16/9] rounded-xl  bg-gray-dark flex items-center justify-center object-cover"
-              >
-                <div className="absolute w-full h-full top-0 left-0 bg-black/40 z-30"></div>
-                <img
-                  src={`https://image.tmdb.org/t/p/original/${episode.still_path}`}
-                  alt="thumbnail"
-                  className="w-full h-full rounded-lg"
-                  loading="lazy"
-                />
+        {isSeasonEpisodeLoading ? (
+          <SeasonEpisodeLoading />
+        ) : (
+          <Swiper
+            modules={[Scrollbar, A11y]}
+            spaceBetween={20}
+            slidesPerView={"auto"}
+            scrollbar={{ draggable: true }}
+            className="h-full mt-4 rounded-lg"
+          >
+            {seasonDetails &&
+              seasonDetails.episodes.map((episode: any) => (
+                <SwiperSlide
+                  key={episode.id}
+                  className="!w-[550px] aspect-[16/9] rounded-xl  bg-gray-dark flex items-center justify-center object-cover"
+                >
+                  <div className="absolute w-full h-full top-0 left-0 bg-black/50 z-30"></div>
+                  <img
+                    src={`https://image.tmdb.org/t/p/original/${episode.still_path}`}
+                    alt="thumbnail"
+                    className="w-full h-full rounded-lg"
+                    loading="lazy"
+                  />
 
-                <div className="absolute bottom-3 left-3 text-white z-40">
-                  <h1 className="text-xl font-medium">
-                    S{episode.season_number}E{episode.episode_number}
-                  </h1>
-                  <h2 className="text-lg">{episode.name}</h2>
-                </div>
-              </SwiperSlide>
-            ))}
-        </Swiper>
+                  <div className="absolute bottom-3 left-3 text-white z-40">
+                    <h1 className="text-xl font-medium">
+                      S{episode.season_number}E{episode.episode_number}
+                    </h1>
+                    <h2 className="text-lg">{episode.name}</h2>
+                  </div>
+                </SwiperSlide>
+              ))}
+          </Swiper>
+        )}
       </div>
     </main>
   );
