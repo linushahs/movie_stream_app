@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { FaVideo } from "react-icons/fa";
-import Menu from "./Menu";
 import { FiCompass, FiHome } from "react-icons/fi";
 import { MdOutlineHomeWork } from "react-icons/md";
 import { RxStopwatch } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
+import Menu from "./Menu";
 
 function Navbar() {
   const [menus, setMenus] = useState([

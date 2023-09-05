@@ -72,7 +72,7 @@ export const ageRatingOptions = (id: string) => {
   };
 };
 
-export const seasonDetailsOptions = (id: string, seasonNo: number) => {
+export const seasonDetailsOptions = (id: string, seasonNo: string) => {
   return {
     url: `https://api.themoviedb.org/3/tv/${id}/season/${seasonNo}?language=en-US`,
     ...getMethod,

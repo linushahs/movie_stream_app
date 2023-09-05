@@ -74,7 +74,7 @@ function TVShowDetails() {
       });
   };
 
-  const getSeasonDetails = async (seasonNo: number) => {
+  const getSeasonDetails = async (seasonNo: string) => {
     if (!tvId) return;
 
     setIsSeasonEpisodeLoading(true);
@@ -91,7 +91,7 @@ function TVShowDetails() {
       });
   };
 
-  const handleSeasonSelection = (seasonNo: number) => {
+  const handleSeasonSelection = (seasonNo: string) => {
     console.log("clicked");
     getSeasonDetails(seasonNo);
   };
@@ -99,7 +99,7 @@ function TVShowDetails() {
   useEffect(() => {
     getTVShowDetails();
     getAgeRating();
-    getSeasonDetails(1);
+    getSeasonDetails("1");
   }, [tvId]);
 
   useEffect(() => {
@@ -233,7 +233,7 @@ function TVShowDetails() {
 
       {/* Similar movies ------------->  */}
       <div className="mt-8 w-full !relative">
-        <Select onValueChange={handleSeasonSelection} defaultValue={1}>
+        <Select onValueChange={handleSeasonSelection} defaultValue={"1"}>
           <SelectTrigger className="min-w-[150px] max-w-fit text-lg text-white bg-dark">
             <SelectValue placeholder="Seasons" />
           </SelectTrigger>
@@ -247,7 +247,7 @@ function TVShowDetails() {
                 tvShowDetails.seasons.map((s: any) => (
                   <SelectItem
                     key={s.id}
-                    value={s.season_number}
+                    value={`${s.season_number}`}
                     className="text-md"
                   >
                     {s.name}
