@@ -1,16 +1,24 @@
+import { twMerge } from "tailwind-merge";
+import { useMatches } from "react-router-dom";
+
 interface MenuProps {
-  name: string;
-  isClicked: boolean;
+  menu: { name: string; path: string };
   changeMenuState: (state: string) => void;
   children: React.ReactNode;
 }
 
-function Menu({ name, isClicked, changeMenuState, children }: MenuProps) {
-  const btnStyle = isClicked
-    ? "lg:border-r-4 lg:border-r-red my-7 text-white flex justify-center lg:justify-start gap-3 items-center  cursor-pointer hover:text-white"
-    : "my-7 flex gap-3 items-center justify-center lg:justify-start text-gray-dark  cursor-pointer hover:text-white";
+function Menu({ menu: { name, path }, changeMenuState, children }: MenuProps) {
+  const [, { pathname }] = useMatches();
+
+  console.log(pathname);
   return (
-    <li className={btnStyle} onClick={() => changeMenuState(name)}>
+    <li
+      className={twMerge(
+        "my-7 flex gap-3 items-center justify-center lg:justify-start text-gray-dark  cursor-pointer hover:text-white",
+        path === pathname && "lg:border-r-4 lg:border-r-red text-white"
+      )}
+      onClick={() => changeMenuState(path)}
+    >
       {children}
       <a href="#" className="hidden sm:hidden lg:block">
         {name}

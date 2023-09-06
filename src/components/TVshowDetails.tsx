@@ -72,7 +72,7 @@ function TVShowDetails() {
         setIsLoading(false);
       })
       .catch((err) => {
-        alert(err);
+        console.log(err);
       });
   };
 
@@ -106,17 +106,11 @@ function TVShowDetails() {
   useEffect(() => {
     //starring cast and director
     if (tvShowDetails.credits) {
-      const cast: any = [];
+      const cast: any = tvShowDetails.credits.cast.filter(
+        (_: any, id: number) => id < 3
+      );
 
-      if (tvShowDetails.credits.cast.length >= 3) {
-        for (let i = 0; i < 3; i++) {
-          cast.push(tvShowDetails.credits.cast[i]);
-        }
-
-        setStarringCast(cast);
-      } else {
-        setStarringCast(tvShowDetails.credits.cast);
-      }
+      setStarringCast(cast);
     }
 
     //created by
@@ -133,10 +127,9 @@ function TVShowDetails() {
 
     //top cast
     if (tvShowDetails.credits) {
-      const cast: any = [];
-      for (let i = 0; i < 8; i++) {
-        cast.push(tvShowDetails.credits.cast[i]);
-      }
+      const cast: any = tvShowDetails.credits.cast.filter(
+        (_: any, id: number) => id < 8
+      );
       setTopCast(cast);
     }
   }, [tvShowDetails]);
@@ -239,10 +232,10 @@ function TVShowDetails() {
 
               {/* Top cast slider with navigation ---------->  */}
               <div className="w-full flex flex-wrap gap-4  mt-4">
-                {topCast.map((t: any) => (
+                {topCast?.map((t: any) => (
                   <CastItem
                     key={t.id}
-                    name={t.name}
+                    name={t.name || t.title}
                     role={t.character}
                     profile_path={t.profile_path}
                     className="w-[210px]"

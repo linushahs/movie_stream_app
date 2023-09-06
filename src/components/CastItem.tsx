@@ -12,7 +12,7 @@ function CastItem({
   name,
   role,
   profile_path,
-  clip_string,
+  clip_string = true,
   className,
 }: CastItemProps) {
   return (
@@ -27,8 +27,8 @@ function CastItem({
       </div>
       <div className="flex-1 text-white">
         <h2 className="mb-1 text-lg font-medium">
-          {clip_string ? name.substring(0, 13) : name}
-          {clip_string && name.length > 13 && ".."}
+          {clip_string ? name.substring(0, 12) : name}
+          {clip_string && name.length > 12 && ".."}
         </h2>
         <h4 className="text-gray-light">{role}</h4>
       </div>
