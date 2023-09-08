@@ -58,7 +58,7 @@ export default function Slider({ movie }: SliderProps) {
       <img
         src={img_path}
         alt="slider_img"
-        className="min-w-full h-[500px] rounded-2xl opacity-60 object-cover"
+        className="aspect-[16/9] rounded-2xl opacity-60 object-cover"
         loading="lazy"
       />
       <div className="details text-white absolute bottom-0 p-8 flex flex-col justify-end h-full">

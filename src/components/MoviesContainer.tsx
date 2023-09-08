@@ -69,7 +69,7 @@ function MoviesContainer() {
               <MdKeyboardArrowRight className="border-[1.5px] p-1 text-3xl cursor-pointer border-white rounded-full" />
             </div>
           </header>
-          <main className="flex flex-wrap gap-4">
+          <main className="grid md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-x-4 gap-y-8">
             {isLoading ? (
               <MoviesLoading />
             ) : category === "movie" ? (
