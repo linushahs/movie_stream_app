@@ -1,22 +1,28 @@
 import {
   ageRatingOptions,
   movieDetailsOptions,
+  movieTrailersOptions,
   similarMoviesOptions,
 } from "@/api/api";
 import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
+import MoviesLoading from "@/loading/MoviesLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
+import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate, useParams } from "react-router-dom";
 import CastItem from "./CastItem";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import Movie from "./Movie";
+import VideoPlayer from "./VideoPlayer";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 function MovieDetails() {
   const [movieDetails, setMovieDetails] = useState<any>([]);
   const [similarMovies, setSimilarMovies] = useState([]);
+  const [trailers, setTrailers] = useState<any>([]);
+  const [currentTrailer, setCurrentTrailer] = useState(0);
   const [isFavoritesClicked, setIsFavoriesClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSimilarMoviesLoading, setSimilarMoviesLoading] = useState(true);
@@ -86,10 +92,44 @@ function MovieDetails() {
       });
   };
 
+  const getMovieTrailers = async () => {
+    if (!movieId) return;
+
+    const options = movieTrailersOptions(movieId);
+    await axios
+      .request(options)
+      .then((res) => {
+        const results = res.data.results;
+        if (results) {
+          setTrailers(results.filter((t: any) => t.type === "Trailer"));
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const goToNextTrailer = () => {
+    if (currentTrailer >= trailers.length - 1) {
+      setCurrentTrailer(0);
+      return;
+    }
+    setCurrentTrailer(currentTrailer + 1);
+  };
+
+  const goToPrevTrailer = () => {
+    if (currentTrailer <= 0) {
+      setCurrentTrailer(trailers.length - 1);
+      return;
+    }
+    setCurrentTrailer(currentTrailer - 1);
+  };
+
   useEffect(() => {
     getMovieDetails();
     getAgeRating();
     getSimilarMovies();
+    getMovieTrailers();
   }, [movieId]);
 
   useEffect(() => {
@@ -135,7 +175,7 @@ function MovieDetails() {
 
       {/* Details section ------------>  */}
       <div className="dark text-white flex items-start gap-6">
-        <img
+        <LazyLoadImage
           src={`https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`}
           alt="poster"
           width={320}
@@ -152,13 +192,27 @@ function MovieDetails() {
             </span>
           </div>
 
-          <ul className="my-2 flex items-center divide-x divide-gray-dark text-gray-dark font-medium">
-            <li className="pr-2">
-              {movieDetails.release_date?.substring(0, 4)}
-            </li>
-            <li className="px-2">{duration}</li>
-            <li className="pl-2">{ageRating}</li>
-          </ul>
+          <div className="flex gap-3 items-center my-2">
+            <ul className=" w-fit flex items-center divide-x divide-gray-dark text-gray-dark font-medium">
+              <li className="pr-2">
+                {movieDetails.release_date?.substring(0, 4)}
+              </li>
+              <li className="px-2">{duration}</li>
+              <li className="pl-2">{ageRating}</li>
+            </ul>
+
+            {/* add to favorites button -------->  */}
+            <button
+              onClick={() => setIsFavoriesClicked(!isFavoritesClicked)}
+              className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
+            >
+              {isFavoritesClicked ? (
+                <AiFillStar className="text-xl text-amber-400" />
+              ) : (
+                <AiOutlineStar className="text-xl text-amber-400" />
+              )}
+            </button>
+          </div>
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
@@ -233,32 +287,28 @@ function MovieDetails() {
               </div>
             </TabsContent>
             <TabsContent value="trailers">
-              <div className="mt-6 w-[600px] aspect-[2/1] rounded-lg bg-gray-dark">
-                {/* <iframe
-                  width="640"
-                  height="360"
-                  src={`https://www.youtube.com/embed/JfVOs4VSpmA`}
-                  allowFullScreen
-                  title="YouTube Video"
-                /> */}
-              </div>
+              {trailers[currentTrailer] && (
+                <>
+                  <VideoPlayer videoId={trailers[currentTrailer].key} />
+
+                  <div className="flex justify-end gap-2 mt-3">
+                    <button
+                      onClick={goToPrevTrailer}
+                      className="border border-gray-700 p-2 rounded-full hover:bg-dark"
+                    >
+                      <HiOutlineChevronLeft className="text-xl" />
+                    </button>
+                    <button
+                      onClick={goToNextTrailer}
+                      className="border border-gray-700 p-2 rounded-full hover:bg-dark"
+                    >
+                      <HiOutlineChevronRight className="text-xl" />
+                    </button>
+                  </div>
+                </>
+              )}
             </TabsContent>
           </Tabs>
-
-          {/* add to favorites button -------->  */}
-          <button
-            onClick={() => setIsFavoriesClicked(!isFavoritesClicked)}
-            className="mt-6 px-3 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
-          >
-            <span className="flex items-center gap-2">
-              {isFavoritesClicked ? (
-                <AiFillStar className="text-xl text-amber-400" />
-              ) : (
-                <AiOutlineStar className="text-xl text-amber-400" />
-              )}
-              Add to Favorites
-            </span>
-          </button>
         </article>
       </div>
 
@@ -267,7 +317,9 @@ function MovieDetails() {
         <h2 className="text-xl text-white">Similar movies</h2>
 
         <main className="main-container mt-4">
-          {similarMovies.length ? (
+          {isSimilarMoviesLoading ? (
+            <MoviesLoading />
+          ) : similarMovies.length ? (
             similarMovies.map((movie: any) => (
               <Movie
                 key={movie.id}

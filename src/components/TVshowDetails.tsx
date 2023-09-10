@@ -2,6 +2,7 @@ import {
   ageRatingOptions,
   seasonDetailsOptions,
   tvShowDetailsOptions,
+  tvShowTrailersOptions,
 } from "@/api/api";
 import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import SeasonEpisodeLoading from "@/loading/SeasonEpisodeLoading";
@@ -23,10 +24,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ScrollArea } from "./ui/scroll-area";
 import { twMerge } from "tailwind-merge";
 import CastItem from "./CastItem";
+import VideoPlayer from "./VideoPlayer";
+import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});
   const [isFavoritesClicked, setIsFavoriesClicked] = useState(false);
+  const [trailers, setTrailers] = useState<any>([]);
+  const [currentTrailer, setCurrentTrailer] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [ageRating, setAgeRating] = useState("");
   const [starringCast, setStarringCast] = useState([]);
@@ -97,10 +102,44 @@ function TVShowDetails() {
     getSeasonDetails(seasonNo);
   };
 
+  const getTvShowTrailers = async () => {
+    if (!tvId) return;
+
+    const options = tvShowTrailersOptions(tvId);
+    await axios
+      .request(options)
+      .then((res) => {
+        const results = res.data.results;
+        if (results) {
+          setTrailers(results.filter((t: any) => t.type === "Trailer"));
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const goToNextTrailer = () => {
+    if (currentTrailer >= trailers.length - 1) {
+      setCurrentTrailer(0);
+      return;
+    }
+    setCurrentTrailer(currentTrailer + 1);
+  };
+
+  const goToPrevTrailer = () => {
+    if (currentTrailer <= 0) {
+      setCurrentTrailer(trailers.length - 1);
+      return;
+    }
+    setCurrentTrailer(currentTrailer - 1);
+  };
+
   useEffect(() => {
     getTVShowDetails();
     getAgeRating();
     getSeasonDetails("1");
+    getTvShowTrailers();
   }, [tvId]);
 
   useEffect(() => {
@@ -166,23 +205,42 @@ function TVShowDetails() {
             </span>
           </div>
 
-          <ul className="my-2 flex items-center divide-x divide-gray-dark text-gray-dark font-medium">
-            <li className="pr-2">
-              {tvShowDetails.first_air_date?.substring(0, 4)}
-            </li>
-            <li className="px-2">{tvShowDetails.number_of_seasons} seasons</li>
-            <li className="pl-2">{ageRating}</li>
-          </ul>
+          <div className="flex gap-3 items-center my-2">
+            <ul className="w-fit flex items-center divide-x divide-gray-dark text-gray-dark font-medium">
+              <li className="pr-2">
+                {tvShowDetails.first_air_date?.substring(0, 4)}
+              </li>
+              <li className="px-2">
+                {tvShowDetails.number_of_seasons} seasons
+              </li>
+              <li className="pl-2">{ageRating}</li>
+            </ul>
+
+            {/* add to favorites button -------->  */}
+            <button
+              onClick={() => setIsFavoriesClicked(!isFavoritesClicked)}
+              className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
+            >
+              {isFavoritesClicked ? (
+                <AiFillStar className="text-xl text-amber-400" />
+              ) : (
+                <AiOutlineStar className="text-xl text-amber-400" />
+              )}
+            </button>
+          </div>
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="cast" className=" mt-8">
-            <TabsList className="w-[300px] h-auto">
+          <Tabs defaultValue="trailers" className=" mt-8">
+            <TabsList className="w-[400px] h-auto">
               <TabsTrigger value="overview" className="w-full text-base">
                 Overview
               </TabsTrigger>
               <TabsTrigger value="cast" className="w-full text-base">
                 Cast
+              </TabsTrigger>
+              <TabsTrigger value="trailers" className="w-full text-base">
+                Trailers
               </TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
@@ -243,22 +301,29 @@ function TVShowDetails() {
                 ))}
               </div>
             </TabsContent>
-          </Tabs>
+            <TabsContent value="trailers">
+              {trailers[currentTrailer] && (
+                <>
+                  <VideoPlayer videoId={trailers[currentTrailer].key} />
 
-          {/* add to favorites button -------->  */}
-          <button
-            onClick={() => setIsFavoriesClicked(!isFavoritesClicked)}
-            className="mt-6 px-3 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
-          >
-            <span className="flex items-center gap-2">
-              {isFavoritesClicked ? (
-                <AiFillStar className="text-xl text-amber-400" />
-              ) : (
-                <AiOutlineStar className="text-xl text-amber-400" />
+                  <div className="flex justify-end gap-2 mt-3">
+                    <button
+                      onClick={goToPrevTrailer}
+                      className="border border-gray-700 p-2 rounded-full hover:bg-dark"
+                    >
+                      <HiOutlineChevronLeft className="text-xl" />
+                    </button>
+                    <button
+                      onClick={goToNextTrailer}
+                      className="border border-gray-700 p-2 rounded-full hover:bg-dark"
+                    >
+                      <HiOutlineChevronRight className="text-xl" />
+                    </button>
+                  </div>
+                </>
               )}
-              Add to Favorites
-            </span>
-          </button>
+            </TabsContent>
+          </Tabs>
         </article>
       </div>
 

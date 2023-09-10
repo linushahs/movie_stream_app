@@ -41,20 +41,6 @@ export default function MovieDetailsLoading() {
           <Skeleton className="w-[140px] h-8 mt-8" />
         </article>
       </div>
-
-      {/* Similar movies ------------->  */}
-      <div className="mt-8">
-        <Skeleton className="w-[180px] h-6" />
-
-        <div className="flex gap-4 mt-4">
-          {new Array(5).fill(0).map((_, id) => (
-            <Skeleton
-              key={id}
-              className="min-w-[120px] lg:min-w-[180px] flex-1 h-[280px] rounded-xl"
-            />
-          ))}
-        </div>
-      </div>
     </main>
   );
 }

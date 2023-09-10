@@ -34,7 +34,6 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
           src={img_path}
           alt="image"
           loading="lazy"
-          placeholder={<div className="bg-gray-dark w-full h-full">asd</div>}
           className="w-full h-full  transition-all hover:scale-[1.15]"
         />
       </div>

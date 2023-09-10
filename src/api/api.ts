@@ -85,3 +85,17 @@ export const seasonDetailsOptions = (id: string, seasonNo: string) => {
     ...getMethod,
   };
 };
+
+export const movieTrailersOptions = (id: string) => {
+  return {
+    url: `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
+    ...getMethod,
+  };
+};
+
+export const tvShowTrailersOptions = (id: string) => {
+  return {
+    url: `https://api.themoviedb.org/3/tv/${id}/videos?language=en-US`,
+    ...getMethod,
+  };
+};
