@@ -73,9 +73,9 @@ function Sidebar() {
                 key={show.id}
                 id={show.id}
                 title={show.title || show.name}
-                poster={show.poster_path}
+                poster_path={show.poster_path}
                 rating={show.vote_average}
-                releaseDate={show.release_date || show.first_air_date}
+                release_date={show.release_date || show.first_air_date}
               />
             ))
           )}
@@ -96,9 +96,9 @@ function Sidebar() {
                 key={movie.id}
                 id={movie.id}
                 title={movie.title}
-                poster={movie.poster_path}
+                poster_path={movie.poster_path}
                 rating={movie.vote_average}
-                releaseDate={movie.release_date}
+                release_date={movie.release_date}
               />
             ))
           ) : (

@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 function SmallMovieCard({
   id,
   title,
-  poster,
+  poster_path,
   rating,
-  releaseDate,
+  release_date,
 }: MovieProps) {
-  const img_path = `https://image.tmdb.org/t/p/original/${poster}`;
+  const img_path = `https://image.tmdb.org/t/p/original/${poster_path}`;
   const navigate = useNavigate();
   const category = useRecoilValue(categoryState);
   const setSearchQuery = useSetRecoilState(searchQueryState);
@@ -35,7 +35,7 @@ function SmallMovieCard({
       <div className="right h-[85px] flex flex-col justify-between">
         <div>
           <h4 className="text-white text-sm">{title}</h4>
-          <p className="text-xs mt-1 text-gray-light">{releaseDate}</p>
+          <p className="text-xs mt-1 text-gray-light">{release_date}</p>
         </div>
         <p className="text-sm  text-white">
           <span className="bg-yellow px-1 rounded-md text-black font-bold ">
