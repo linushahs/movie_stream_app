@@ -3,6 +3,7 @@ import { categoryState } from "@/stores/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiPlus } from "react-icons/bi";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 
@@ -53,12 +54,12 @@ export default function Slider({ movie }: SliderProps) {
           category === "movie" ? `/movie/${movie.id}` : `/tv/${movie.id}`
         )
       }
-      className="relative w-full h-auto bg-cover rounded-xl cursor-pointer"
+      className="relative w-full aspect-[16/9]  bg-cover rounded-xl cursor-pointer"
     >
-      <img
+      <LazyLoadImage
         src={img_path}
         alt="slider_img"
-        className="aspect-[16/9] rounded-2xl opacity-60 object-cover"
+        className="rounded-2xl opacity-60 object-cover"
         loading="lazy"
       />
       <div className="details text-white absolute bottom-0 p-8 flex flex-col justify-end h-full">
