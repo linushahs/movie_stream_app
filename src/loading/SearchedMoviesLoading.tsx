@@ -2,13 +2,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SearchedMoviesLoading() {
   return (
-    <main className="flex flex-wrap gap-4 mt-4">
+    <>
       {new Array(10).fill(0).map((_, id) => (
-        <Skeleton
-          key={id}
-          className="min-w-[120px] lg:min-w-[180px] flex-1 h-[280px] rounded-2xl"
-        />
+        <div key={id} className="flex flex-col gap-2 cursor-pointer w-full ">
+          <Skeleton className="w-full aspect-[2/3] rounded-xl transition-all " />
+          <Skeleton className="w-[60px] h-4" />
+          <Skeleton className="w-[120px] h-4" />
+        </div>
       ))}
-    </main>
+    </>
   );
 }
