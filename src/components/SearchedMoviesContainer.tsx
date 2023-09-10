@@ -44,7 +44,7 @@ function SearchedMoviesContainer() {
   return (
     <div className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
       <Header />
-      <main className="flex flex-wrap gap-4 mt-4">
+      <main className="mt-6 grid md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-x-4 gap-y-8">
         {isLoading ? (
           <SearchedMoviesLoading />
         ) : movies[0] ? (
@@ -52,10 +52,10 @@ function SearchedMoviesContainer() {
             <Movie
               key={id}
               id={movie.id}
-              poster={movie.poster_path}
+              poster_path={movie.poster_path}
               title={movie.title || movie.name}
               rating={movie.vote_average.toFixed(1)}
-              releaseDate={movie.release_date}
+              release_date={movie.release_date || movie.first_air_date}
             />
           ))
         ) : (

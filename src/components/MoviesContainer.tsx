@@ -77,10 +77,10 @@ function MoviesContainer() {
                 <Movie
                   key={movie.id}
                   id={movie.id}
-                  poster={movie.poster_path}
+                  poster_path={movie.poster_path}
                   title={movie.title || movie.name}
                   rating={movie.vote_average.toFixed(1)}
-                  releaseDate={movie.release_date}
+                  release_date={movie.release_date}
                 />
               ))
             ) : (
@@ -89,10 +89,10 @@ function MoviesContainer() {
                   <Movie
                     key={tvShow.id}
                     id={tvShow.id}
-                    poster={tvShow.poster_path}
+                    poster_path={tvShow.poster_path}
                     title={tvShow.name}
                     rating={tvShow.vote_average.toFixed(1)}
-                    releaseDate={tvShow.first_air_date}
+                    release_date={tvShow.first_air_date}
                   />
                 );
               })
