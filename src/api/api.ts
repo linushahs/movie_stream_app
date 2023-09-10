@@ -37,6 +37,13 @@ export const topRatedTvShowOptions = {
   ...getMethod,
 };
 
+export const similarMoviesOptions = (id: string) => {
+  return {
+    url: `https://api.themoviedb.org/3/movie/${id}/recommendations`,
+    ...getMethod,
+  };
+};
+
 export const searchMoviesOptions = (searchString: string) => {
   return {
     url: `https://api.themoviedb.org/3/search/movie?query=${searchString}&include_adult=false&language=en-US&page=1`,

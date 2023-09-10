@@ -59,7 +59,7 @@ export default function Slider({ movie }: SliderProps) {
       <LazyLoadImage
         src={img_path}
         alt="slider_img"
-        className="w-full h-full rounded-2xl opacity-60 object-cover"
+        className="w-full h-full rounded-xl opacity-60 object-cover"
         loading="lazy"
       />
       <div className="details text-white absolute bottom-0 p-8 flex flex-col justify-end h-full">

@@ -73,6 +73,10 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .main-container {
+    @apply grid md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-x-4 gap-y-8;
+  }
 }
 
 .swiper {

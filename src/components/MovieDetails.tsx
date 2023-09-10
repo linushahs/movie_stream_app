@@ -1,4 +1,8 @@
-import { ageRatingOptions, movieDetailsOptions } from "@/api/api";
+import {
+  ageRatingOptions,
+  movieDetailsOptions,
+  similarMoviesOptions,
+} from "@/api/api";
 import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -8,11 +12,14 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate, useParams } from "react-router-dom";
 import CastItem from "./CastItem";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import Movie from "./Movie";
 
 function MovieDetails() {
   const [movieDetails, setMovieDetails] = useState<any>([]);
+  const [similarMovies, setSimilarMovies] = useState([]);
   const [isFavoritesClicked, setIsFavoriesClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSimilarMoviesLoading, setSimilarMoviesLoading] = useState(true);
   const [duration, setDuration] = useState("");
   const [ageRating, setAgeRating] = useState("");
   const [starringCast, setStarringCast] = useState([]);
@@ -60,9 +67,29 @@ function MovieDetails() {
       });
   };
 
+  const getSimilarMovies = async () => {
+    if (!movieId) return;
+
+    setSimilarMoviesLoading(true);
+    const options = similarMoviesOptions(movieId);
+    await axios
+      .request(options)
+      .then((res) => {
+        const results = res.data.results;
+        if (results) {
+          setSimilarMovies(results.filter((_: any, id: number) => id < 5));
+        }
+        setSimilarMoviesLoading(false);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   useEffect(() => {
     getMovieDetails();
     getAgeRating();
+    getSimilarMovies();
   }, [movieId]);
 
   useEffect(() => {
@@ -135,13 +162,16 @@ function MovieDetails() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="cast" className="tabs mt-8">
-            <TabsList className="w-[300px] h-auto">
+          <Tabs defaultValue="trailers" className="tabs mt-8">
+            <TabsList className="w-[400px] h-auto">
               <TabsTrigger value="overview" className="w-full text-base">
                 Overview
               </TabsTrigger>
               <TabsTrigger value="cast" className="w-full text-base">
                 Cast
+              </TabsTrigger>
+              <TabsTrigger value="trailers" className="w-full text-base">
+                Trailers
               </TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
@@ -173,7 +203,7 @@ function MovieDetails() {
                 </ul>
               </div>
             </TabsContent>
-            <TabsContent value="cast" className="overflow-hidden">
+            <TabsContent value="cast">
               <div className="mt-4 flex flex-wrap gap-x-10">
                 {director.map((d: any) => (
                   <CastItem
@@ -202,12 +232,23 @@ function MovieDetails() {
                 ))}
               </div>
             </TabsContent>
+            <TabsContent value="trailers">
+              <div className="mt-6 w-[600px] aspect-[2/1] rounded-lg bg-gray-dark">
+                {/* <iframe
+                  width="640"
+                  height="360"
+                  src={`https://www.youtube.com/embed/JfVOs4VSpmA`}
+                  allowFullScreen
+                  title="YouTube Video"
+                /> */}
+              </div>
+            </TabsContent>
           </Tabs>
 
           {/* add to favorites button -------->  */}
           <button
             onClick={() => setIsFavoriesClicked(!isFavoritesClicked)}
-            className="mt-6 px-3 py-1.5 rounded-lg hover:bg-dark/50 transition-colors bg-dark text-white "
+            className="mt-6 px-3 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
           >
             <span className="flex items-center gap-2">
               {isFavoritesClicked ? (
@@ -222,39 +263,25 @@ function MovieDetails() {
       </div>
 
       {/* Similar movies ------------->  */}
-      <div className="mt-8">
+      <div className="mt-12">
         <h2 className="text-xl text-white">Similar movies</h2>
 
-        <div className="flex flex-wrap gap-4 mt-4">
-          {new Array(5).fill(0).map((_, id) => (
-            <div
-              key={id}
-              className="min-w-[120px] lg:min-w-[180px] flex-1 h-[280px] rounded-xl relative overflow-hidden"
-            >
-              <LazyLoadImage
-                src={
-                  "https://image.tmdb.org/t/p/original/kyeqWdyUXW608qlYkRqosgbbJyK.jpg"
-                }
-                alt="image"
-                loading="lazy"
-                className="w-full h-full rounded-2xl opacity-50 hover:scale-125 hover:rounded-2xl transition-all"
+        <main className="main-container mt-4">
+          {similarMovies.length ? (
+            similarMovies.map((movie: any) => (
+              <Movie
+                key={movie.id}
+                id={movie.id}
+                poster_path={movie.poster_path}
+                title={movie.title || movie.name}
+                rating={movie.vote_average.toFixed(1)}
+                release_date={movie.release_date}
               />
-              <button className="absolute top-4 right-4 py-0.5 px-2.5 text-xl text-white bg-gray-light/70 rounded-lg">
-                +
-              </button>
-              <div className="details w-full flex flex-col gap-1 absolute bottom-6 text-center">
-                <h3 className="text-center text-white">Avatar</h3>
-                <p className="text-xs text-gray-light">2020-05-09</p>
-                <p className="text-sm mt-1 text-white">
-                  <span className="bg-yellow px-2 rounded-md text-black font-bold ">
-                    IMDB
-                  </span>
-                  &nbsp; 9.8
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))
+          ) : (
+            <h1 className="text-gray-light">Oops! Movies not added</h1>
+          )}
+        </main>
       </div>
     </main>
   );

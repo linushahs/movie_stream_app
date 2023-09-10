@@ -29,7 +29,7 @@ function SmallMovieCard({
           src={img_path}
           alt=""
           loading="lazy"
-          className="h-[85px] w-full rounded-lg object-cover"
+          className="h-[85px] w-full rounded-xl object-cover"
         />
       </div>
       <div className="right h-[85px] flex flex-col justify-between">

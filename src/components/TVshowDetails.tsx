@@ -269,13 +269,13 @@ function TVShowDetails() {
             <SelectValue placeholder="Seasons" />
           </SelectTrigger>
           <SelectContent className="bg-dark text-white">
-            <ScrollArea
-              className={twMerge(
-                tvShowDetails.seasons.length > 6 ? "h-[250px]" : "h-fit"
-              )}
-            >
-              {tvShowDetails.seasons &&
-                tvShowDetails.seasons.map((s: any) => (
+            {tvShowDetails.seasons && (
+              <ScrollArea
+                className={twMerge(
+                  tvShowDetails.seasons.length > 6 ? "h-[250px]" : "h-fit"
+                )}
+              >
+                {tvShowDetails.seasons.map((s: any) => (
                   <SelectItem
                     key={s.id}
                     value={`${s.season_number}`}
@@ -284,7 +284,8 @@ function TVShowDetails() {
                     {s.name}
                   </SelectItem>
                 ))}
-            </ScrollArea>
+              </ScrollArea>
+            )}
           </SelectContent>
         </Select>
 
