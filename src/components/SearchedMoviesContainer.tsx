@@ -6,25 +6,32 @@ import Movie from "./Movie";
 import { useRecoilValue } from "recoil";
 import { categoryState, searchQueryState } from "@/stores/store";
 import Header from "@/layout/Header";
+import { useParams } from "react-router-dom";
 
 function SearchedMoviesContainer() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const category = useRecoilValue(categoryState);
-  const searchQuery = useRecoilValue(searchQueryState);
+  const { query } = useParams();
 
   const getMovies = async () => {
+    if (!query) return;
+
     setIsLoading(true);
-    const options = searchMoviesOptions(searchQuery);
+    const options = searchMoviesOptions(query);
     await axios.request(options).then((response) => {
       setIsLoading(false);
       setMovies(response.data.results);
     });
   };
 
+  console.log(query);
+
   const getTvShows = async () => {
+    if (!query) return;
+
     setIsLoading(true);
-    const options = searchTvShowsOptions(searchQuery);
+    const options = searchTvShowsOptions(query);
     await axios.request(options).then((response) => {
       setIsLoading(false);
       setMovies(response.data.results);
@@ -39,7 +46,7 @@ function SearchedMoviesContainer() {
     return () => {
       clearTimeout(timer); // Clear the timer if the component unmounts or searchQuery changes before 2 seconds
     };
-  }, [searchQuery]);
+  }, [query]);
 
   return (
     <div className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">

@@ -1,31 +1,31 @@
 import { categoryState } from "@/stores/store";
 import { useEffect } from "react";
 import { useMatches, useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
 
-function Header() {
-  const [, { pathname }] = useMatches();
-  const setCategory = useSetRecoilState(categoryState);
+function FavoritesHeader() {
+  const [{ pathname }] = useMatches();
+  const [category, setCategory] = useRecoilState(categoryState);
   const navigate = useNavigate();
 
   const handleTvShowsClick = () => {
     setCategory("tv");
-    navigate("/home/tv-series");
+    navigate("/favorites/tv-series");
   };
 
   const handleMoviesClick = () => {
     setCategory("movie");
-    navigate("/home/movies");
+    navigate("/favorites/movies");
   };
 
   useEffect(() => {
-    if (pathname === "/home/movies") {
+    if (pathname === "/favorites/movies") {
       setCategory("movie");
-    } else if (pathname === "/home/tv-series") {
+    } else if (pathname === "/favorites/tv-series") {
       setCategory("tv");
     }
-  }, []);
+  }, [pathname]);
 
   return (
     <header className="">
@@ -34,7 +34,7 @@ function Header() {
           onClick={handleTvShowsClick}
           className={twMerge(
             "text-gray-light hover:text-white cursor-pointer",
-            pathname === "/home/tv-series" && "text-white"
+            category === "tv" && "text-white"
           )}
         >
           TV Series
@@ -43,7 +43,7 @@ function Header() {
           onClick={handleMoviesClick}
           className={twMerge(
             "text-gray-light hover:text-white cursor-pointer",
-            pathname === "/home/movies" && "text-white"
+            category === "movie" && "text-white"
           )}
         >
           Movies
@@ -53,4 +53,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default FavoritesHeader;

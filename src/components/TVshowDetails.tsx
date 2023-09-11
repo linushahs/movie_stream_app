@@ -135,6 +135,7 @@ function TVShowDetails() {
     setCurrentTrailer(currentTrailer - 1);
   };
 
+  console.log(tvId);
   useEffect(() => {
     getTVShowDetails();
     getAgeRating();

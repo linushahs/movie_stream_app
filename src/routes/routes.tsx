@@ -1,6 +1,7 @@
 import App from "@/App";
 import MovieDetails from "@/components/MovieDetails";
 import MoviesContainer from "@/components/MoviesContainer";
+import SearchedMoviesContainer from "@/components/SearchedMoviesContainer";
 import TVShowDetails from "@/components/TVshowDetails";
 import Favorites from "@/components/favorites/Favorites";
 import { Navigate } from "react-router-dom";
@@ -16,20 +17,32 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/home/",
+        path: "",
+        element: <Navigate to="/home/movies" />,
+      },
+      {
+        path: "/home/movies",
         element: <MoviesContainer />,
+      },
+      {
+        path: "/home/movies/:movieId",
+        element: <MovieDetails />,
+      },
+      {
+        path: "/home/search/movies?q=query",
+        element: <SearchedMoviesContainer />,
       },
       {
         path: "/home/tv-series",
         element: <MoviesContainer />,
       },
       {
-        path: "/home/movie/:movieId",
-        element: <MovieDetails />,
+        path: "/home/tv-series/:tvId",
+        element: <TVShowDetails />,
       },
       {
-        path: "/home/tv/:tvId",
-        element: <TVShowDetails />,
+        path: "/home/search/tv-series?q=query",
+        element: <SearchedMoviesContainer />,
       },
     ],
   },

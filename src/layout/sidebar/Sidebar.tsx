@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useRecoilState, useRecoilValue } from "recoil";
 import SmallMovieCard from "./SmallMovieCard";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const [topRatedShows, setTopRatedShows] = useState<any>([]);
@@ -17,6 +18,7 @@ function Sidebar() {
   const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
   const category = useRecoilValue(categoryState);
   const favoriteMovies = useRecoilValue(favoriteMoviesState);
+  const navigate = useNavigate();
 
   const getTopRatedMovies = async () => {
     setIsLoading(true);
@@ -47,7 +49,16 @@ function Sidebar() {
   }, [category]);
 
   const handleSearchState = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    const query = e.target.value;
+    category === "movie"
+      ? navigate(`/home/search/movies?q=${query}`)
+      : navigate(`/home/search/tv-series?q=${query}`);
+  };
+
+  const handleFavoritesNavigation = () => {
+    navigate(
+      category === "movie" ? "/favorites/movies" : "/favorites/tv-series"
+    );
   };
 
   return (
@@ -95,21 +106,28 @@ function Sidebar() {
         <h2 className=" text-white">Favorites</h2>
         <div className="movies-list mt-4">
           {favoriteMovies[0] ? (
-            favoriteMovies.map((movie: any) => (
-              <SmallMovieCard
-                key={movie.id}
-                id={movie.id}
-                title={movie.title}
-                poster_path={movie.poster_path}
-                rating={movie.vote_average}
-                release_date={movie.release_date}
-              />
-            ))
+            favoriteMovies.map((movie: any, idx) => {
+              if (idx < 3) {
+                return (
+                  <SmallMovieCard
+                    key={movie.id}
+                    id={movie.id}
+                    title={movie.title}
+                    poster_path={movie.poster_path}
+                    rating={movie.vote_average}
+                    release_date={movie.release_date}
+                  />
+                );
+              }
+            })
           ) : (
             <h3 className="text-gray-dark mb-4">No movies added</h3>
           )}
         </div>
-        <button className="px-4 py-2 bg-red rounded-lg w-full text-white">
+        <button
+          onClick={handleFavoritesNavigation}
+          className="px-4 py-2 bg-red rounded-lg w-full text-white"
+        >
           See more
         </button>
       </main>

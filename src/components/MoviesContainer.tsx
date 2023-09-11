@@ -4,25 +4,21 @@ import SliderLoading from "@/loading/SliderLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { trendingMovieOptions, trendingTvOptions } from "../api/api";
 import { categoryState, favoriteMoviesState } from "../stores/store";
 import Movie from "./Movie";
 import Slider from "./Slider";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-} from "firebase/firestore";
+import { getFavoriteMovies } from "@/firebase/helpers";
+import { getFirestore } from "firebase/firestore";
 import { firebaseApp } from "@/main";
 
 function MoviesContainer() {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trendingTvShows, setTrendingTvShows] = useState([]);
   const category = useRecoilValue(categoryState);
-  const setFavoriteMovies = useSetRecoilState(favoriteMoviesState);
+  const [favoriteMovies, setFavoriteMovies] =
+    useRecoilState(favoriteMoviesState);
   const [isLoading, setIsLoading] = useState(true);
 
   const db = getFirestore(firebaseApp);
@@ -43,15 +39,9 @@ function MoviesContainer() {
     });
   };
 
-  const getFavoriteMovies = async () => {
-    // Query the Firestore collection
-    const list: any = [];
-    const querySnapshot = await getDocs(collection(db, "favorite(movies)"));
-    querySnapshot.forEach((doc) => {
-      list.push(doc.data());
-    });
-
-    setFavoriteMovies(list);
+  const getFavMovies = async () => {
+    const movies = await getFavoriteMovies(db);
+    setFavoriteMovies(movies);
   };
 
   useEffect(() => {
@@ -60,8 +50,10 @@ function MoviesContainer() {
   }, [category]);
 
   useEffect(() => {
-    getFavoriteMovies();
+    getFavMovies();
   }, []);
+
+  console.log("runned");
 
   return (
     <div className="main-container">

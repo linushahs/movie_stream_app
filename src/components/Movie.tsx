@@ -10,9 +10,10 @@ import { AiFillStar } from "react-icons/ai";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { useToast } from "./ui/use-toast";
 import { twMerge } from "tailwind-merge";
+import { getFavoriteMovies } from "@/firebase/helpers";
 
 export interface MovieProps {
   id: number;
@@ -27,7 +28,8 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
   const navigate = useNavigate();
   const category = useRecoilValue(categoryState);
   const setSearchQuery = useSetRecoilState(searchQueryState);
-  const favoriteMovies = useRecoilValue(favoriteMoviesState);
+  const [favoriteMovies, setFavoriteMovies] =
+    useRecoilState(favoriteMoviesState);
   const [isAddedToFav, setIsAddedToFav] = useState(false);
   const { toast } = useToast();
 
@@ -64,17 +66,20 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
         variant: "destructive",
       });
     });
+
+    await getFavoriteMovies(db).then((res) => setFavoriteMovies(res));
   };
 
   const handleNavigation = () => {
     setSearchQuery("");
-    navigate(category === "movie" ? `/home/movie/${id}` : `/home/tv/${id}`);
+    navigate(
+      category === "movie" ? `/home/movies/${id}` : `/home/tv-series/${id}`
+    );
   };
 
   useEffect(() => {
     const list: any = favoriteMovies.find((m: any) => m.id === id);
     if (list) setIsAddedToFav(true);
-    console.log(list);
   }, []);
 
   return (

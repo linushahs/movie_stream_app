@@ -17,7 +17,9 @@ function SmallMovieCard({
 
   const handleNavigation = () => {
     setSearchQuery("");
-    navigate(category === "movie" ? `/home/movie/${id}` : `/home/tv/${id}`);
+    navigate(
+      category === "movie" ? `/home/movies/${id}` : `/home/tv-series/${id}`
+    );
   };
   return (
     <div
