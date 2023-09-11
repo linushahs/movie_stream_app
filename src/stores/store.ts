@@ -24,3 +24,8 @@ export const loggedInUserState = atom({
     profile_path: null,
   },
 });
+
+export const favoriteMoviesState = atom({
+  key: "favoriteMovies",
+  default: [],
+});

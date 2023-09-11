@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { firebaseApp } from "@/main";
-import { categoryState, searchQueryState } from "@/stores/store";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import {
+  categoryState,
+  favoriteMoviesState,
+  searchQueryState,
+} from "@/stores/store";
+import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { AiFillStar } from "react-icons/ai";
-import { BiPlus } from "react-icons/bi";
+import { BiMinus, BiPlus } from "react-icons/bi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useToast } from "./ui/use-toast";
+import { twMerge } from "tailwind-merge";
 
 export interface MovieProps {
   id: number;
@@ -22,17 +27,18 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
   const navigate = useNavigate();
   const category = useRecoilValue(categoryState);
   const setSearchQuery = useSetRecoilState(searchQueryState);
-  const [isAddedToFav, setAddedToFav] = useState(false);
+  const favoriteMovies = useRecoilValue(favoriteMoviesState);
+  const [isAddedToFav, setIsAddedToFav] = useState(false);
   const { toast } = useToast();
 
   //firestore database
   const db = getFirestore(firebaseApp);
 
   const addToFavorites = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-
+    setIsAddedToFav(true);
     await setDoc(doc(db, "favorite(movies)", `movie${id}`), {
       id,
       poster_path,
@@ -46,10 +52,30 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
     });
   };
 
+  const removeFromFavorites = async (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    setIsAddedToFav(false);
+
+    await deleteDoc(doc(db, "favorite(movies)", `movie${id}`)).then(() => {
+      toast({
+        title: "Removed from favorites",
+        variant: "destructive",
+      });
+    });
+  };
+
   const handleNavigation = () => {
     setSearchQuery("");
     navigate(category === "movie" ? `/home/movie/${id}` : `/home/tv/${id}`);
   };
+
+  useEffect(() => {
+    const list: any = favoriteMovies.find((m: any) => m.id === id);
+    if (list) setIsAddedToFav(true);
+    console.log(list);
+  }, []);
 
   return (
     <div
@@ -67,10 +93,20 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
 
       {/* Add to favorites section -------  */}
       <button
-        onClick={(e) => addToFavorites(e)}
-        className="absolute top-2 right-2 p-1.5 text-xl text-white transition-colors bg-gray-light/50 hover:bg-gray-light/70 rounded-lg z-30"
+        className={twMerge(
+          "absolute top-2 right-2 p-1.5 text-xl text-white transition-colors bg-gray-light/50 hover:bg-gray-light/70 rounded-lg z-30",
+          isAddedToFav && "bg-red/90 text-white hover:bg-red/80"
+        )}
       >
-        <BiPlus className="text-md" />
+        {isAddedToFav ? (
+          <div onClick={(e) => removeFromFavorites(e)}>
+            <BiMinus className="text-md" on />
+          </div>
+        ) : (
+          <div onClick={(e) => addToFavorites(e)}>
+            <BiPlus className="text-md" />
+          </div>
+        )}
       </button>
 
       {/* description -------------------  */}
