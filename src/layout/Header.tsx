@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
 
 function Header() {
-  const [, { pathname }] = useMatches();
+  const [{ pathname }] = useMatches();
   const [category, setCategory] = useRecoilState(categoryState);
   const navigate = useNavigate();
 

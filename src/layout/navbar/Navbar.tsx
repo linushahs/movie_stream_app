@@ -27,7 +27,7 @@ const menus = [
   },
 ];
 function Navbar() {
-  const [, { pathname }] = useMatches();
+  const [{ pathname }] = useMatches();
   const navigate = useNavigate();
   const loggedInUser = useRecoilValue(loggedInUserState);
 

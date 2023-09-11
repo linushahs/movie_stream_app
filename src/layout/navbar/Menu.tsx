@@ -8,7 +8,7 @@ interface MenuProps {
 }
 
 function Menu({ menu: { name, path }, changeMenuState, children }: MenuProps) {
-  const [, { pathname }] = useMatches();
+  const [{ pathname }] = useMatches();
 
   return (
     <li

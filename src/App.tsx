@@ -5,6 +5,7 @@ import Navbar from "./layout/navbar/Navbar";
 import Sidebar from "./layout/sidebar/Sidebar";
 import SearchedMoviesLoading from "./loading/SearchedMoviesLoading";
 import { searchQueryState } from "./stores/store";
+import { Toaster } from "./components/ui/toaster";
 
 const LazySearchedMovies = lazy(
   () => import("@/components/SearchedMoviesContainer")
@@ -29,7 +30,7 @@ function App() {
       ) : (
         <Outlet />
       )}
-
+      <Toaster />
       <Sidebar />
     </div>
   );

@@ -17,7 +17,7 @@ import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/firebaseConfig.ts";
 
 //initialize firebase app
-initializeApp(firebaseConfig);
+export const firebaseApp = initializeApp(firebaseConfig);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
