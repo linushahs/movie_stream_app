@@ -1,23 +1,24 @@
-import { FiCompass, FiHome } from "react-icons/fi";
+import SignInWithGoogle from "@/components/SignInWithGoogle";
+import UserProfile from "@/components/UserProfile";
+import { loggedInUserState } from "@/stores/store";
+import { AiOutlineHeart } from "react-icons/ai";
+import { FiHome } from "react-icons/fi";
 import { RxStopwatch } from "react-icons/rx";
 import { useMatches, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import { twMerge } from "tailwind-merge";
 import Menu from "./Menu";
-import SignInWithGoogle from "@/components/SignInWithGoogle";
-import { useRecoilValue } from "recoil";
-import { loggedInUserState } from "@/stores/store";
-import UserProfile from "@/components/UserProfile";
 
 const menus = [
   {
     name: "Home",
     icon: <FiHome />,
-    path: "/",
+    path: "/home",
   },
   {
-    name: "Discover",
-    icon: <FiCompass />,
-    path: "/discover",
+    name: "Favorites",
+    icon: <AiOutlineHeart />,
+    path: "/favorites",
   },
   {
     name: "Upcoming Shows",

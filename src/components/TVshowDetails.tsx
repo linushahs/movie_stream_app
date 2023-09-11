@@ -231,7 +231,7 @@ function TVShowDetails() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="trailers" className=" mt-8">
+          <Tabs defaultValue="overview" className=" mt-8">
             <TabsList className="w-[400px] h-auto">
               <TabsTrigger value="overview" className="w-full text-base">
                 Overview

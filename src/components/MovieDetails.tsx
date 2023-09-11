@@ -8,7 +8,12 @@ import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import MoviesLoading from "@/loading/MoviesLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import {
+  AiFillHeart,
+  AiFillStar,
+  AiOutlineHeart,
+  AiOutlineStar,
+} from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -207,16 +212,16 @@ function MovieDetails() {
               className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
             >
               {isFavoritesClicked ? (
-                <AiFillStar className="text-xl text-amber-400" />
+                <AiFillHeart className="text-xl text-red" />
               ) : (
-                <AiOutlineStar className="text-xl text-amber-400" />
+                <AiOutlineHeart className="text-xl text-red" />
               )}
             </button>
           </div>
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="trailers" className="tabs mt-8">
+          <Tabs defaultValue="overview" className="tabs mt-8">
             <TabsList className="w-[400px] h-auto">
               <TabsTrigger value="overview" className="w-full text-base">
                 Overview
@@ -316,7 +321,7 @@ function MovieDetails() {
       <div className="mt-12">
         <h2 className="text-xl text-white">Similar movies</h2>
 
-        <main className="main-container mt-4">
+        <main className="movie-container mt-4">
           {isSimilarMoviesLoading ? (
             <MoviesLoading />
           ) : similarMovies.length ? (

@@ -1,21 +1,32 @@
 import { categoryState } from "@/stores/store";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useMatches, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
 
 function Header() {
+  const [, { pathname }] = useMatches();
   const [category, setCategory] = useRecoilState(categoryState);
   const navigate = useNavigate();
 
   const handleTvShowsClick = () => {
     setCategory("tv");
-    navigate("/tv-series");
+    navigate("/home/tv-series");
   };
 
   const handleMoviesClick = () => {
     setCategory("movie");
-    navigate("/");
+    navigate("/home");
   };
+
+  useEffect(() => {
+    if (pathname === "/home") {
+      setCategory("movie");
+    } else if (pathname === "/home/tv-series") {
+      setCategory("tv");
+    }
+  }, [pathname]);
+
   return (
     <header className="">
       <ul className="flex gap-4 text-gray-light">

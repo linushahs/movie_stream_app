@@ -51,7 +51,9 @@ export default function Slider({ movie }: SliderProps) {
     <div
       onClick={() =>
         navigate(
-          category === "movie" ? `/movie/${movie.id}` : `/tv/${movie.id}`
+          category === "movie"
+            ? `/home/movie/${movie.id}`
+            : `/home/tv/${movie.id}`
         )
       }
       className="relative w-full aspect-[2/1]  bg-cover rounded-xl cursor-pointer"

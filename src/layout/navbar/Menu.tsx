@@ -10,12 +10,11 @@ interface MenuProps {
 function Menu({ menu: { name, path }, changeMenuState, children }: MenuProps) {
   const [, { pathname }] = useMatches();
 
-  console.log(pathname);
   return (
     <li
       className={twMerge(
         "my-7 flex gap-3 items-center justify-center lg:justify-start text-gray-dark  cursor-pointer hover:text-white",
-        path === pathname && "lg:border-r-4 lg:border-r-red text-white"
+        pathname.startsWith(path) && "lg:border-r-4 lg:border-r-red text-white"
       )}
       onClick={() => changeMenuState(path)}
     >
