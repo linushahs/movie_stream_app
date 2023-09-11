@@ -1,6 +1,10 @@
 import { topRatedMovieOptions, topRatedTvShowOptions } from "@/api/api";
 import SidebarLoading from "@/loading/SidebarLoading";
-import { categoryState, searchQueryState } from "@/stores/store";
+import {
+  categoryState,
+  favoriteMoviesState,
+  searchQueryState,
+} from "@/stores/store";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
@@ -9,10 +13,10 @@ import SmallMovieCard from "./SmallMovieCard";
 
 function Sidebar() {
   const [topRatedShows, setTopRatedShows] = useState<any>([]);
-  const [favorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
   const category = useRecoilValue(categoryState);
+  const favoriteMovies = useRecoilValue(favoriteMoviesState);
 
   const getTopRatedMovies = async () => {
     setIsLoading(true);
@@ -90,8 +94,8 @@ function Sidebar() {
       <main className="mt-8">
         <h2 className=" text-white">Favorites</h2>
         <div className="movies-list mt-4">
-          {favorites[0] ? (
-            topRatedShows.map((movie: any) => (
+          {favoriteMovies[0] ? (
+            favoriteMovies.map((movie: any) => (
               <SmallMovieCard
                 key={movie.id}
                 id={movie.id}

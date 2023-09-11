@@ -24,15 +24,15 @@ function SmallMovieCard({
       onClick={handleNavigation}
       className="w-full flex gap-3 mb-4 cursor-pointer"
     >
-      <div className="left min-w-[70px]">
+      <div className="w-1/3">
         <img
           src={img_path}
-          alt=""
+          alt="pic"
           loading="lazy"
-          className="h-[85px] w-full rounded-xl object-cover"
+          className="aspect-[3/4] rounded-lg "
         />
       </div>
-      <div className="right h-[85px] flex flex-col justify-between">
+      <div className="flex-1 h-[85px] flex flex-col justify-between">
         <div>
           <h4 className="text-white text-sm">{title}</h4>
           <p className="text-xs mt-1 text-gray-light">{release_date}</p>
