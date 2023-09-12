@@ -1,10 +1,10 @@
-import { loggedInUserState } from "@/stores/store";
+import { userDataState } from "@/stores/store";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
 import { useSetRecoilState } from "recoil";
 
 function SignInWithGoogle() {
-  const setUser = useSetRecoilState(loggedInUserState);
+  const setUserData = useSetRecoilState(userDataState);
 
   const handleSignIn = async () => {
     const provider = new GoogleAuthProvider();
@@ -12,15 +12,19 @@ function SignInWithGoogle() {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        const user = result.user;
-        if (user) {
-          setUser({
-            name: user.displayName,
-            email: user.email,
-            profile_path: user.photoURL,
-          });
+        const { displayName, email, photoURL } = result.user;
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential?.accessToken;
+        if (displayName && token && email && photoURL) {
+          const user = {
+            name: displayName,
+            email,
+            photoURL,
+            accessToken: token,
+          };
+          localStorage.setItem("user", JSON.stringify(user));
+          setUserData({ name: displayName, email, photoURL });
         }
-        console.log(user);
       })
       .catch((error) => {
         console.log(error.message);

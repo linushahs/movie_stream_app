@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { firebaseApp } from "@/main";
+import { firebaseApp, firebaseDB } from "@/main";
 import {
   categoryState,
   favoriteMoviesState,
   searchQueryState,
+  userDataState,
 } from "@/stores/store";
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { AiFillStar } from "react-icons/ai";
@@ -40,6 +41,14 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
+
+    if (!localStorage.getItem("user")) {
+      toast({
+        title: "Please signin first",
+      });
+      return;
+    }
+
     setIsAddedToFav(true);
     await setDoc(doc(db, "favorite(movies)", `movie${id}`), {
       id,
@@ -60,8 +69,9 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    setIsAddedToFav(false);
+    if (!localStorage.getItem("user")) return;
 
+    setIsAddedToFav(false);
     await deleteDoc(doc(db, "favorite(movies)", `movie${id}`)).then(() => {
       toast({
         title: "Removed from favorites",
@@ -81,8 +91,8 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
 
   useEffect(() => {
     const list: any = favoriteMovies.find((m: any) => m.id === id);
-    if (list) setIsAddedToFav(true);
-  }, []);
+    list ? setIsAddedToFav(true) : setIsAddedToFav(false);
+  }, [favoriteMovies]);
 
   return (
     <div

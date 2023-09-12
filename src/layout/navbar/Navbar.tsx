@@ -1,13 +1,14 @@
 import SignInWithGoogle from "@/components/SignInWithGoogle";
 import UserProfile from "@/components/UserProfile";
-import { loggedInUserState } from "@/stores/store";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FiHome } from "react-icons/fi";
 import { RxStopwatch } from "react-icons/rx";
 import { useMatches, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 import { twMerge } from "tailwind-merge";
 import Menu from "./Menu";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { userDataState } from "@/stores/store";
 
 const menus = [
   {
@@ -29,11 +30,18 @@ const menus = [
 function Navbar() {
   const [{ pathname }] = useMatches();
   const navigate = useNavigate();
-  const loggedInUser = useRecoilValue(loggedInUserState);
+  const [userData, setUserData] = useRecoilState(userDataState);
 
   const changeMenuState = (path: string) => {
     navigate(path);
   };
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setUserData(JSON.parse(user));
+    }
+  }, []);
 
   return (
     <div className="flex flex-col fixed border-r-[0.5px] border-r-gray-dark/50 transition-all bg-black h-screen w-[80px] lg:w-[250px] xl:w-[260px]">
@@ -67,11 +75,7 @@ function Navbar() {
       </div>
 
       <footer className="mt-auto pb-6 px-4 w-full">
-        {loggedInUser.name && loggedInUser.profile_path ? (
-          <UserProfile user={loggedInUser} />
-        ) : (
-          <SignInWithGoogle />
-        )}
+        {userData.name ? <UserProfile user={userData} /> : <SignInWithGoogle />}
       </footer>
     </div>
   );

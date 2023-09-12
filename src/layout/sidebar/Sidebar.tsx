@@ -104,7 +104,7 @@ function Sidebar() {
         <h2 className=" text-white">Favorites</h2>
         <div className="movies-list mt-4">
           {favoriteMovies[0] ? (
-            favoriteMovies.map((movie: any, idx) => {
+            favoriteMovies.map((movie: any, idx: number) => {
               if (idx < 3) {
                 return (
                   <SmallMovieCard

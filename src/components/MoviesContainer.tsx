@@ -6,12 +6,16 @@ import { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { trendingMovieOptions, trendingTvOptions } from "../api/api";
-import { categoryState, favoriteMoviesState } from "../stores/store";
+import {
+  categoryState,
+  favoriteMoviesState,
+  userDataState,
+} from "../stores/store";
 import Movie from "./Movie";
 import Slider from "./Slider";
 import { getFavoriteMovies } from "@/firebase/helpers";
 import { getFirestore } from "firebase/firestore";
-import { firebaseApp } from "@/main";
+import { firebaseApp, firebaseDB } from "@/main";
 import { useSearchParams } from "react-router-dom";
 import SearchedMoviesContainer from "./SearchedMoviesContainer";
 
@@ -21,10 +25,9 @@ function MoviesContainer() {
   const category = useRecoilValue(categoryState);
   const [favoriteMovies, setFavoriteMovies] =
     useRecoilState(favoriteMoviesState);
+  const userData = useRecoilValue(userDataState);
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
-
-  const db = getFirestore(firebaseApp);
 
   const getMovies = async () => {
     setIsLoading(true); // Set isLoading to true before making the request
@@ -43,8 +46,12 @@ function MoviesContainer() {
   };
 
   const getFavMovies = async () => {
-    const movies = await getFavoriteMovies(db);
-    setFavoriteMovies(movies);
+    const user = localStorage.getItem("user");
+
+    if (user) {
+      const movies = await getFavoriteMovies(firebaseDB);
+      setFavoriteMovies(movies);
+    }
   };
 
   useEffect(() => {
@@ -54,7 +61,7 @@ function MoviesContainer() {
 
   useEffect(() => {
     getFavMovies();
-  }, []);
+  }, [userData.email]);
 
   if (searchParams.get("q")) return <SearchedMoviesContainer />;
 

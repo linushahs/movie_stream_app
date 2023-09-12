@@ -1,12 +1,4 @@
-import { firebaseApp } from "@/main";
-import {
-  Firestore,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-} from "firebase/firestore";
+import { Firestore, collection, getDocs } from "firebase/firestore";
 
 export const getFavoriteMovies = async (db: Firestore) => {
   // Query the Firestore collection

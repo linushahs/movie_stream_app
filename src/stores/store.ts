@@ -13,15 +13,15 @@ export const searchQueryState = atom({
 export type UserProps = {
   name: string | null;
   email: string | null;
-  profile_path: string | null;
+  photoURL: string;
 };
 
-export const loggedInUserState = atom({
-  key: "loggedInUser",
+export const userDataState = atom({
+  key: "userData",
   default: <UserProps>{
     name: "",
-    email: null,
-    profile_path: null,
+    email: "",
+    photoURL: "",
   },
 });
 

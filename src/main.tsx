@@ -15,9 +15,11 @@ import "swiper/css/navigation";
 //firebase
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/firebaseConfig.ts";
+import { getFirestore } from "firebase/firestore";
 
 //initialize firebase app
 export const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseDB = getFirestore(firebaseApp);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
