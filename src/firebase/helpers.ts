@@ -12,3 +12,16 @@ export const getFavoriteMovies = async (uid: string, db: Firestore) => {
 
   return list;
 };
+
+export const getFavoriteTvShows = async (uid: string, db: Firestore) => {
+  // Query the Firestore collection
+  const list: any = [];
+  const querySnapshot = await getDocs(
+    collection(db, uid, "favorites", "tvShows")
+  );
+  querySnapshot.forEach((doc) => {
+    list.push(doc.data());
+  });
+
+  return list;
+};

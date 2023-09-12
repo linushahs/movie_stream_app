@@ -31,3 +31,8 @@ export const favoriteMoviesState = atom({
   key: "favoriteMovies",
   default: [],
 });
+
+export const favoriteTvShowState = atom({
+  key: "favoriteTvShows",
+  default: [],
+});

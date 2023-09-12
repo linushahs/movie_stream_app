@@ -3,6 +3,7 @@ import { firebaseApp, firebaseDB } from "@/main";
 import {
   categoryState,
   favoriteMoviesState,
+  favoriteTvShowState,
   searchQueryState,
   userDataState,
 } from "@/stores/store";
@@ -14,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { useToast } from "./ui/use-toast";
 import { twMerge } from "tailwind-merge";
-import { getFavoriteMovies } from "@/firebase/helpers";
+import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
 
 export interface MovieProps {
   id: number;
@@ -31,6 +32,8 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
   const setSearchQuery = useSetRecoilState(searchQueryState);
   const [favoriteMovies, setFavoriteMovies] =
     useRecoilState(favoriteMoviesState);
+  const [favoriteTvShows, setFavoriteTvShows] =
+    useRecoilState(favoriteTvShowState);
   const { uid } = useRecoilValue(userDataState);
   const [isAddedToFav, setIsAddedToFav] = useState(false);
   const { toast } = useToast();
@@ -51,7 +54,9 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
     }
 
     setIsAddedToFav(true);
-    await setDoc(doc(db, uid, "favorites", "movies", `movie${id}`), {
+    const coll = category === "tv" ? "tvShows" : "movies";
+    const docId = category === "tv" ? `tv${id}` : `movie${id}`;
+    await setDoc(doc(db, uid, "favorites", coll, docId), {
       id,
       poster_path,
       title,
@@ -63,7 +68,11 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
       });
     });
 
-    await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
+    if (category === "movie") {
+      await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
+    } else {
+      await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
+    }
   };
 
   const removeFromFavorites = async (
@@ -73,16 +82,20 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
     if (!localStorage.getItem("user")) return;
 
     setIsAddedToFav(false);
-    await deleteDoc(doc(db, uid, "favorites", "movies", `movie${id}`)).then(
-      () => {
-        toast({
-          title: "Removed from favorites",
-          variant: "destructive",
-        });
-      }
-    );
+    const coll = category === "tv" ? "tvShows" : "movies";
+    const docId = category === "tv" ? `tv${id}` : `movie${id}`;
+    await deleteDoc(doc(db, uid, "favorites", coll, docId)).then(() => {
+      toast({
+        title: "Removed from favorites",
+        variant: "destructive",
+      });
+    });
 
-    await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
+    if (category === "movie") {
+      await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
+    } else {
+      await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
+    }
   };
 
   const handleNavigation = () => {
@@ -93,9 +106,13 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
   };
 
   useEffect(() => {
-    const list: any = favoriteMovies.find((m: any) => m.id === id);
+    const list: any =
+      category === "movie"
+        ? favoriteMovies.find((m: any) => m.id === id)
+        : favoriteTvShows.find((m: any) => m.id === id);
+
     list ? setIsAddedToFav(true) : setIsAddedToFav(false);
-  }, [favoriteMovies]);
+  }, [favoriteMovies, favoriteTvShows]);
 
   return (
     <div

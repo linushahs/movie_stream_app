@@ -3,6 +3,7 @@ import SidebarLoading from "@/loading/SidebarLoading";
 import {
   categoryState,
   favoriteMoviesState,
+  favoriteTvShowState,
   searchQueryState,
 } from "@/stores/store";
 import axios from "axios";
@@ -11,6 +12,8 @@ import { FiSearch } from "react-icons/fi";
 import { useRecoilState, useRecoilValue } from "recoil";
 import SmallMovieCard from "./SmallMovieCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import FavoriteTvShows from "./FavoriteTvShows";
+import FavoriteMovies from "./FavoriteMovies";
 
 function Sidebar() {
   const [topRatedShows, setTopRatedShows] = useState<any>([]);
@@ -18,6 +21,7 @@ function Sidebar() {
   const [searchParams, setSearchParams] = useSearchParams();
   const category = useRecoilValue(categoryState);
   const favoriteMovies = useRecoilValue(favoriteMoviesState);
+  const favoriteTvShows = useRecoilValue(favoriteTvShowState);
   const navigate = useNavigate();
 
   const getTopRatedMovies = async () => {
@@ -103,23 +107,10 @@ function Sidebar() {
       <main className="mt-8">
         <h2 className=" text-white">Favorites</h2>
         <div className="movies-list mt-4">
-          {favoriteMovies[0] ? (
-            favoriteMovies.map((movie: any, idx: number) => {
-              if (idx < 3) {
-                return (
-                  <SmallMovieCard
-                    key={movie.id}
-                    id={movie.id}
-                    title={movie.title}
-                    poster_path={movie.poster_path}
-                    rating={movie.vote_average}
-                    release_date={movie.release_date}
-                  />
-                );
-              }
-            })
+          {category === "tv" ? (
+            <FavoriteTvShows tvShows={favoriteTvShows} />
           ) : (
-            <h3 className="text-gray-dark mb-4">No movies added</h3>
+            <FavoriteMovies movies={favoriteMovies} />
           )}
         </div>
         <button
