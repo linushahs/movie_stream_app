@@ -49,7 +49,7 @@ function MoviesContainer() {
     const user = localStorage.getItem("user");
 
     if (user) {
-      const movies = await getFavoriteMovies(firebaseDB);
+      const movies = await getFavoriteMovies(userData.uid, firebaseDB);
       setFavoriteMovies(movies);
     }
   };

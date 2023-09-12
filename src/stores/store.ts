@@ -11,6 +11,7 @@ export const searchQueryState = atom({
 });
 
 export type UserProps = {
+  uid: string;
   name: string | null;
   email: string | null;
   photoURL: string;
@@ -19,6 +20,7 @@ export type UserProps = {
 export const userDataState = atom({
   key: "userData",
   default: <UserProps>{
+    uid: "",
     name: "",
     email: "",
     photoURL: "",

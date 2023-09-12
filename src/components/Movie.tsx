@@ -31,6 +31,7 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
   const setSearchQuery = useSetRecoilState(searchQueryState);
   const [favoriteMovies, setFavoriteMovies] =
     useRecoilState(favoriteMoviesState);
+  const { uid } = useRecoilValue(userDataState);
   const [isAddedToFav, setIsAddedToFav] = useState(false);
   const { toast } = useToast();
 
@@ -50,7 +51,7 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
     }
 
     setIsAddedToFav(true);
-    await setDoc(doc(db, "favorite(movies)", `movie${id}`), {
+    await setDoc(doc(db, uid, "favorites", "movies", `movie${id}`), {
       id,
       poster_path,
       title,
@@ -62,7 +63,7 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
       });
     });
 
-    await getFavoriteMovies(db).then((res) => setFavoriteMovies(res));
+    await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
   };
 
   const removeFromFavorites = async (
@@ -72,14 +73,16 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
     if (!localStorage.getItem("user")) return;
 
     setIsAddedToFav(false);
-    await deleteDoc(doc(db, "favorite(movies)", `movie${id}`)).then(() => {
-      toast({
-        title: "Removed from favorites",
-        variant: "destructive",
-      });
-    });
+    await deleteDoc(doc(db, uid, "favorites", "movies", `movie${id}`)).then(
+      () => {
+        toast({
+          title: "Removed from favorites",
+          variant: "destructive",
+        });
+      }
+    );
 
-    await getFavoriteMovies(db).then((res) => setFavoriteMovies(res));
+    await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
   };
 
   const handleNavigation = () => {

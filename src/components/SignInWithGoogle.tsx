@@ -12,18 +12,19 @@ function SignInWithGoogle() {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        const { displayName, email, photoURL } = result.user;
+        const { displayName, email, photoURL, uid } = result.user;
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential?.accessToken;
         if (displayName && token && email && photoURL) {
           const user = {
+            uid,
             name: displayName,
             email,
             photoURL,
             accessToken: token,
           };
           localStorage.setItem("user", JSON.stringify(user));
-          setUserData({ name: displayName, email, photoURL });
+          setUserData({ uid, name: displayName, email, photoURL });
         }
       })
       .catch((error) => {
