@@ -6,13 +6,14 @@ import Movie from "./Movie";
 import { useRecoilValue } from "recoil";
 import { categoryState, searchQueryState } from "@/stores/store";
 import Header from "@/layout/Header";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 function SearchedMoviesContainer() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const category = useRecoilValue(categoryState);
-  const { query } = useParams();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
 
   const getMovies = async () => {
     if (!query) return;
@@ -24,8 +25,6 @@ function SearchedMoviesContainer() {
       setMovies(response.data.results);
     });
   };
-
-  console.log(query);
 
   const getTvShows = async () => {
     if (!query) return;
@@ -41,7 +40,7 @@ function SearchedMoviesContainer() {
   useEffect(() => {
     const timer = setTimeout(() => {
       category === "movie" ? getMovies() : getTvShows();
-    }, 800);
+    }, 600);
 
     return () => {
       clearTimeout(timer); // Clear the timer if the component unmounts or searchQuery changes before 2 seconds

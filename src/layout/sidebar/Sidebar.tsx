@@ -10,12 +10,12 @@ import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useRecoilState, useRecoilValue } from "recoil";
 import SmallMovieCard from "./SmallMovieCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function Sidebar() {
   const [topRatedShows, setTopRatedShows] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
+  const [searchParams, setSearchParams] = useSearchParams();
   const category = useRecoilValue(categoryState);
   const favoriteMovies = useRecoilValue(favoriteMoviesState);
   const navigate = useNavigate();
@@ -50,9 +50,7 @@ function Sidebar() {
 
   const handleSearchState = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
-    category === "movie"
-      ? navigate(`/home/search/movies?q=${query}`)
-      : navigate(`/home/search/tv-series?q=${query}`);
+    setSearchParams({ q: query });
   };
 
   const handleFavoritesNavigation = () => {
@@ -69,7 +67,7 @@ function Sidebar() {
           type="text"
           name="search"
           placeholder="Search"
-          value={searchQuery}
+          value={searchParams.get("q") || ""}
           onChange={(e) => handleSearchState(e)}
           className="pl-1 border-none outline-none text-white bg-black w-full rounded-xl placeholder:text-gray-light"
         />

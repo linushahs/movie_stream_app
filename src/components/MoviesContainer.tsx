@@ -12,6 +12,8 @@ import Slider from "./Slider";
 import { getFavoriteMovies } from "@/firebase/helpers";
 import { getFirestore } from "firebase/firestore";
 import { firebaseApp } from "@/main";
+import { useSearchParams } from "react-router-dom";
+import SearchedMoviesContainer from "./SearchedMoviesContainer";
 
 function MoviesContainer() {
   const [trendingMovies, setTrendingMovies] = useState([]);
@@ -19,6 +21,7 @@ function MoviesContainer() {
   const category = useRecoilValue(categoryState);
   const [favoriteMovies, setFavoriteMovies] =
     useRecoilState(favoriteMoviesState);
+  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
 
   const db = getFirestore(firebaseApp);
@@ -53,7 +56,7 @@ function MoviesContainer() {
     getFavMovies();
   }, []);
 
-  console.log("runned");
+  if (searchParams.get("q")) return <SearchedMoviesContainer />;
 
   return (
     <div className="main-container">

@@ -52,6 +52,8 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
         title: "Added to favorites",
       });
     });
+
+    await getFavoriteMovies(db).then((res) => setFavoriteMovies(res));
   };
 
   const removeFromFavorites = async (

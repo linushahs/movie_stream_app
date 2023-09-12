@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { useRecoilState } from "recoil";
 import Movie from "../Movie";
+import { Toaster } from "../ui/toaster";
 
 function Favorites() {
   const [favoriteMovies, setFavoriteMovies] =
@@ -64,6 +65,7 @@ function Favorites() {
       </div>
 
       <Sidebar />
+      <Toaster />
     </section>
   );
 }
