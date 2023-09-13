@@ -58,13 +58,14 @@ export default function Slider({ movie }: SliderProps) {
       }
       className="relative w-full aspect-[2/1]  bg-cover rounded-xl cursor-pointer"
     >
+      <div className="absolute w-full h-full bg-gradient-to-tr from-black/80 rounded-xl"></div>
       <LazyLoadImage
         src={img_path}
         alt="slider_img"
-        className="w-full h-full rounded-xl opacity-60 object-cover"
+        className="w-full h-full rounded-xl object-cover"
         loading="lazy"
       />
-      <div className="details text-white absolute bottom-0 p-8 flex flex-col justify-end h-full">
+      <div className="details text-white absolute bottom-0 p-4 sm:p-8 flex flex-col justify-end h-full">
         <h1 className="uppercase text-xl font-medium">
           {movie.name || movie.title}
         </h1>
