@@ -33,21 +33,19 @@ function UserProfile({ user }: { user: UserProps }) {
   };
 
   return (
-    <div className=" flex items-center gap-3 text-white">
+    <div className=" flex items-center gap-2 text-white">
       <img
         src={user.photoURL}
         alt="pic"
-        className="hidden lg:block  w-11 h-11 rounded-full "
+        className="hidden lg:block w-10 h-10 rounded-full "
       />
-      <span className="hidden lg:block">
+      <span className="hidden lg:block lg:text-sm">
         <h2>{user.name}</h2>
-        <p className=" lg:-mt-1 text-gray-light">
-          {user.email?.split("@")[0]}..
-        </p>
+        <p className=" text-gray-light">{user.email?.split("@")[0]}..</p>
       </span>
 
       <DropdownMenu>
-        <DropdownMenuTrigger className="hidden lg:inline-block ml-auto">
+        <DropdownMenuTrigger className="hidden lg:inline-block lg:ml-[16px] ">
           <BsThreeDotsVertical className="text-xl  cursor-pointer" />
         </DropdownMenuTrigger>
         <DropdownMenuTrigger className="lg:hidden inline-block ml-auto">

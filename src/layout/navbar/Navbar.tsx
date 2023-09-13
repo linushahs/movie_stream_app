@@ -47,11 +47,15 @@ function Navbar() {
     <div className="navbar">
       <header>
         <div
-          className="flex gap-2 justify-center lg:justify-start items-center -mt-1.5 cursor-pointer lg:p-8"
+          className="flex gap-2 justify-center lg:justify-start items-center lg:-mt-1.5 cursor-pointer lg:px-4 lg:pb-6 sm:pt-8"
           onClick={() => navigate("/")}
         >
-          <img src="/peamon.png" alt="logo" className="w-6 h-6" />
-          <h3 className="text-white text-lg lg:text-2xl hidden lg:block ">
+          <img
+            src="/peamon.png"
+            alt="logo"
+            className="w-6 h-6 sm:w-7 sm:h-7 lg:w-6 lg:h-6"
+          />
+          <h3 className="text-white text-lg lg:text-lg hidden lg:block ">
             Peamon
           </h3>
         </div>
@@ -60,7 +64,7 @@ function Navbar() {
         <h5 className="hidden lg:block text-sm text-center lg:text-left text-gray-light font-bold uppercase">
           Menu
         </h5>
-        <ul className=" list-none  ">
+        <ul className=" list-none  lg:text-sm 2xl:text-lg">
           <Menu menu={menus[0]} changeMenuState={changeMenuState}>
             <span
               className={twMerge(
@@ -94,7 +98,7 @@ function Navbar() {
         </ul>
       </div>
 
-      <footer className="lg:mt-auto lg:pb-6 lg:px-4 lg:w-full">
+      <footer className="sm:flex sm:justify-center sm:mt-auto sm:pb-6 sm:w-full">
         {userData.name ? <UserProfile user={userData} /> : <SignInWithGoogle />}
       </footer>
     </div>

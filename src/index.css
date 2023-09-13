@@ -83,11 +83,11 @@
   }
 
   .navbar {
-    @apply flex lg:flex-col fixed lg:border-r-[0.5px] lg:border-r-gray-dark/50 transition-all bg-black lg:h-screen lg:w-[250px] xl:w-[260px];
+    @apply flex sm:flex-col fixed sm:border-r-[0.5px] sm:border-r-gray-dark/50 transition-all bg-black sm:h-screen sm:w-[65px] lg:w-[220px] xl:w-[230px];
   }
 
   .menu {
-    @apply lg:mt-4 lg:px-8;
+    @apply sm:mt-4 sm:px-8 lg:px-4;
   }
 }
 
@@ -118,8 +118,5 @@
     display: flex;
     align-items: center;
     column-gap: 28px;
-  }
-
-  .navbar > footer {
   }
 }
