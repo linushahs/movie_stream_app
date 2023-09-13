@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { firebaseApp, firebaseDB } from "@/main";
+import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
+import { firebaseApp } from "@/main";
 import {
   categoryState,
   favoriteMoviesState,
@@ -8,14 +8,14 @@ import {
   userDataState,
 } from "@/stores/store";
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { useToast } from "./ui/use-toast";
 import { twMerge } from "tailwind-merge";
-import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
+import { useToast } from "./ui/use-toast";
 
 export interface MovieProps {
   id: number;

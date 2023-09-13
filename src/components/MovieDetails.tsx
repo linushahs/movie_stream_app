@@ -8,12 +8,7 @@ import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import MoviesLoading from "@/loading/MoviesLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  AiFillHeart,
-  AiFillStar,
-  AiOutlineHeart,
-  AiOutlineStar,
-} from "react-icons/ai";
+import { AiFillHeart, AiFillStar, AiOutlineHeart } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { LazyLoadImage } from "react-lazy-load-image-component";

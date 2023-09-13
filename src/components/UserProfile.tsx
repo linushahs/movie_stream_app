@@ -29,7 +29,7 @@ function UserProfile({ user }: { user: UserProps }) {
 
     localStorage.removeItem("user");
     setFavoriteMovies([]);
-    setUserData({ name: "", email: "", photoURL: "" });
+    setUserData({ uid: "", name: "", email: "", photoURL: "" });
   };
 
   return (

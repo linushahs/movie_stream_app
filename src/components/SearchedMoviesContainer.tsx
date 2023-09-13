@@ -1,12 +1,12 @@
 import { searchMoviesOptions, searchTvShowsOptions } from "@/api/api";
+import Header from "@/layout/Header";
 import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
+import { categoryState } from "@/stores/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Movie from "./Movie";
+import { useSearchParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { categoryState, searchQueryState } from "@/stores/store";
-import Header from "@/layout/Header";
-import { useParams, useSearchParams } from "react-router-dom";
+import Movie from "./Movie";
 
 function SearchedMoviesContainer() {
   const [movies, setMovies] = useState([]);

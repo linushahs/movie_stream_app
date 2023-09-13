@@ -4,16 +4,15 @@ import {
   categoryState,
   favoriteMoviesState,
   favoriteTvShowState,
-  searchQueryState,
 } from "@/stores/store";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { useRecoilState, useRecoilValue } from "recoil";
-import SmallMovieCard from "./SmallMovieCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import FavoriteTvShows from "./FavoriteTvShows";
+import { useRecoilValue } from "recoil";
 import FavoriteMovies from "./FavoriteMovies";
+import FavoriteTvShows from "./FavoriteTvShows";
+import SmallMovieCard from "./SmallMovieCard";
 
 function Sidebar() {
   const [topRatedShows, setTopRatedShows] = useState<any>([]);
