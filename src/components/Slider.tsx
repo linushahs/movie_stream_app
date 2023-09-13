@@ -56,7 +56,7 @@ export default function Slider({ movie }: SliderProps) {
             : `/home/tv-series/${movie.id}`
         )
       }
-      className="relative w-full aspect-[2/1]  bg-cover rounded-xl cursor-pointer"
+      className="relative w-full aspect-video sm:aspect-[2/1]  bg-cover rounded-xl cursor-pointer"
     >
       <div className="absolute w-full h-full bg-gradient-to-tr from-black/80 rounded-xl"></div>
       <LazyLoadImage
@@ -66,13 +66,13 @@ export default function Slider({ movie }: SliderProps) {
         loading="lazy"
       />
       <div className="details text-white absolute bottom-0 p-4 sm:p-8 flex flex-col justify-end h-full">
-        <h1 className="uppercase text-xl font-medium">
+        <h1 className="uppercase text-lg sm:text-xl font-medium">
           {movie.name || movie.title}
         </h1>
-        <p className="uppercase text-gray-300 text-sm my-1">
+        <p className="uppercase text-gray-300 text-xs sm:text-sm my-1">
           {genres?.map((genre: any) => genre.name).join(", ")}
         </p>
-        <div className="flex gap-2 mt-2">
+        <div className="flex gap-2 mt-2 text-xs sm:text-md">
           <button className="px-4 py-1 rounded-lg bg-red">Watch</button>
           <button className="transition-colors bg-gray-light/50 hover:bg-gray-light/70 p-1.5 py-1.5 rounded-lg">
             <BiPlus className="text-xl" />

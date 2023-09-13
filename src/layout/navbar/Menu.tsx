@@ -13,7 +13,7 @@ function Menu({ menu: { name, path }, changeMenuState, children }: MenuProps) {
   return (
     <li
       className={twMerge(
-        "my-7 flex gap-3 items-center justify-center lg:justify-start text-gray-dark  cursor-pointer hover:text-white",
+        "my-7 flex gap-1 sm:gap-3 items-center justify-center lg:justify-start text-gray-dark  cursor-pointer hover:text-white",
         pathname.startsWith(path) && "lg:border-r-4 lg:border-r-red text-white"
       )}
       onClick={() => changeMenuState(path)}

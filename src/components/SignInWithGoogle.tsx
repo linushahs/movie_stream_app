@@ -35,9 +35,10 @@ function SignInWithGoogle() {
   return (
     <button
       onClick={handleSignIn}
-      className="border border-gray-400 rounded-full py-2 px-3 flex items-center gap-3 text-gray-400 transition-colors hover:border-white hover:text-white w-full"
+      className="border-2 border-white text-white text-xs sm:text-md sm:border-gray-400 rounded-full py-1 sm:py-2 px-3 sm:mx-3 flex items-center gap-1 sm:gap-3 sm:text-gray-400 transition-colors hover:border-white hover:text-white w-full"
     >
-      <FcGoogle className="w-6 h-6" /> Sign in with google
+      <FcGoogle className="w-6 h-6 hidden sm:block" /> Sign in
+      <span className="hidden sm:inline-block -ml-2">with google</span>
     </button>
   );
 }
