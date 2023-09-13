@@ -48,7 +48,7 @@ function Favorites() {
         <div className="flex justify-between ">
           <FavoritesHeader />
 
-          <div className="flex justify-end gap-2 text-white">
+          <div className="hidden sm:flex justify-end gap-2 text-white">
             <button
               // onClick={goToPrevTrailer}
               className="border border-gray-dark p-2 rounded-full hover:bg-dark"
