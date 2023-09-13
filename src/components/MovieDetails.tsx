@@ -168,9 +168,9 @@ function MovieDetails() {
     <main className="main-container">
       <button
         onClick={() => navigate(-1)}
-        className="flex gap-1 items-center border-2 border-gray-600 rounded-full py-1 px-2 text-xs sm:text-md text-gray-light cursor-pointer mb-4 sm:mb-6"
+        className="hidden sm:flex gap-1 items-center border-2 border-gray-600 rounded-full py-1 px-2 text-lg text-gray-light cursor-pointer mb-4 sm:mb-6"
       >
-        <BiArrowBack className="text-sm sm:text-lg" />
+        <BiArrowBack className="text-lg" />
         Back
       </button>
 
@@ -191,14 +191,14 @@ function MovieDetails() {
           loading="lazy"
         />
 
-        <article>
-          <div className="flex gap-3 items-center">
-            <h2 className="text-2xl sm:text-3xl">{movieDetails.title}</h2>
-            <span className="flex items-center gap-1 text-xs sm:text-md px-2 py-1 bg-dark rounded-md font-medium">
+        <article className="w-full">
+          <h2 className="text-2xl sm:text-3xl">
+            {movieDetails.name || movieDetails.title}
+            <span className="inline-flex items-center gap-1 text-sm ml-2 px-2 py-1 bg-dark rounded-md font-medium">
               {movieDetails.vote_average?.toFixed(1)}{" "}
               <AiFillStar className="w-4 h-4 text-yellow" />
             </span>
-          </div>
+          </h2>
 
           <div className="flex gap-3 items-center my-2">
             <ul className=" w-fit flex items-center divide-x divide-gray-dark text-sm sm:text-md text-gray-dark font-medium">
@@ -224,15 +224,15 @@ function MovieDetails() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="overview" className="tabs mt-6 sm:mt-8">
-            <TabsList className="w-[calc(100vw-24px)] sm:w-[400px] h-auto">
-              <TabsTrigger value="overview" className="w-full text-base">
+          <Tabs defaultValue="overview" className="tabs w-full mt-6 sm:mt-8">
+            <TabsList className="w-[calc(100vw-42px)] sm:w-[400px] h-auto">
+              <TabsTrigger value="overview" className="text-base flex-1">
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="cast" className="w-full text-base">
+              <TabsTrigger value="cast" className="text-base flex-1">
                 Cast
               </TabsTrigger>
-              <TabsTrigger value="trailers" className="w-full text-base">
+              <TabsTrigger value="trailers" className="text-base flex-1">
                 Trailers
               </TabsTrigger>
             </TabsList>
@@ -268,7 +268,7 @@ function MovieDetails() {
               </div>
             </TabsContent>
             <TabsContent value="cast">
-              <div className="mt-4 flex flex-wrap gap-x-10">
+              <div className="mt-4 grid grid-cols-3 gap-x-10">
                 {director.map((d: any) => (
                   <CastItem
                     key={d.id}
@@ -284,14 +284,14 @@ function MovieDetails() {
               </h2>
 
               {/* Top cast slider with navigation ---------->  */}
-              <div className="w-full grid grid-cols-3  gap-2  mt-4">
+              <div className="min-w-full grid grid-cols-3  gap-x-2 gap-y-6  mt-4">
                 {topCast.map((t: any) => (
                   <CastItem
                     key={t.id}
                     name={t.name}
                     role={t.character}
                     profile_path={t.profile_path}
-                    className="w-full "
+                    className="w-full"
                   />
                 ))}
               </div>

@@ -8,7 +8,12 @@ import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import SeasonEpisodeLoading from "@/loading/SeasonEpisodeLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import {
+  AiFillHeart,
+  AiFillStar,
+  AiOutlineHeart,
+  AiOutlineStar,
+} from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
 import { A11y, Scrollbar } from "swiper/modules";
@@ -26,6 +31,7 @@ import { twMerge } from "tailwind-merge";
 import CastItem from "./CastItem";
 import VideoPlayer from "./VideoPlayer";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});
@@ -135,7 +141,6 @@ function TVShowDetails() {
     setCurrentTrailer(currentTrailer - 1);
   };
 
-  console.log(tvId);
   useEffect(() => {
     getTVShowDetails();
     getAgeRating();
@@ -177,34 +182,41 @@ function TVShowDetails() {
   if (isLoading) return <MovieDetailsLoading />;
 
   return (
-    <main className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
+    <main className="main-container">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center justify-center border-2 border-gray-600 rounded-full p-2 cursor-pointer mb-6"
+        className="hidden sm:flex gap-1 items-center border-2 border-gray-600 rounded-full py-1 px-2 text-lg text-gray-light cursor-pointer mb-4 sm:mb-6"
       >
-        <BiArrowBack className="text-lg text-gray-light" />
+        <BiArrowBack className="text-lg" />
+        Back
       </button>
 
       {/* Details section ------------>  */}
-      <div className="dark text-white flex items-start gap-6">
-        <img
+      <div className="dark text-white flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+        <LazyLoadImage
           src={`https://image.tmdb.org/t/p/original/${tvShowDetails.poster_path}`}
           alt="poster"
           width={330}
-          className="rounded-xl aspect-[2/3]"
+          className="hidden sm:block rounded-xl aspect-[2/3]"
+          loading="lazy"
+        />
+
+        <LazyLoadImage
+          src={`https://image.tmdb.org/t/p/original/${tvShowDetails.backdrop_path}`}
+          alt="poster"
+          width={330}
+          className="w-full rounded-xl aspect-video sm:hidden"
           loading="lazy"
         />
 
         <article>
-          <div className="flex gap-3 items-center">
-            <h2 className="text-3xl">
-              {tvShowDetails.name || tvShowDetails.title}
-            </h2>
-            <span className="flex items-center gap-1 text-md px-2 py-1 bg-dark rounded-md font-medium">
+          <h2 className="text-2xl sm:text-3xl">
+            {tvShowDetails.name || tvShowDetails.title}
+            <span className="inline-flex items-center gap-1 text-sm ml-2 px-2 py-1 bg-dark rounded-md font-medium">
               {tvShowDetails.vote_average?.toFixed(1)}{" "}
               <AiFillStar className="w-4 h-4 text-yellow" />
             </span>
-          </div>
+          </h2>
 
           <div className="flex gap-3 items-center my-2">
             <ul className="w-fit flex items-center divide-x divide-gray-dark text-gray-dark font-medium">
@@ -223,9 +235,9 @@ function TVShowDetails() {
               className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
             >
               {isFavoritesClicked ? (
-                <AiFillStar className="text-xl text-amber-400" />
+                <AiFillHeart className="text-xl text-red" />
               ) : (
-                <AiOutlineStar className="text-xl text-amber-400" />
+                <AiOutlineHeart className="text-xl text-red" />
               )}
             </button>
           </div>
@@ -233,7 +245,7 @@ function TVShowDetails() {
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
           <Tabs defaultValue="overview" className=" mt-8">
-            <TabsList className="w-[400px] h-auto">
+            <TabsList className="w-full sm:w-[400px] h-auto">
               <TabsTrigger value="overview" className="w-full text-base">
                 Overview
               </TabsTrigger>
@@ -248,22 +260,24 @@ function TVShowDetails() {
               <div className="w-full">
                 <p className="text-gray-light pt-2">{tvShowDetails.overview}</p>
                 <ul className="mt-6">
-                  <li className="flex items-center">
-                    <strong className="w-[130px] text-gray-dark">
+                  <li className="flex items-start gap-2 sm:gap-0 sm:items-center">
+                    <strong className="sm:w-[130px] text-gray-dark">
                       Starring:
                     </strong>
                     <p>
                       {starringCast.map((cast: any) => cast.name).join(", ")}
                     </p>
                   </li>
-                  <li className="flex items-center mt-2">
-                    <strong className="w-[130px] text-gray-dark">
+                  <li className="flex items-start gap-2 sm:gap-0 sm:items-center mt-2">
+                    <strong className="sm:w-[130px] text-gray-dark">
                       Created by:
                     </strong>
                     <p>{createdBy.map((c: any) => c.name).join(", ")}</p>
                   </li>
-                  <li className="flex items-center mt-2">
-                    <strong className="w-[130px] text-gray-dark">Genre:</strong>
+                  <li className="flex items-start gap-2 sm:gap-0 sm:items-center mt-2">
+                    <strong className="sm:w-[130px] text-gray-dark">
+                      Genre:
+                    </strong>
                     <p>
                       {tvShowDetails.genres
                         ?.map((genre: any) => genre.name)
@@ -273,8 +287,8 @@ function TVShowDetails() {
                 </ul>
               </div>
             </TabsContent>
-            <TabsContent value="cast" className="overflow-hidden">
-              <div className="mt-4 flex flex-wrap gap-x-10">
+            <TabsContent value="cast">
+              <div className="mt-4 grid grid-cols-3 gap-x-10">
                 {createdBy.map((d: any) => (
                   <CastItem
                     key={d.id}
@@ -290,7 +304,7 @@ function TVShowDetails() {
               </h2>
 
               {/* Top cast slider with navigation ---------->  */}
-              <div className="w-full flex flex-wrap gap-4  mt-4">
+              <div className="min-w-full grid grid-cols-3  gap-x-2 gap-y-6  mt-4">
                 {topCast?.map((t: any) => (
                   <CastItem
                     key={t.id}
@@ -331,7 +345,7 @@ function TVShowDetails() {
       {/* seasons, episods ------------->  */}
       <div className="mt-8 w-full !relative">
         <Select onValueChange={handleSeasonSelection} defaultValue={"1"}>
-          <SelectTrigger className="min-w-[150px] max-w-fit text-lg text-white bg-dark">
+          <SelectTrigger className="min-w-[125px] sm:min-w-[150px] max-w-fit text-md sm:text-lg text-white bg-dark">
             <SelectValue placeholder="Seasons" />
           </SelectTrigger>
           <SelectContent className="bg-dark text-white">
@@ -369,7 +383,7 @@ function TVShowDetails() {
               seasonDetails.episodes.map((episode: any) => (
                 <SwiperSlide
                   key={episode.id}
-                  className="!w-[550px] aspect-[16/9] rounded-xl  bg-gray-dark flex items-center justify-center object-cover"
+                  className="!w-[350px] !sm:w-[550px] aspect-[16/9] rounded-xl  bg-gray-dark flex items-center justify-center object-cover"
                 >
                   <div className="absolute w-full h-full top-0 left-0 bg-black/50 z-30"></div>
                   <img
@@ -380,10 +394,10 @@ function TVShowDetails() {
                   />
 
                   <div className="absolute bottom-3 left-3 text-white z-40">
-                    <h1 className="text-xl font-medium">
+                    <h1 className="text-md sm:text-xl font-medium">
                       S{episode.season_number}E{episode.episode_number}
                     </h1>
-                    <h2 className="text-lg">{episode.name}</h2>
+                    <h2 className="text-sm sm:text-lg">{episode.name}</h2>
                   </div>
                 </SwiperSlide>
               ))}

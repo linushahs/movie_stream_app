@@ -2,14 +2,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MovieDetailsLoading() {
   return (
-    <main className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
-      <Skeleton className="w-[100px] h-8" />
+    <main className="main-container">
+      <Skeleton className="hidden sm:block sm:w-[100px] h-8" />
 
       {/* Details section ------------>  */}
-      <div className="dark text-white flex gap-6 mt-6">
-        <Skeleton className="w-[300px] h-[450px] rounded-xl" />
+      <div className="dark text-white flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+        <Skeleton className="w-full aspect-video sm:aspect-[3/4] sm:w-[300px] sm:h-[450px] rounded-xl" />
 
-        <article>
+        <article className="w-full">
           <div className="flex gap-3 items-center">
             <Skeleton className="w-[180px] h-6" />
           </div>
@@ -18,9 +18,10 @@ export default function MovieDetailsLoading() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <div className="flex gap-4 mt-6">
-            <Skeleton className="w-[200px] h-8" />
-            <Skeleton className="w-[200px] h-8" />
+          <div className="w-full flex gap-4 mt-6">
+            <Skeleton className="flex-1 h-8" />
+            <Skeleton className="flex-1 h-8" />
+            <Skeleton className="flex-1 h-8" />
           </div>
 
           <div className="w-full mt-4">

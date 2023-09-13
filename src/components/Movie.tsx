@@ -9,7 +9,7 @@ import {
 } from "@/stores/store";
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { AiFillStar } from "react-icons/ai";
+import { AiFillHeart, AiFillStar, AiOutlineHeart } from "react-icons/ai";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
@@ -131,17 +131,17 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
       {/* Add to favorites section -------  */}
       <button
         className={twMerge(
-          "absolute top-2 right-2 p-1.5 text-xl text-white transition-colors bg-gray-light/50 hover:bg-gray-light/70 rounded-lg z-30",
-          isAddedToFav && "bg-red/90 text-white hover:bg-red/80"
+          "absolute top-2 right-2 p-1.5 text-xl text-white transition-colors bg-white/40 backdrop-blur-sm hover:bg-gray-light/70 rounded-lg z-30",
+          isAddedToFav && " text-white "
         )}
       >
         {isAddedToFav ? (
           <div onClick={(e) => removeFromFavorites(e)}>
-            <BiMinus className="text-md" on />
+            <AiFillHeart className="text-md text-red" on />
           </div>
         ) : (
           <div onClick={(e) => addToFavorites(e)}>
-            <BiPlus className="text-md" />
+            <AiOutlineHeart className="text-md" />
           </div>
         )}
       </button>

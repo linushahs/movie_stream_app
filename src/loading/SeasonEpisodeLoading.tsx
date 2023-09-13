@@ -12,7 +12,7 @@ export default function SeasonEpisodeLoading() {
       className="h-full mt-4 rounded-lg"
     >
       {new Array(2).fill(0).map((_, id) => (
-        <SwiperSlide key={id} className="!w-[550px]">
+        <SwiperSlide key={id} className="!w-[350px] !sm:w-[550px]">
           <Skeleton className=" aspect-[16/9] rounded-xl   flex items-center justify-center object-cover"></Skeleton>
         </SwiperSlide>
       ))}
