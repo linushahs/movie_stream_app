@@ -44,18 +44,20 @@ function Navbar() {
   }, []);
 
   return (
-    <div className="flex flex-col fixed border-r-[0.5px] border-r-gray-dark/50 transition-all bg-black h-screen w-[80px] lg:w-[250px] xl:w-[260px]">
+    <div className="navbar">
       <header>
         <div
           className="flex gap-2 justify-center lg:justify-start items-center -mt-1.5 cursor-pointer lg:p-8"
           onClick={() => navigate("/")}
         >
           <img src="/peamon.png" alt="logo" className="w-6 h-6" />
-          <h3 className="text-white text-2xl hidden lg:block ">Peamon</h3>
+          <h3 className="text-white text-lg lg:text-2xl hidden lg:block ">
+            Peamon
+          </h3>
         </div>
       </header>
-      <div className="menu mt-4 lg:px-8">
-        <h5 className="text-sm text-center lg:text-left text-gray-light font-bold uppercase">
+      <div className="menu">
+        <h5 className="hidden lg:block text-sm text-center lg:text-left text-gray-light font-bold uppercase">
           Menu
         </h5>
         <ul className=" list-none  ">
@@ -73,7 +75,7 @@ function Navbar() {
             <span
               className={twMerge(
                 pathname === "/favorites/movies" && "text-red",
-                "text-xl"
+                "text-[22px]"
               )}
             >
               {menus[1].icon}
@@ -92,7 +94,7 @@ function Navbar() {
         </ul>
       </div>
 
-      <footer className="mt-auto pb-6 px-4 w-full">
+      <footer className="lg:mt-auto lg:pb-6 lg:px-4 lg:w-full">
         {userData.name ? <UserProfile user={userData} /> : <SignInWithGoogle />}
       </footer>
     </div>

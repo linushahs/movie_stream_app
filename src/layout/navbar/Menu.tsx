@@ -19,7 +19,13 @@ function Menu({ menu: { name, path }, changeMenuState, children }: MenuProps) {
       onClick={() => changeMenuState(path)}
     >
       {children}
-      <a href="#" className="hidden sm:hidden lg:block">
+      <a
+        href="#"
+        className={twMerge(
+          "hidden sm:hidden lg:block",
+          pathname.startsWith(path) && "block"
+        )}
+      >
         {name}
       </a>
     </li>
