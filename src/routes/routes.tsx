@@ -8,7 +8,7 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/home" />,
+    element: <Navigate to="/home/movies" />,
   },
   {
     path: "/home",
@@ -38,16 +38,14 @@ export const router = createBrowserRouter([
   },
   {
     path: "/favorites",
+    element: <Navigate to="/favorites/movies" />,
+  },
+  {
+    path: "/favorites/movies",
     element: <Favorites />,
-    children: [
-      {
-        path: "/favorites/movies",
-        element: <Favorites />,
-      },
-      {
-        path: "/favorites/tv-series",
-        element: <Favorites />,
-      },
-    ],
+  },
+  {
+    path: "/favorites/tv-series",
+    element: <Favorites />,
   },
 ]);

@@ -70,7 +70,7 @@ function MoviesContainer() {
 
   useEffect(() => {
     category === "movie" ? getFavMovies() : getFavTvShows();
-  }, [userData.email]);
+  }, [userData.email, category]);
 
   if (searchParams.get("q")) return <SearchedMoviesContainer />;
 

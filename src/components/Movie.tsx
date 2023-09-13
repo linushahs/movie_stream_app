@@ -112,7 +112,7 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
         : favoriteTvShows.find((m: any) => m.id === id);
 
     list ? setIsAddedToFav(true) : setIsAddedToFav(false);
-  }, [favoriteMovies, favoriteTvShows]);
+  }, [favoriteMovies, favoriteTvShows, category]);
 
   return (
     <div

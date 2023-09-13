@@ -3,28 +3,43 @@ import FavoritesHeader from "@/layout/FavoritesHeader";
 import Navbar from "@/layout/navbar/Navbar";
 import Sidebar from "@/layout/sidebar/Sidebar";
 import { firebaseApp } from "@/main";
-import { favoriteMoviesState } from "@/stores/store";
+import { categoryState, favoriteMoviesState } from "@/stores/store";
 import { getFirestore } from "firebase/firestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Movie from "../Movie";
 import { Toaster } from "../ui/toaster";
+import { useMatches } from "react-router-dom";
 
 function Favorites() {
   const [favoriteMovies, setFavoriteMovies] =
     useRecoilState(favoriteMoviesState);
+  const category = useRecoilValue(categoryState);
+  const [{ pathname }] = useMatches();
 
   const db = getFirestore(firebaseApp);
 
-  const getFavMovies = async () => {
-    const movies = await getFavoriteMovies(db);
+  const getFavMovies = async (uid: string) => {
+    const movies = await getFavoriteMovies(uid, db);
+    setFavoriteMovies(movies);
+  };
+
+  const getFavTvShows = async (uid: string) => {
+    const movies = await getFavoriteTvShows(uid, db);
     setFavoriteMovies(movies);
   };
 
   useEffect(() => {
-    getFavMovies();
-  }, []);
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const parsedData = JSON.parse(userData);
+
+      pathname === "/favorites/movies"
+        ? getFavMovies(parsedData.uid)
+        : getFavTvShows(parsedData.uid);
+    }
+  }, [pathname]);
 
   return (
     <section className="App flex">

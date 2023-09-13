@@ -59,18 +59,36 @@ function Navbar() {
           Menu
         </h5>
         <ul className=" list-none  ">
-          {menus.map((menu, id) => (
-            <Menu key={id} menu={menu} changeMenuState={changeMenuState}>
-              <span
-                className={twMerge(
-                  menu.path === pathname && "text-red",
-                  "text-xl"
-                )}
-              >
-                {menu.icon}
-              </span>
-            </Menu>
-          ))}
+          <Menu menu={menus[0]} changeMenuState={changeMenuState}>
+            <span
+              className={twMerge(
+                menus[0].path === pathname && "text-red",
+                "text-xl"
+              )}
+            >
+              {menus[0].icon}
+            </span>
+          </Menu>
+          <Menu menu={menus[1]} changeMenuState={changeMenuState}>
+            <span
+              className={twMerge(
+                pathname === "/favorites/movies" && "text-red",
+                "text-xl"
+              )}
+            >
+              {menus[1].icon}
+            </span>
+          </Menu>
+          <Menu menu={menus[2]} changeMenuState={changeMenuState}>
+            <span
+              className={twMerge(
+                menus[2].path === pathname && "text-red",
+                "text-xl"
+              )}
+            >
+              {menus[2].icon}
+            </span>
+          </Menu>
         </ul>
       </div>
 
