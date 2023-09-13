@@ -1,14 +1,9 @@
 import YouTube from "react-youtube";
 
 const VideoPlayer = ({ videoId }: { videoId: string }) => {
-  const opts = {
-    height: "390",
-    width: "640",
-  };
-
   return (
-    <div className="video-player">
-      <YouTube videoId={videoId} opts={opts} />
+    <div className="video-player w-[200px]">
+      <YouTube videoId={videoId} className="w-[200px] aspect-[16/9]" />
     </div>
   );
 };
