@@ -4,26 +4,32 @@ import {
   movieTrailersOptions,
   similarMoviesOptions,
 } from "@/api/api";
+import { getFavoriteMovies } from "@/firebase/helpers";
 import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import MoviesLoading from "@/loading/MoviesLoading";
+import { firebaseApp } from "@/main";
+import { favoriteMoviesState, userDataState } from "@/stores/store";
 import axios from "axios";
+import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { AiFillHeart, AiFillStar, AiOutlineHeart } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
 import CastItem from "./CastItem";
 import Movie from "./Movie";
 import VideoPlayer from "./VideoPlayer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { toast } from "./ui/use-toast";
 
 function MovieDetails() {
-  const [movieDetails, setMovieDetails] = useState<any>([]);
+  const [movieDetails, setMovieDetails] = useState<any>({});
   const [similarMovies, setSimilarMovies] = useState([]);
   const [trailers, setTrailers] = useState<any>([]);
   const [currentTrailer, setCurrentTrailer] = useState(0);
-  const [isFavoritesClicked, setIsFavoriesClicked] = useState(false);
+  const [isAddedToFav, setIsAddedToFav] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSimilarMoviesLoading, setSimilarMoviesLoading] = useState(true);
   const [duration, setDuration] = useState("");
@@ -33,6 +39,12 @@ function MovieDetails() {
   const [director, setDirector] = useState<any>([]);
   const { movieId } = useParams();
   const navigate = useNavigate();
+
+  //firebase db
+  const db = getFirestore(firebaseApp);
+  const { uid } = useRecoilValue(userDataState);
+  const [favoriteMovies, setFavoriteMovies] =
+    useRecoilState(favoriteMoviesState);
 
   const getMovieDetails = async () => {
     if (!movieId) return;
@@ -125,6 +137,53 @@ function MovieDetails() {
     setCurrentTrailer(currentTrailer - 1);
   };
 
+  const addToFavorites = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+
+    if (!localStorage.getItem("user")) {
+      toast({
+        title: "Please signin first",
+      });
+      return;
+    }
+
+    setIsAddedToFav(true);
+    await setDoc(doc(db, uid, "favorites", "movies", `movie${movieId}`), {
+      id: movieDetails.id,
+      poster_path: movieDetails.poster_path,
+      title: movieDetails.title,
+      rating: movieDetails.vote_average,
+      release_date: movieDetails.release_date,
+    }).then(() => {
+      toast({
+        title: "Added to favorites",
+      });
+    });
+
+    await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
+  };
+
+  const removeFromFavorites = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    if (!localStorage.getItem("user")) return;
+
+    setIsAddedToFav(false);
+    await deleteDoc(
+      doc(db, uid, "favorites", "movies", `movie${movieId}`)
+    ).then(() => {
+      toast({
+        title: "Removed from favorites",
+        variant: "destructive",
+      });
+    });
+
+    await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
+  };
+
   useEffect(() => {
     getMovieDetails();
     getAgeRating();
@@ -141,26 +200,31 @@ function MovieDetails() {
 
     //starring cast and director
     if (movieDetails.credits) {
-      const cast: any = [];
+      const cast: any = movieDetails.credits.cast.filter(
+        (_: any, id: number) => id < 3
+      );
       const directors = movieDetails.credits.crew.filter(
         (crew: any) => crew.job === "Director"
       );
-      for (let i = 0; i < 3; i++) {
-        cast.push(movieDetails.credits.cast[i]);
-      }
       setStarringCast(cast);
       setDirector(directors.filter((_: any, id: number) => id < 2));
     }
 
     //top cast
     if (movieDetails.credits) {
-      const cast: any = [];
-      for (let i = 0; i < 8; i++) {
-        cast.push(movieDetails.credits.cast[i]);
-      }
+      const cast: any = movieDetails.credits.cast.filter(
+        (_: any, id: number) => id < 8
+      );
       setTopCast(cast);
     }
   }, [movieDetails]);
+
+  useEffect(() => {
+    const list: any = favoriteMovies.find(
+      (m: any) => m.id === parseInt(movieId as string)
+    );
+    list ? setIsAddedToFav(true) : setIsAddedToFav(false);
+  }, [favoriteMovies]);
 
   if (isLoading) return <MovieDetailsLoading />;
 
@@ -168,7 +232,7 @@ function MovieDetails() {
     <main className="main-container">
       <button
         onClick={() => navigate(-1)}
-        className="hidden sm:flex gap-1 items-center border-2 border-gray-600 rounded-full py-1 px-2 text-lg text-gray-light cursor-pointer mb-4 sm:mb-6"
+        className="hidden sm:flex gap-1 items-center border-2 border-gray-600 rounded-full py-1 px-2 text-sm text-gray-light cursor-pointer mb-4 sm:mb-6"
       >
         <BiArrowBack className="text-lg" />
         Back
@@ -192,7 +256,7 @@ function MovieDetails() {
         />
 
         <article className="w-full">
-          <h2 className="text-2xl sm:text-3xl">
+          <h2 className="flex items-center text-2xl sm:text-3xl">
             {movieDetails.name || movieDetails.title}
             <span className="inline-flex items-center gap-1 text-sm ml-2 px-2 py-1 bg-dark rounded-md font-medium">
               {movieDetails.vote_average?.toFixed(1)}{" "}
@@ -210,16 +274,21 @@ function MovieDetails() {
             </ul>
 
             {/* add to favorites button -------->  */}
-            <button
-              onClick={() => setIsFavoriesClicked(!isFavoritesClicked)}
-              className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
-            >
-              {isFavoritesClicked ? (
+            {isAddedToFav ? (
+              <button
+                onClick={removeFromFavorites}
+                className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
+              >
                 <AiFillHeart className="text-xl text-red" />
-              ) : (
+              </button>
+            ) : (
+              <button
+                onClick={addToFavorites}
+                className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
+              >
                 <AiOutlineHeart className="text-xl text-red" />
-              )}
-            </button>
+              </button>
+            )}
           </div>
 
           {/* tabs section ----------->  */}
@@ -269,15 +338,16 @@ function MovieDetails() {
             </TabsContent>
             <TabsContent value="cast">
               <div className="mt-4 grid grid-cols-3 gap-x-10">
-                {director.map((d: any) => (
-                  <CastItem
-                    key={d.id}
-                    name={d.name}
-                    role={d.job}
-                    profile_path={d.profile_path}
-                    clip_string={false}
-                  />
-                ))}
+                {director.length &&
+                  director.map((d: any) => (
+                    <CastItem
+                      key={d.id}
+                      name={d.name || ""}
+                      role={d.job}
+                      profile_path={d.profile_path}
+                      clip_string={false}
+                    />
+                  ))}
               </div>
               <h2 className="text-lg font-medium text-gray-light mt-4">
                 Top Cast
@@ -285,15 +355,16 @@ function MovieDetails() {
 
               {/* Top cast slider with navigation ---------->  */}
               <div className="min-w-full grid grid-cols-3  gap-x-2 gap-y-6  mt-4">
-                {topCast.map((t: any) => (
-                  <CastItem
-                    key={t.id}
-                    name={t.name}
-                    role={t.character}
-                    profile_path={t.profile_path}
-                    className="w-full"
-                  />
-                ))}
+                {topCast.length &&
+                  topCast.map((t: any) => (
+                    <CastItem
+                      key={t.id}
+                      name={t.name || t.original_name}
+                      role={t.character}
+                      profile_path={t.profile_path}
+                      className="w-full"
+                    />
+                  ))}
               </div>
             </TabsContent>
             <TabsContent value="trailers">

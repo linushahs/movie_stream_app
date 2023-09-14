@@ -1,20 +1,13 @@
-import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
 import Header from "@/layout/Header";
 import MoviesLoading from "@/loading/MoviesLoading";
 import SliderLoading from "@/loading/SliderLoading";
-import { firebaseDB } from "@/main";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { trendingMovieOptions, trendingTvOptions } from "../api/api";
-import {
-  categoryState,
-  favoriteMoviesState,
-  favoriteTvShowState,
-  userDataState,
-} from "../stores/store";
+import { categoryState } from "../stores/store";
 import Movie from "./Movie";
 import SearchedMoviesContainer from "./SearchedMoviesContainer";
 import Slider from "./Slider";
@@ -23,9 +16,6 @@ function MoviesContainer() {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trendingTvShows, setTrendingTvShows] = useState([]);
   const category = useRecoilValue(categoryState);
-  const setFavoriteMovies = useSetRecoilState(favoriteMoviesState);
-  const setFavoriteTvShows = useSetRecoilState(favoriteTvShowState);
-  const userData = useRecoilValue(userDataState);
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -45,32 +35,10 @@ function MoviesContainer() {
     });
   };
 
-  const getFavMovies = async () => {
-    const user = localStorage.getItem("user");
-
-    if (user) {
-      const movies = await getFavoriteMovies(userData.uid, firebaseDB);
-      setFavoriteMovies(movies);
-    }
-  };
-
-  const getFavTvShows = async () => {
-    const user = localStorage.getItem("user");
-
-    if (user) {
-      const tvShows = await getFavoriteTvShows(userData.uid, firebaseDB);
-      setFavoriteTvShows(tvShows);
-    }
-  };
-
   useEffect(() => {
     setIsLoading(true);
     category === "movie" ? getMovies() : getTvShows();
   }, [category]);
-
-  useEffect(() => {
-    category === "movie" ? getFavMovies() : getFavTvShows();
-  }, [userData.email, category]);
 
   if (searchParams.get("q")) return <SearchedMoviesContainer />;
 

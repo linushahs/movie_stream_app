@@ -131,7 +131,7 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
       {/* Add to favorites section -------  */}
       <button
         className={twMerge(
-          "absolute top-2 right-2 p-1.5 text-xl text-white transition-colors bg-white/40 backdrop-blur-sm hover:bg-gray-light/70 rounded-lg z-30",
+          "absolute top-2 right-2 p-1.5 text-xl text-white transition-colors bg-white/40 backdrop-blur-sm hover:bg-gray-light/70 rounded-md z-30",
           isAddedToFav && " text-white "
         )}
       >

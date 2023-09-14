@@ -4,20 +4,26 @@ import {
   tvShowDetailsOptions,
   tvShowTrailersOptions,
 } from "@/api/api";
+import { getFavoriteTvShows } from "@/firebase/helpers";
 import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import SeasonEpisodeLoading from "@/loading/SeasonEpisodeLoading";
+import { firebaseApp } from "@/main";
+import { favoriteTvShowState, userDataState } from "@/stores/store";
 import axios from "axios";
+import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import {
-  AiFillHeart,
-  AiFillStar,
-  AiOutlineHeart,
-  AiOutlineStar,
-} from "react-icons/ai";
+import { AiFillHeart, AiFillStar, AiOutlineHeart } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
+import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { A11y, Scrollbar } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { twMerge } from "tailwind-merge";
+import CastItem from "./CastItem";
+import VideoPlayer from "./VideoPlayer";
+import { ScrollArea } from "./ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -26,16 +32,11 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { ScrollArea } from "./ui/scroll-area";
-import { twMerge } from "tailwind-merge";
-import CastItem from "./CastItem";
-import VideoPlayer from "./VideoPlayer";
-import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { toast } from "./ui/use-toast";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});
-  const [isFavoritesClicked, setIsFavoriesClicked] = useState(false);
+  const [isAddedToFav, setIsAddedToFav] = useState(false);
   const [trailers, setTrailers] = useState<any>([]);
   const [currentTrailer, setCurrentTrailer] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,6 +48,12 @@ function TVShowDetails() {
   const [topCast, setTopCast] = useState([]);
   const { tvId } = useParams();
   const navigate = useNavigate();
+
+  //firebase db
+  const db = getFirestore(firebaseApp);
+  const { uid } = useRecoilValue(userDataState);
+  const [favoriteTvShows, setFavoriteTvShows] =
+    useRecoilState(favoriteTvShowState);
 
   const getTVShowDetails = async () => {
     if (!tvId) return;
@@ -141,12 +148,61 @@ function TVShowDetails() {
     setCurrentTrailer(currentTrailer - 1);
   };
 
+  const addToFavorites = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+
+    if (!localStorage.getItem("user")) {
+      toast({
+        title: "Please signin first",
+      });
+      return;
+    }
+
+    setIsAddedToFav(true);
+    await setDoc(doc(db, uid, "favorites", "tvShows", `tv${tvId}`), {
+      id: tvShowDetails.id,
+      poster_path: tvShowDetails.poster_path,
+      title: tvShowDetails.name,
+      rating: tvShowDetails.vote_average,
+      release_date: tvShowDetails.first_air_date,
+    }).then(() => {
+      toast({
+        title: "Added to favorites",
+      });
+    });
+
+    await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
+  };
+
+  const removeFromFavorites = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    if (!localStorage.getItem("user")) return;
+
+    setIsAddedToFav(false);
+    await deleteDoc(doc(db, uid, "favorites", "tvShows", `tv${tvId}`)).then(
+      () => {
+        toast({
+          title: "Removed from favorites",
+          variant: "destructive",
+        });
+      }
+    );
+
+    await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
+  };
+
   useEffect(() => {
     getTVShowDetails();
     getAgeRating();
     getSeasonDetails("1");
     getTvShowTrailers();
   }, [tvId]);
+
+  console.log(tvShowDetails);
 
   useEffect(() => {
     //starring cast and director
@@ -179,13 +235,20 @@ function TVShowDetails() {
     }
   }, [tvShowDetails]);
 
+  useEffect(() => {
+    const list: any = favoriteTvShows.find(
+      (m: any) => m.id === parseInt(tvId as string)
+    );
+    list ? setIsAddedToFav(true) : setIsAddedToFav(false);
+  }, [favoriteTvShows]);
+
   if (isLoading) return <MovieDetailsLoading />;
 
   return (
     <main className="main-container">
       <button
         onClick={() => navigate(-1)}
-        className="hidden sm:flex gap-1 items-center border-2 border-gray-600 rounded-full py-1 px-2 text-lg text-gray-light cursor-pointer mb-4 sm:mb-6"
+        className="hidden sm:flex gap-1 items-center border-2 border-gray-600 rounded-full py-1 px-2 text-sm text-gray-light cursor-pointer mb-4 sm:mb-6"
       >
         <BiArrowBack className="text-lg" />
         Back
@@ -210,9 +273,9 @@ function TVShowDetails() {
         />
 
         <article>
-          <h2 className="text-2xl sm:text-3xl">
+          <h2 className="flex items-center text-2xl sm:text-3xl ">
             {tvShowDetails.name || tvShowDetails.title}
-            <span className="inline-flex items-center gap-1 text-sm ml-2 px-2 py-1 bg-dark rounded-md font-medium">
+            <span className=" inline-flex items-center gap-1 text-sm ml-2 px-2 py-1 bg-dark rounded-md font-medium">
               {tvShowDetails.vote_average?.toFixed(1)}{" "}
               <AiFillStar className="w-4 h-4 text-yellow" />
             </span>
@@ -230,16 +293,21 @@ function TVShowDetails() {
             </ul>
 
             {/* add to favorites button -------->  */}
-            <button
-              onClick={() => setIsFavoriesClicked(!isFavoritesClicked)}
-              className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
-            >
-              {isFavoritesClicked ? (
+            {isAddedToFav ? (
+              <button
+                onClick={removeFromFavorites}
+                className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
+              >
                 <AiFillHeart className="text-xl text-red" />
-              ) : (
+              </button>
+            ) : (
+              <button
+                onClick={addToFavorites}
+                className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
+              >
                 <AiOutlineHeart className="text-xl text-red" />
-              )}
-            </button>
+              </button>
+            )}
           </div>
 
           {/* tabs section ----------->  */}
