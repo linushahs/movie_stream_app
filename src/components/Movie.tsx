@@ -1,21 +1,9 @@
-import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
-import { firebaseApp } from "@/main";
-import {
-  categoryState,
-  favoriteMoviesState,
-  favoriteTvShowState,
-  searchQueryState,
-  userDataState,
-} from "@/stores/store";
-import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { AiFillHeart, AiFillStar, AiOutlineHeart } from "react-icons/ai";
-import { BiMinus, BiPlus } from "react-icons/bi";
+import { categoryState, searchQueryState } from "@/stores/store";
+import { AiFillStar } from "react-icons/ai";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { twMerge } from "tailwind-merge";
-import { useToast } from "./ui/use-toast";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import FavoriteButton from "./favorites/FavoriteButton";
 
 export interface MovieProps {
   id: number;
@@ -30,73 +18,6 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
   const navigate = useNavigate();
   const category = useRecoilValue(categoryState);
   const setSearchQuery = useSetRecoilState(searchQueryState);
-  const [favoriteMovies, setFavoriteMovies] =
-    useRecoilState(favoriteMoviesState);
-  const [favoriteTvShows, setFavoriteTvShows] =
-    useRecoilState(favoriteTvShowState);
-  const { uid } = useRecoilValue(userDataState);
-  const [isAddedToFav, setIsAddedToFav] = useState(false);
-  const { toast } = useToast();
-
-  //firestore database
-  const db = getFirestore(firebaseApp);
-
-  const addToFavorites = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    e.stopPropagation();
-
-    if (!localStorage.getItem("user")) {
-      toast({
-        title: "Please signin first",
-      });
-      return;
-    }
-
-    setIsAddedToFav(true);
-    const coll = category === "tv" ? "tvShows" : "movies";
-    const docId = category === "tv" ? `tv${id}` : `movie${id}`;
-    await setDoc(doc(db, uid, "favorites", coll, docId), {
-      id,
-      poster_path,
-      title,
-      rating,
-      release_date,
-    }).then(() => {
-      toast({
-        title: "Added to favorites",
-      });
-    });
-
-    if (category === "movie") {
-      await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
-    } else {
-      await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
-    }
-  };
-
-  const removeFromFavorites = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    e.stopPropagation();
-    if (!localStorage.getItem("user")) return;
-
-    setIsAddedToFav(false);
-    const coll = category === "tv" ? "tvShows" : "movies";
-    const docId = category === "tv" ? `tv${id}` : `movie${id}`;
-    await deleteDoc(doc(db, uid, "favorites", coll, docId)).then(() => {
-      toast({
-        title: "Removed from favorites",
-        variant: "destructive",
-      });
-    });
-
-    if (category === "movie") {
-      await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
-    } else {
-      await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
-    }
-  };
 
   const handleNavigation = () => {
     setSearchQuery("");
@@ -104,15 +25,6 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
       category === "movie" ? `/home/movies/${id}` : `/home/tv-series/${id}`
     );
   };
-
-  useEffect(() => {
-    const list: any =
-      category === "movie"
-        ? favoriteMovies.find((m: any) => m.id === id)
-        : favoriteTvShows.find((m: any) => m.id === id);
-
-    list ? setIsAddedToFav(true) : setIsAddedToFav(false);
-  }, [favoriteMovies, favoriteTvShows, category]);
 
   return (
     <div
@@ -129,22 +41,13 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
       </div>
 
       {/* Add to favorites section -------  */}
-      <button
-        className={twMerge(
-          "absolute top-2 right-2 p-1.5 text-xl text-white transition-colors bg-white/40 backdrop-blur-sm hover:bg-gray-light/70 rounded-md z-30",
-          isAddedToFav && " text-white "
-        )}
-      >
-        {isAddedToFav ? (
-          <div onClick={(e) => removeFromFavorites(e)}>
-            <AiFillHeart className="text-md text-red" on />
-          </div>
-        ) : (
-          <div onClick={(e) => addToFavorites(e)}>
-            <AiOutlineHeart className="text-md" />
-          </div>
-        )}
-      </button>
+
+      <div className="absolute top-2 right-2">
+        <FavoriteButton
+          id={id + ""}
+          movie={{ id, poster_path, title, rating, release_date }}
+        />
+      </div>
 
       {/* description -------------------  */}
       <div className="flex justify-between items-center text-xs xl:text-sm text-gray-light">

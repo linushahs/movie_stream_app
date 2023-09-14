@@ -38,7 +38,7 @@ function SignInWithGoogle() {
       className="border-2 border-white text-white sm:border-gray-400 rounded-full py-1 px-3 sm:p-2  sm:mx-3 xl:py-2 xl:px-3 sm:text-gray-400 transition-colors hover:border-white hover:text-white w-full"
     >
       <div className="sm:flex items-center gap-2 text-md">
-        <FcGoogle className="w-6 h-6" />
+        <FcGoogle className="hidden sm:block w-6 h-6" />
         <h2 className="hidden xl:block">Sign in with google</h2>
       </div>
       <h2 className="sm:hidden text-xs">Sign in</h2>

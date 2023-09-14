@@ -4,25 +4,21 @@ import {
   tvShowDetailsOptions,
   tvShowTrailersOptions,
 } from "@/api/api";
-import { getFavoriteTvShows } from "@/firebase/helpers";
 import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import SeasonEpisodeLoading from "@/loading/SeasonEpisodeLoading";
-import { firebaseApp } from "@/main";
-import { favoriteTvShowState, userDataState } from "@/stores/store";
 import axios from "axios";
-import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { AiFillHeart, AiFillStar, AiOutlineHeart } from "react-icons/ai";
+import { AiFillStar } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { A11y, Scrollbar } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { twMerge } from "tailwind-merge";
 import CastItem from "./CastItem";
 import VideoPlayer from "./VideoPlayer";
+import FavoriteButton from "./favorites/FavoriteButton";
 import { ScrollArea } from "./ui/scroll-area";
 import {
   Select,
@@ -32,11 +28,9 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { toast } from "./ui/use-toast";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});
-  const [isAddedToFav, setIsAddedToFav] = useState(false);
   const [trailers, setTrailers] = useState<any>([]);
   const [currentTrailer, setCurrentTrailer] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,12 +42,6 @@ function TVShowDetails() {
   const [topCast, setTopCast] = useState([]);
   const { tvId } = useParams();
   const navigate = useNavigate();
-
-  //firebase db
-  const db = getFirestore(firebaseApp);
-  const { uid } = useRecoilValue(userDataState);
-  const [favoriteTvShows, setFavoriteTvShows] =
-    useRecoilState(favoriteTvShowState);
 
   const getTVShowDetails = async () => {
     if (!tvId) return;
@@ -148,61 +136,12 @@ function TVShowDetails() {
     setCurrentTrailer(currentTrailer - 1);
   };
 
-  const addToFavorites = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.stopPropagation();
-
-    if (!localStorage.getItem("user")) {
-      toast({
-        title: "Please signin first",
-      });
-      return;
-    }
-
-    setIsAddedToFav(true);
-    await setDoc(doc(db, uid, "favorites", "tvShows", `tv${tvId}`), {
-      id: tvShowDetails.id,
-      poster_path: tvShowDetails.poster_path,
-      title: tvShowDetails.name,
-      rating: tvShowDetails.vote_average,
-      release_date: tvShowDetails.first_air_date,
-    }).then(() => {
-      toast({
-        title: "Added to favorites",
-      });
-    });
-
-    await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
-  };
-
-  const removeFromFavorites = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.stopPropagation();
-    if (!localStorage.getItem("user")) return;
-
-    setIsAddedToFav(false);
-    await deleteDoc(doc(db, uid, "favorites", "tvShows", `tv${tvId}`)).then(
-      () => {
-        toast({
-          title: "Removed from favorites",
-          variant: "destructive",
-        });
-      }
-    );
-
-    await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
-  };
-
   useEffect(() => {
     getTVShowDetails();
     getAgeRating();
     getSeasonDetails("1");
     getTvShowTrailers();
   }, [tvId]);
-
-  console.log(tvShowDetails);
 
   useEffect(() => {
     //starring cast and director
@@ -234,13 +173,6 @@ function TVShowDetails() {
       setTopCast(cast);
     }
   }, [tvShowDetails]);
-
-  useEffect(() => {
-    const list: any = favoriteTvShows.find(
-      (m: any) => m.id === parseInt(tvId as string)
-    );
-    list ? setIsAddedToFav(true) : setIsAddedToFav(false);
-  }, [favoriteTvShows]);
 
   if (isLoading) return <MovieDetailsLoading />;
 
@@ -293,21 +225,7 @@ function TVShowDetails() {
             </ul>
 
             {/* add to favorites button -------->  */}
-            {isAddedToFav ? (
-              <button
-                onClick={removeFromFavorites}
-                className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
-              >
-                <AiFillHeart className="text-xl text-red" />
-              </button>
-            ) : (
-              <button
-                onClick={addToFavorites}
-                className=" px-2.5 py-1.5 rounded-md hover:bg-dark/50 transition-colors bg-dark text-white "
-              >
-                <AiOutlineHeart className="text-xl text-red" />
-              </button>
-            )}
+            <FavoriteButton id={tvId as string} movie={tvShowDetails} />
           </div>
 
           {/* tabs section ----------->  */}
