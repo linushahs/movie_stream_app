@@ -1,21 +1,10 @@
 import { movieDetailsOptions, tvShowDetailsOptions } from "@/api/api";
-import {
-  categoryState,
-  favoriteMoviesState,
-  favoriteTvShowState,
-  userDataState,
-} from "@/stores/store";
+import { categoryState } from "@/stores/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { twMerge } from "tailwind-merge";
-import { useToast } from "./ui/use-toast";
-import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
-import { firebaseApp } from "@/main";
-import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { useRecoilValue } from "recoil";
 import FavoriteButton from "./favorites/FavoriteButton";
 
 interface SliderProps {
