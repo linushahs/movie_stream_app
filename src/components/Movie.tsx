@@ -147,7 +147,7 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
       </button>
 
       {/* description -------------------  */}
-      <div className="flex justify-between items-center text-xs sm:text-sm text-gray-light">
+      <div className="flex justify-between items-center text-xs xl:text-sm text-gray-light">
         <p>{release_date?.substring(0, 4)}</p>
         <span className="rounded-full border border-gray-600 w-fit px-2">
           {category === "movie" ? "Movie" : "Series"}

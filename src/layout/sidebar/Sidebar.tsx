@@ -63,7 +63,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="hidden lg:block py-8 bg-black lg:px-8 lg:w-[420px]">
+    <div className="hidden lg:block py-8 bg-black lg:px-4 lg:w-[360px] xl:px-8 xl:w-[420px]">
       <header className="relative px-2 py-1.5 w-[220px] flex justify-center gap-2 items-center border-2 border-gray-dark rounded-3xl">
         <FiSearch className="text-2xl text-gray-light" />
         <input
