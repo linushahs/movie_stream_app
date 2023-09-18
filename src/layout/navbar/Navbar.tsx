@@ -2,7 +2,7 @@ import SignInWithGoogle from "@/components/SignInWithGoogle";
 import UserProfile from "@/components/UserProfile";
 import { userDataState } from "@/stores/store";
 import { AiOutlineHeart } from "react-icons/ai";
-import { FiHome } from "react-icons/fi";
+import { FiHome, FiSearch } from "react-icons/fi";
 import { RxStopwatch } from "react-icons/rx";
 import { useMatches, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -13,12 +13,17 @@ const menus = [
   {
     name: "Home",
     icon: <FiHome />,
-    path: "/home",
+    path: "/home/movies",
+  },
+  {
+    name: "Search",
+    icon: <FiSearch />,
+    path: "/search/movies",
   },
   {
     name: "Favorites",
     icon: <AiOutlineHeart />,
-    path: "/favorites",
+    path: "/favorites/movies",
   },
   {
     name: "Upcoming Shows",
@@ -34,6 +39,8 @@ function Navbar() {
   const changeMenuState = (path: string) => {
     navigate(path);
   };
+
+  console.log(pathname);
 
   return (
     <div className="navbar">
@@ -57,36 +64,18 @@ function Navbar() {
           Menu
         </h5>
         <ul className=" list-none  xl:text-sm 2xl:text-lg">
-          <Menu menu={menus[0]} changeMenuState={changeMenuState}>
-            <span
-              className={twMerge(
-                menus[0].path === pathname && "text-red",
-                "text-xl"
-              )}
-            >
-              {menus[0].icon}
-            </span>
-          </Menu>
-          <Menu menu={menus[1]} changeMenuState={changeMenuState}>
-            <span
-              className={twMerge(
-                pathname === "/favorites/movies" && "text-red",
-                "text-[22px]"
-              )}
-            >
-              {menus[1].icon}
-            </span>
-          </Menu>
-          <Menu menu={menus[2]} changeMenuState={changeMenuState}>
-            <span
-              className={twMerge(
-                menus[2].path === pathname && "text-red",
-                "text-xl"
-              )}
-            >
-              {menus[2].icon}
-            </span>
-          </Menu>
+          {menus.map((menu, id) => (
+            <Menu key={id} menu={menu} changeMenuState={changeMenuState}>
+              <span
+                className={twMerge(
+                  menu.path.startsWith(pathname) && "text-red",
+                  "text-xl"
+                )}
+              >
+                {menu.icon}
+              </span>
+            </Menu>
+          ))}
         </ul>
       </div>
 

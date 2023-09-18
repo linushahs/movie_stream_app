@@ -13,8 +13,8 @@ function Menu({ menu: { name, path }, changeMenuState, children }: MenuProps) {
   return (
     <li
       className={twMerge(
-        "my-7 flex gap-1 sm:gap-3 items-center justify-center xl:justify-start text-gray-dark  cursor-pointer hover:text-white xl:px-4",
-        pathname.startsWith(path) && "xl:border-r-4 xl:border-r-red text-white"
+        "my-7 flex gap-1 font-medium sm:gap-3 items-center justify-center xl:justify-start text-gray-dark  cursor-pointer hover:text-white xl:px-4",
+        path.startsWith(pathname) && "xl:border-r-4 xl:border-r-red text-white"
       )}
       onClick={() => changeMenuState(path)}
     >
@@ -23,7 +23,7 @@ function Menu({ menu: { name, path }, changeMenuState, children }: MenuProps) {
         href="#"
         className={twMerge(
           "hidden sm:hidden xl:block",
-          pathname.startsWith(path) && "block"
+          path.startsWith(pathname) && "block"
         )}
       >
         {name}

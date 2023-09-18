@@ -12,6 +12,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { twMerge } from "tailwind-merge";
 import { useToast } from "../ui/use-toast";
+import { MovieProps } from "../Movie";
 
 interface FavoriteButtonProps {
   id: string;
@@ -46,17 +47,20 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
     setIsAddedToFav(true);
     const coll = category === "tv" ? "tvShows" : "movies";
     const docId = category === "tv" ? `tv${id}` : `movie${id}`;
-    await setDoc(doc(db, uid, "favorites", coll, docId), {
+    const movieDetails: MovieProps = {
       id: movie.id,
       poster_path: movie.poster_path,
       title: movie.title || movie.name,
-      rating: movie.vote_average,
+      rating: parseInt(movie.vote_average),
       release_date: movie.release_date || movie.first_air_date,
-    }).then(() => {
-      toast({
-        title: "Added to favorites",
-      });
-    });
+    };
+    await setDoc(doc(db, uid, "favorites", coll, docId), movieDetails).then(
+      () => {
+        toast({
+          title: "Added to favorites",
+        });
+      }
+    );
 
     if (category === "movie") {
       await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));

@@ -1,5 +1,4 @@
 import { searchMoviesOptions, searchTvShowsOptions } from "@/api/api";
-import Header from "@/layout/Header";
 import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
 import { categoryState } from "@/stores/store";
 import axios from "axios";
@@ -48,29 +47,26 @@ function SearchedMoviesContainer() {
   }, [query]);
 
   return (
-    <div className="w-full min-h-screen bg-black py-8 pr-8 pl-[112px] lg:pl-[250px] xl:pl-[calc(260px+32px)] border-r-[0.5px] border-r-gray-dark/50 ">
-      <Header />
-      <main className="mt-6 grid md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-x-4 gap-y-8">
-        {isLoading ? (
-          <SearchedMoviesLoading />
-        ) : movies[0] ? (
-          movies.map((movie: any, id) => (
-            <Movie
-              key={id}
-              id={movie.id}
-              poster_path={movie.poster_path}
-              title={movie.title || movie.name}
-              rating={movie.vote_average.toFixed(1)}
-              release_date={movie.release_date || movie.first_air_date}
-            />
-          ))
-        ) : (
-          <div className="h-20 w-full flex justify-center items-center text-gray-light">
-            No movies found
-          </div>
-        )}
-      </main>
-    </div>
+    <main className="movie-container">
+      {isLoading ? (
+        <SearchedMoviesLoading />
+      ) : movies[0] ? (
+        movies.map((movie: any, id) => (
+          <Movie
+            key={id}
+            id={movie.id}
+            poster_path={movie.poster_path}
+            title={movie.title || movie.name}
+            rating={movie.vote_average.toFixed(1)}
+            release_date={movie.release_date || movie.first_air_date}
+          />
+        ))
+      ) : (
+        <div className="h-20 w-full flex justify-center items-center text-gray-light">
+          No movies found
+        </div>
+      )}
+    </main>
   );
 }
 

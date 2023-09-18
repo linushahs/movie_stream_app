@@ -5,7 +5,7 @@ import { useSetRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
 
 function Header() {
-  const [, { pathname }] = useMatches();
+  const [{ pathname }] = useMatches();
   const setCategory = useSetRecoilState(categoryState);
   const navigate = useNavigate();
 
@@ -20,10 +20,12 @@ function Header() {
   };
 
   useEffect(() => {
-    if (pathname === "/home/movies") {
+    if (pathname.includes("movies")) {
       setCategory("movie");
-    } else if (pathname === "/home/tv-series") {
+    } else if (pathname.includes("tv-series")) {
       setCategory("tv");
+    } else {
+      setCategory("movie");
     }
   }, []);
 

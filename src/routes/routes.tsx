@@ -1,8 +1,10 @@
 import App from "@/App";
 import MovieDetails from "@/components/MovieDetails";
 import MoviesContainer from "@/components/MoviesContainer";
+import SearchedMoviesContainer from "@/components/SearchedMoviesContainer";
 import TVShowDetails from "@/components/TVshowDetails";
 import Favorites from "@/components/favorites/Favorites";
+import SearchPage from "@/components/search/SearchPage";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -37,15 +39,19 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/favorites",
-    element: <Navigate to="/favorites/movies" />,
-  },
-  {
     path: "/favorites/movies",
     element: <Favorites />,
   },
   {
     path: "/favorites/tv-series",
     element: <Favorites />,
+  },
+  {
+    path: "/search/movies",
+    element: <SearchPage />,
+  },
+  {
+    path: "/search/tv-series",
+    element: <SearchPage />,
   },
 ]);

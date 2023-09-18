@@ -71,7 +71,7 @@ function Favorites() {
               id={movie.id}
               poster_path={movie.poster_path}
               title={movie.title || movie.name}
-              rating={movie.vote_average?.toFixed(1)}
+              rating={parseInt(parseInt(movie.rating).toFixed(1))}
               release_date={movie.release_date}
             />
           ))}
