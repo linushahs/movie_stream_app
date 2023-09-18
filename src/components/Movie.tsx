@@ -45,7 +45,7 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
       <div className="absolute top-2 right-2">
         <FavoriteButton
           id={id + ""}
-          movie={{ id, poster_path, title, rating, release_date }}
+          movie={{ id, poster_path, title, vote_average: rating, release_date }}
         />
       </div>
 

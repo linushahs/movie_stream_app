@@ -3,7 +3,7 @@ import Sidebar from "@/layout/sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
 import { Toaster } from "./components/ui/toaster";
 import { useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   categoryState,
   favoriteMoviesState,
@@ -17,7 +17,7 @@ function App() {
   const category = useRecoilValue(categoryState);
   const setFavoriteMovies = useSetRecoilState(favoriteMoviesState);
   const setFavoriteTvShows = useSetRecoilState(favoriteTvShowState);
-  const userData = useRecoilValue(userDataState);
+  const [userData, setUserData] = useRecoilState(userDataState);
 
   const getFavMovies = async () => {
     const user = localStorage.getItem("user");
@@ -38,8 +38,12 @@ function App() {
   };
 
   useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setUserData(JSON.parse(user));
+    }
     category === "movie" ? getFavMovies() : getFavTvShows();
-  }, [userData.email, category]);
+  }, []);
 
   return (
     <section className="flex">

@@ -1,14 +1,13 @@
 import SignInWithGoogle from "@/components/SignInWithGoogle";
 import UserProfile from "@/components/UserProfile";
+import { userDataState } from "@/stores/store";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FiHome } from "react-icons/fi";
 import { RxStopwatch } from "react-icons/rx";
 import { useMatches, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import { twMerge } from "tailwind-merge";
 import Menu from "./Menu";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { userDataState } from "@/stores/store";
 
 const menus = [
   {
@@ -30,18 +29,11 @@ const menus = [
 function Navbar() {
   const [{ pathname }] = useMatches();
   const navigate = useNavigate();
-  const [userData, setUserData] = useRecoilState(userDataState);
+  const userData = useRecoilValue(userDataState);
 
   const changeMenuState = (path: string) => {
     navigate(path);
   };
-
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      setUserData(JSON.parse(user));
-    }
-  }, []);
 
   return (
     <div className="navbar">
