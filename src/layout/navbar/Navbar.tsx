@@ -40,8 +40,6 @@ function Navbar() {
     navigate(path);
   };
 
-  console.log(pathname);
-
   return (
     <div className="navbar">
       <header>

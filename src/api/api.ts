@@ -99,3 +99,17 @@ export const tvShowTrailersOptions = (id: string) => {
     ...getMethod,
   };
 };
+
+export const movieGenreOptions = () => {
+  return {
+    url: `https://api.themoviedb.org/3/genre/movie/list`,
+    ...getMethod,
+  };
+};
+
+export const tvGenreOptions = () => {
+  return {
+    url: `https://api.themoviedb.org/3/genre/tv/list`,
+    ...getMethod,
+  };
+};
