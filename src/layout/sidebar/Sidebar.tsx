@@ -7,7 +7,7 @@ import {
 } from "@/stores/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import FavoriteMovies from "./FavoriteMovies";
 import FavoriteTvShows from "./FavoriteTvShows";

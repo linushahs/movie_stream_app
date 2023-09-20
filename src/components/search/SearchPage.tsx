@@ -5,13 +5,10 @@ import Sidebar from "@/layout/sidebar/Sidebar";
 import years from "@/stores/yearList";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import SearchedMoviesContainer from "../SearchedMoviesContainer";
 import GenreDropdown from "../dropdowns/GenreDropdown";
 import YearDropdown from "../dropdowns/YearDropdown";
 import { Toaster } from "../ui/toaster";
-import SearchedMoviesContainer from "../SearchedMoviesContainer";
-import { useSearchParams } from "react-router-dom";
-import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
-import MoviesLoading from "@/loading/MoviesLoading";
 
 export interface Genre {
   id: number;

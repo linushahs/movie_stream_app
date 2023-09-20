@@ -4,19 +4,16 @@ import SliderLoading from "@/loading/SliderLoading";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { trendingMovieOptions, trendingTvOptions } from "../api/api";
 import { categoryState } from "../stores/store";
 import Movie from "./Movie";
-import SearchedMoviesContainer from "./SearchedMoviesContainer";
 import Slider from "./Slider";
 
 function MoviesContainer() {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trendingTvShows, setTrendingTvShows] = useState([]);
   const category = useRecoilValue(categoryState);
-  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
 
   const getMovies = async () => {
@@ -39,8 +36,6 @@ function MoviesContainer() {
     setIsLoading(true);
     category === "movie" ? getMovies() : getTvShows();
   }, [category]);
-
-  if (searchParams.get("q")) return <SearchedMoviesContainer />;
 
   return (
     <div className="main-container">

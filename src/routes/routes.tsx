@@ -1,7 +1,6 @@
 import App from "@/App";
 import MovieDetails from "@/components/MovieDetails";
 import MoviesContainer from "@/components/MoviesContainer";
-import SearchedMoviesContainer from "@/components/SearchedMoviesContainer";
 import TVShowDetails from "@/components/TVshowDetails";
 import Favorites from "@/components/favorites/Favorites";
 import SearchPage from "@/components/search/SearchPage";
