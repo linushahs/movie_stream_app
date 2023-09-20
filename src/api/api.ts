@@ -44,9 +44,25 @@ export const similarMoviesOptions = (id: string) => {
   };
 };
 
-export const searchMoviesOptions = (searchString: string) => {
+export const searchMoviesOptions = (
+  searchString: string,
+  selectedYear: string | null
+) => {
+  // Include selected year as a query parameter
+  const queryParams: Record<string, string> = {
+    query: searchString,
+    include_adult: "false",
+    language: "en-US",
+    page: "1",
+  };
+
+  if (selectedYear) {
+    queryParams.year = selectedYear;
+  }
+
   return {
-    url: `https://api.themoviedb.org/3/search/movie?query=${searchString}&include_adult=false&language=en-US&page=1`,
+    url: `https://api.themoviedb.org/3/search/movie`,
+    params: queryParams,
     ...getMethod,
   };
 };

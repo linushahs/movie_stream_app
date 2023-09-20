@@ -6,7 +6,11 @@ export interface Year {
 let years: Array<Year> = [];
 
 for (let i = 23; i >= 0; i--) {
-  years.push({ id: `20${i}`, checked: false });
+  if (i < 10) {
+    years.push({ id: `200${i}`, checked: false });
+  } else {
+    years.push({ id: `20${i}`, checked: false });
+  }
 }
 
 years = [

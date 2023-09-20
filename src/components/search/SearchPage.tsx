@@ -1,28 +1,34 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { movieGenreOptions, searchMoviesOptions } from "@/api/api";
 import Header from "@/layout/Header";
 import Navbar from "@/layout/navbar/Navbar";
 import Sidebar from "@/layout/sidebar/Sidebar";
-import { FiChevronDown, FiPlus } from "react-icons/fi";
-import { Toaster } from "../ui/toaster";
-import { useEffect, useState } from "react";
-import { movieGenreOptions } from "@/api/api";
+import years from "@/stores/yearList";
 import axios from "axios";
-import years, { Year } from "@/stores/yearList";
+import React, { useEffect, useState } from "react";
+import GenreDropdown from "../dropdowns/GenreDropdown";
+import YearDropdown from "../dropdowns/YearDropdown";
+import { Toaster } from "../ui/toaster";
+import SearchedMoviesContainer from "../SearchedMoviesContainer";
+import { useSearchParams } from "react-router-dom";
 
-interface Genre {
+export interface Genre {
   id: number;
   name: string;
   checked: boolean;
 }
 
+export interface Year {
+  id: string;
+  checked: boolean;
+}
+
 function SearchPage() {
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [genreList, setGenreList] = useState<Array<Genre>>([]);
-  const [yearList, setYearList] = useState(years);
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [filteredResults, setFilteredResults] = useState<any[]>([]);
+  const [filterApplied, setFilterApplied] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const getGenreList = async () => {
     const options = movieGenreOptions();
@@ -37,19 +43,56 @@ function SearchPage() {
   };
 
   const handleGenreClick = (id: number) => {
-    const genre = genreList.map((genre: Genre) => {
+    const updatedGenres = genreList.map((genre: Genre) => {
       if (genre.id === id) {
         genre.checked = !genre.checked;
       }
+
       return genre;
     });
 
-    setGenreList([...genre]);
+    setGenreList([...updatedGenres]);
+  };
+
+  const handleYearClick = (id: string) => {
+    setSelectedYear(id);
+  };
+
+  const fetchFilteredResults = async () => {
+    // Call the TMDB API with search query and filter options as parameters
+    const options = searchMoviesOptions(searchQuery, selectedYear);
+
+    await axios
+      .request(options)
+      .then((res: any) => {
+        // Filter movies based on selected genres
+        const filteredMovies = res.data.results.filter((movie: any) => {
+          return genreList.some((genre) =>
+            genre.checked ? movie.genre_ids.includes(genre.id) : true
+          );
+        });
+
+        setFilteredResults(filteredMovies);
+        setFilterApplied(true); // Set filter applied to true
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   useEffect(() => {
     getGenreList();
   }, []);
+
+  const handleFilterClick = () => {
+    fetchFilteredResults();
+  };
+
+  const handleSearchQueryChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchQuery(event.target.value);
+  };
 
   return (
     <section className="App flex">
@@ -59,59 +102,46 @@ function SearchPage() {
         <Header />
 
         <div className="flex gap-2 text-white">
-          <input type="text" className="" />
+          <input
+            type="text"
+            className="text-black"
+            value={searchQuery}
+            onChange={handleSearchQueryChange}
+          />
           {/* Genre list -------------->  */}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="bg-dark flex items-center gap-1.5 py-1 px-2 rounded-md">
-              Genre <FiChevronDown className="text-lg" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-dark grid grid-cols-3 grid-rows-8">
-              {genreList.map((genre: Genre, id) => (
-                <DropdownMenuItem
-                  key={id}
-                  onClick={() => handleGenreClick(genre.id)}
-                  className="flex items-center gap-2 cursor-pointer focus:bg-dark/50"
-                >
-                  {genre.checked ? (
-                    <span className="w-4 h-4 flex items-center justify-center rounded-full bg-red text-white text-xs">
-                      <FiPlus />
-                    </span>
-                  ) : (
-                    <span className="w-4 h-4 rounded-full bg-gray-dark"></span>
-                  )}
-                  {genre.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <GenreDropdown
+            label="Genre"
+            items={genreList}
+            onItemClick={handleGenreClick}
+          />
 
           {/* Year list --------------->  */}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="bg-dark flex items-center gap-1.5 py-1 px-2 rounded-md">
-              Year <FiChevronDown className="text-lg" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-dark grid grid-cols-3 grid-rows-8">
-              {yearList.map((year: Year, id) => (
-                <DropdownMenuItem
-                  key={year.id}
-                  onClick={() => handleYearClick(year.id)}
-                  className="flex items-center gap-2 cursor-pointer focus:bg-dark/50"
-                >
-                  {year.checked ? (
-                    <span className="w-4 h-4 flex items-center justify-center rounded-full bg-red text-white text-xs">
-                      <FiPlus />
-                    </span>
-                  ) : (
-                    <span className="w-4 h-4 rounded-full bg-gray-dark"></span>
-                  )}
-                  {year.id}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <YearDropdown
+            label="Year"
+            years={years}
+            selectedYear={selectedYear}
+            onYearSelect={handleYearClick}
+          />
+          {/* Filter Button */}
+          <button
+            className="bg-blue-500 text-white py-1 px-3 rounded-md"
+            onClick={handleFilterClick}
+          >
+            Filter
+          </button>
         </div>
 
-        {/* <SearchedMoviesContainer /> */}
+        {/* Display filtered results */}
+        {/* {filterApplied && (
+          <div className="text-white mt-4">
+            {/* Display filtered results here 
+            {filteredResults.map((result, index) => (
+              <div key={index}>{result.title}</div>
+            ))}
+          </div>
+        )} */}
+
+        <SearchedMoviesContainer movies={filteredResults} />
       </div>
 
       <Sidebar />
