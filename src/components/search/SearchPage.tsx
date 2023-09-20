@@ -10,6 +10,8 @@ import YearDropdown from "../dropdowns/YearDropdown";
 import { Toaster } from "../ui/toaster";
 import SearchedMoviesContainer from "../SearchedMoviesContainer";
 import { useSearchParams } from "react-router-dom";
+import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
+import MoviesLoading from "@/loading/MoviesLoading";
 
 export interface Genre {
   id: number;
@@ -27,8 +29,7 @@ function SearchPage() {
   const [genreList, setGenreList] = useState<Array<Genre>>([]);
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [filteredResults, setFilteredResults] = useState<any[]>([]);
-  const [filterApplied, setFilterApplied] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   const getGenreList = async () => {
     const options = movieGenreOptions();
@@ -60,7 +61,12 @@ function SearchPage() {
 
   const fetchFilteredResults = async () => {
     // Call the TMDB API with search query and filter options as parameters
+    setIsLoading(true);
     const options = searchMoviesOptions(searchQuery, selectedYear);
+    const isGenreChecked = genreList.reduce(
+      (acc, curr) => (curr.checked ? acc + 1 : acc),
+      0
+    );
 
     await axios
       .request(options)
@@ -68,12 +74,12 @@ function SearchPage() {
         // Filter movies based on selected genres
         const filteredMovies = res.data.results.filter((movie: any) => {
           return genreList.some((genre) =>
-            genre.checked ? movie.genre_ids.includes(genre.id) : true
+            genre.checked ? movie.genre_ids.includes(genre.id) : false
           );
         });
 
-        setFilteredResults(filteredMovies);
-        setFilterApplied(true); // Set filter applied to true
+        setFilteredResults(!isGenreChecked ? res.data.results : filteredMovies);
+        setIsLoading(false);
       })
       .catch((err) => {
         alert(err);
@@ -101,10 +107,11 @@ function SearchPage() {
       <div className="main-container">
         <Header />
 
-        <div className="flex gap-2 text-white">
+        <div className="flex gap-2 text-white py-8">
           <input
             type="text"
-            className="text-black"
+            className="text-gray-light px-3 py-2 bg-dark rounded-md"
+            placeholder="Search..."
             value={searchQuery}
             onChange={handleSearchQueryChange}
           />
@@ -124,24 +131,17 @@ function SearchPage() {
           />
           {/* Filter Button */}
           <button
-            className="bg-blue-500 text-white py-1 px-3 rounded-md"
+            className="bg-red hover:bg-red/80 text-white py-1 px-4 rounded-md"
             onClick={handleFilterClick}
           >
             Filter
           </button>
         </div>
 
-        {/* Display filtered results */}
-        {/* {filterApplied && (
-          <div className="text-white mt-4">
-            {/* Display filtered results here 
-            {filteredResults.map((result, index) => (
-              <div key={index}>{result.title}</div>
-            ))}
-          </div>
-        )} */}
-
-        <SearchedMoviesContainer movies={filteredResults} />
+        <SearchedMoviesContainer
+          movies={filteredResults}
+          isLoading={isLoading}
+        />
       </div>
 
       <Sidebar />

@@ -53,7 +53,7 @@ const GenreDropdown: React.FC<DropdownProps> = ({
     <div className="relative z-50">
       <div
         onClick={toggleDropdown}
-        className="bg-dark flex items-center gap-1.5 py-1 px-2 rounded-md cursor-pointer"
+        className="bg-dark flex items-center gap-1.5 py-2 px-3 rounded-md cursor-pointer"
       >
         {label} <FiChevronDown className="text-lg" />
       </div>

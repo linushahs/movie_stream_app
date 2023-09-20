@@ -6,8 +6,7 @@ import {
   favoriteTvShowState,
 } from "@/stores/store";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { FiSearch } from "react-icons/fi";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import FavoriteMovies from "./FavoriteMovies";
@@ -17,7 +16,6 @@ import SmallMovieCard from "./SmallMovieCard";
 function Sidebar() {
   const [topRatedShows, setTopRatedShows] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchParams, setSearchParams] = useSearchParams();
   const category = useRecoilValue(categoryState);
   const favoriteMovies = useRecoilValue(favoriteMoviesState);
   const favoriteTvShows = useRecoilValue(favoriteTvShowState);
@@ -51,11 +49,6 @@ function Sidebar() {
     category === "movie" ? getTopRatedMovies() : getTopRatedTvShows();
   }, [category]);
 
-  const handleSearchState = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchParams({ q: query });
-  };
-
   const handleFavoritesNavigation = () => {
     navigate(
       category === "movie" ? "/favorites/movies" : "/favorites/tv-series"
@@ -63,22 +56,10 @@ function Sidebar() {
   };
 
   return (
-    <div className="hidden lg:block py-8 bg-black lg:px-4 lg:w-[360px] xl:px-8 xl:w-[420px]">
-      <header className="relative px-2 py-1.5 w-[220px] flex justify-center gap-2 items-center border-2 border-gray-dark rounded-3xl">
-        <FiSearch className="text-2xl text-gray-light" />
-        <input
-          type="text"
-          name="search"
-          placeholder="Search"
-          value={searchParams.get("q") || ""}
-          onChange={(e) => handleSearchState(e)}
-          className="pl-1 border-none outline-none text-white bg-black w-full rounded-xl placeholder:text-gray-light"
-        />
-      </header>
-
+    <div className="hidden lg:block py-8 bg-black lg:px-4 lg:w-[300px] xl:px-6 xl:w-[360px]">
       {/* Most rated movies section goes here ------------->  */}
       {/* -------------------------------->  */}
-      <main className="mt-8">
+      <main className="">
         <h2 className=" text-white">Most Rated Movies</h2>
         <div className="flex flex-col gap-y-2 mt-4">
           {isLoading ? (

@@ -12,7 +12,7 @@ function FavoriteMovies({ movies }: { movies: any }) {
                 id={movie.id}
                 title={movie.title}
                 poster_path={movie.poster_path}
-                rating={movie.vote_average}
+                rating={movie.rating}
                 release_date={movie.release_date}
               />
             );
