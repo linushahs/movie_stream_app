@@ -1,6 +1,6 @@
 import { categoryState } from "@/stores/store";
 import { useEffect } from "react";
-import { useMatches, useNavigate } from "react-router-dom";
+import { useMatches } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
 

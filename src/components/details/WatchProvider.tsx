@@ -1,5 +1,3 @@
-import { BsBoxArrowUpRight } from "react-icons/bs";
-import WatchProviderItem from "./WatchProviderItem";
 import WatchProviderGrid from "./WatchProviderItem";
 
 interface WatchProviderProps {
