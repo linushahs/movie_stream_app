@@ -5,17 +5,27 @@ import Sidebar from "@/layout/sidebar/Sidebar";
 import { firebaseApp } from "@/main";
 import { favoriteMoviesState } from "@/stores/store";
 import { getFirestore } from "firebase/firestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { useMatches } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Movie from "../Movie";
 import { Toaster } from "../ui/toaster";
+import { twMerge } from "tailwind-merge";
 
 function Favorites() {
   const [favoriteMovies, setFavoriteMovies] =
     useRecoilState(favoriteMoviesState);
   const [{ pathname }] = useMatches();
+  const [pageNo, setPageNo] = useState(1);
+  const btnStyle = {
+    nextBtnStyle: favoriteMovies.length < pageNo * 10 ? "disabled" : "default",
+    prevBtnStyle: pageNo <= 1 ? "disabled" : "default",
+  };
+  const startIndex = (pageNo - 1) * 10;
+  const endIndex = pageNo * 10;
+
+  console.log(startIndex, endIndex);
 
   const db = getFirestore(firebaseApp);
 
@@ -27,6 +37,20 @@ function Favorites() {
   const getFavTvShows = async (uid: string) => {
     const movies = await getFavoriteTvShows(uid, db);
     setFavoriteMovies(movies);
+  };
+
+  const goToNextPage = async () => {
+    if (favoriteMovies.length > pageNo * 10) {
+      setPageNo(pageNo + 1);
+      return;
+    }
+  };
+
+  const goToPreviousPage = async () => {
+    if (pageNo > 1) {
+      setPageNo(pageNo - 1);
+      return;
+    }
   };
 
   useEffect(() => {
@@ -50,14 +74,24 @@ function Favorites() {
 
           <div className="hidden sm:flex justify-end gap-2 text-white">
             <button
-              // onClick={goToPrevTrailer}
-              className="border border-gray-dark p-2 rounded-full hover:bg-dark"
+              onClick={goToPreviousPage}
+              className={twMerge(
+                "border border-gray-dark p-2 rounded-full hover:bg-dark",
+                btnStyle.prevBtnStyle === "disabled" &&
+                  "disabled:bg-gray-dark disabled:opacity-50"
+              )}
+              disabled={btnStyle.prevBtnStyle === "disabled"}
             >
               <HiOutlineChevronLeft className="text-xl" />
             </button>
             <button
-              // onClick={goToNextTrailer}
-              className="border border-gray-dark p-2 rounded-full hover:bg-dark"
+              onClick={goToNextPage}
+              className={twMerge(
+                "border border-gray-dark p-2 rounded-full hover:bg-dark",
+                btnStyle.nextBtnStyle === "disabled" &&
+                  "disabled:bg-gray-dark disabled:opacity-50"
+              )}
+              disabled={btnStyle.nextBtnStyle === "disabled"}
             >
               <HiOutlineChevronRight className="text-xl" />
             </button>
@@ -65,16 +99,20 @@ function Favorites() {
         </div>
 
         <div className="movie-container mt-6">
-          {favoriteMovies.map((movie: any) => (
-            <Movie
-              key={movie.id}
-              id={movie.id}
-              poster_path={movie.poster_path}
-              title={movie.title || movie.name}
-              rating={parseInt(parseInt(movie.rating).toFixed(1))}
-              release_date={movie.release_date}
-            />
-          ))}
+          {favoriteMovies.map((movie: any, idx: number) => {
+            if (idx >= startIndex && idx < endIndex) {
+              return (
+                <Movie
+                  key={movie.id}
+                  id={movie.id}
+                  poster_path={movie.poster_path}
+                  title={movie.title || movie.name}
+                  rating={parseInt(parseInt(movie.rating).toFixed(1))}
+                  release_date={movie.release_date}
+                />
+              );
+            }
+          })}
         </div>
       </div>
 
