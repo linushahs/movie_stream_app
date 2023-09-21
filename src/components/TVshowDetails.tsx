@@ -19,6 +19,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { twMerge } from "tailwind-merge";
 import CastItem from "./CastItem";
 import VideoPlayer from "./VideoPlayer";
+import WatchProvider from "./details/movie/WatchProvider";
 import FavoriteButton from "./favorites/FavoriteButton";
 import { ScrollArea } from "./ui/scroll-area";
 import {
@@ -29,7 +30,6 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { BsBoxArrowUpRight } from "react-icons/bs";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});
@@ -347,47 +347,17 @@ function TVShowDetails() {
               )}
             </TabsContent>
             <TabsContent value="watch">
-              <h2 className="mt-4">Stream</h2>
-              <div className="grid grid-cols-3 gap-3 mt-2">
-                {watchProviders?.flatrate?.map((p: any) => (
-                  <a
-                    key={p.provider_id}
-                    className="flex gap-2 items-center text-sm bg-dark rounded-md py-1.5 px-3 cursor-pointer"
-                    href={watchProviders.link}
-                    target="_blank"
-                  >
-                    <img
-                      src={`https://image.tmdb.org/t/p/original/${p.logo_path}`}
-                      alt="logo"
-                      className="w-9 h-9 rounded-full object-cover"
-                    />
-                    {p.provider_name}
-
-                    <BsBoxArrowUpRight className="ml-auto text-sm text-gray-dark" />
-                  </a>
-                ))}
-              </div>
-
-              <h2 className="mt-4">Free</h2>
-              <div className="grid grid-cols-3 gap-3 mt-2">
-                {watchProviders?.free?.map((p: any) => (
-                  <a
-                    key={p.provider_id}
-                    className="flex gap-2 items-center text-sm bg-dark rounded-md py-1.5 px-3 cursor-pointer"
-                    href={watchProviders.link}
-                    target="_blank"
-                  >
-                    <img
-                      src={`https://image.tmdb.org/t/p/original/${p.logo_path}`}
-                      alt="logo"
-                      className="w-9 h-9 rounded-full object-cover"
-                    />
-                    {p.provider_name}
-
-                    <BsBoxArrowUpRight className="flex-grow ml-auto text-sm text-gray-dark" />
-                  </a>
-                ))}
-              </div>
+              {watchProviders ? (
+                <WatchProvider watchProviders={watchProviders} />
+              ) : (
+                <button
+                  className="w-fit flex gap-2 items-center text-sm bg-dark rounded-md py-2 px-3 cursor-pointer mt-4"
+                  aria-disabled={true}
+                  disabled={true}
+                >
+                  Watch in theatres...
+                </button>
+              )}
             </TabsContent>
           </Tabs>
         </article>

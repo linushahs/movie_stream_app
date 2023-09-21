@@ -19,7 +19,7 @@ import Movie from "../../Movie";
 import VideoPlayer from "../../VideoPlayer";
 import FavoriteButton from "../../favorites/FavoriteButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import MovieWatchProvider from "./MovieWatchProvider";
+import WatchProvider from "./WatchProvider";
 
 function MovieDetails() {
   const [movieDetails, setMovieDetails] = useState<any>({});
@@ -337,7 +337,7 @@ function MovieDetails() {
             </TabsContent>
             <TabsContent value="watch">
               {watchProviders ? (
-                <MovieWatchProvider watchProviders={watchProviders} />
+                <WatchProvider watchProviders={watchProviders} />
               ) : (
                 <button
                   className="w-fit flex gap-2 items-center text-sm bg-dark rounded-md py-2 px-3 cursor-pointer mt-4"

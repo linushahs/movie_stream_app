@@ -6,13 +6,21 @@ interface WatchProviderProps {
   watchProviders: any;
 }
 
-function MovieWatchProvider({ watchProviders }: WatchProviderProps) {
+function WatchProvider({ watchProviders }: WatchProviderProps) {
   return (
     <>
       {watchProviders?.flatrate && (
         <WatchProviderGrid
           title="Stream"
           arrayName="flatrate"
+          watchProviders={watchProviders}
+        />
+      )}
+
+      {watchProviders?.free && (
+        <WatchProviderGrid
+          title="Free"
+          arrayName="free"
           watchProviders={watchProviders}
         />
       )}
@@ -36,4 +44,4 @@ function MovieWatchProvider({ watchProviders }: WatchProviderProps) {
   );
 }
 
-export default MovieWatchProvider;
+export default WatchProvider;
