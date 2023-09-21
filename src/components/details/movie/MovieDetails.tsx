@@ -181,8 +181,6 @@ function MovieDetails() {
     }
   }, [movieDetails]);
 
-  console.log(watchProviders);
-
   if (isLoading) return <MovieDetailsLoading />;
 
   return (

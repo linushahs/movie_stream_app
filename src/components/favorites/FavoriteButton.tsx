@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { twMerge } from "tailwind-merge";
-import { useToast } from "../ui/use-toast";
 import { MovieProps } from "../Movie";
+import { useToast } from "../ui/use-toast";
 
 interface FavoriteButtonProps {
   id: string;
@@ -21,6 +21,7 @@ interface FavoriteButtonProps {
 
 function FavoriteButton({ id, movie }: FavoriteButtonProps) {
   const category = useRecoilValue(categoryState);
+  const [favoriteShows, setFavoriteShows] = useState([]);
   const [favoriteMovies, setFavoriteMovies] =
     useRecoilState(favoriteMoviesState);
   const [favoriteTvShows, setFavoriteTvShows] =
@@ -92,14 +93,26 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
     }
   };
 
-  useEffect(() => {
-    const list: any =
-      category === "movie"
-        ? favoriteMovies.find((m: any) => m.id === parseInt(id))
-        : favoriteTvShows.find((m: any) => m.id === parseInt(id));
+  const getFavMovies = async () => {
+    await getFavoriteMovies(uid, db).then((movies) => {
+      setFavoriteShows(movies);
+    });
+  };
 
+  const getFavTvShows = async () => {
+    await getFavoriteTvShows(uid, db).then((shows) => {
+      setFavoriteShows(shows);
+    });
+  };
+
+  useEffect(() => {
+    category === "movie" ? getFavMovies() : getFavTvShows();
+  }, [category]);
+
+  useEffect(() => {
+    const list: any = favoriteShows.find((m: any) => m.id === parseInt(id));
     list ? setIsAddedToFav(true) : setIsAddedToFav(false);
-  }, [favoriteMovies, favoriteTvShows, category]);
+  }, [favoriteShows]);
 
   return (
     <button

@@ -1,36 +1,43 @@
 import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
-import FavoritesHeader from "@/layout/RouteHeader";
+import RouteHeader from "@/layout/RouteHeader";
 import Navbar from "@/layout/navbar/Navbar";
 import Sidebar from "@/layout/sidebar/Sidebar";
+import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
 import { firebaseApp } from "@/main";
-import { categoryState, favoriteMoviesState } from "@/stores/store";
+import { categoryState } from "@/stores/store";
 import { getFirestore } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useMatches } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import Movie from "../Movie";
-import { Toaster } from "../ui/toaster";
 import Pagination from "../Pagination";
+import { Toaster } from "../ui/toaster";
+import MoviesLoading from "@/loading/MoviesLoading";
 
 function Favorites() {
-  const [favoriteMovies, setFavoriteMovies] =
-    useRecoilState(favoriteMoviesState);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
   const category = useRecoilValue(categoryState);
   const [pagination, setPagination] = useState({
     startIndex: 0,
     endIndex: 10,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   const db = getFirestore(firebaseApp);
 
   const getFavMovies = async (uid: string) => {
-    const movies = await getFavoriteMovies(uid, db);
-    setFavoriteMovies(movies);
+    setIsLoading(true);
+    await getFavoriteMovies(uid, db).then((movies) => {
+      setFavoriteMovies(movies);
+      setIsLoading(false);
+    });
   };
 
   const getFavTvShows = async (uid: string) => {
-    const movies = await getFavoriteTvShows(uid, db);
-    setFavoriteMovies(movies);
+    setIsLoading(true);
+    await getFavoriteTvShows(uid, db).then((shows) => {
+      setFavoriteMovies(shows);
+      setIsLoading(false);
+    });
   };
 
   useEffect(() => {
@@ -50,7 +57,7 @@ function Favorites() {
 
       <div className="main-container">
         <div className="flex justify-between ">
-          <FavoritesHeader />
+          <RouteHeader />
 
           <Pagination
             totalItems={favoriteMovies.length}
@@ -59,20 +66,24 @@ function Favorites() {
         </div>
 
         <div className="movie-container mt-6">
-          {favoriteMovies.map((movie: any, idx: number) => {
-            if (idx >= pagination.startIndex && idx < pagination.endIndex) {
-              return (
-                <Movie
-                  key={movie.id}
-                  id={movie.id}
-                  poster_path={movie.poster_path}
-                  title={movie.title || movie.name}
-                  rating={movie.rating}
-                  release_date={movie.release_date}
-                />
-              );
-            }
-          })}
+          {isLoading ? (
+            <MoviesLoading />
+          ) : (
+            favoriteMovies.map((movie: any, idx: number) => {
+              if (idx >= pagination.startIndex && idx < pagination.endIndex) {
+                return (
+                  <Movie
+                    key={movie.id}
+                    id={movie.id}
+                    poster_path={movie.poster_path}
+                    title={movie.title || movie.name}
+                    rating={movie.rating}
+                    release_date={movie.release_date}
+                  />
+                );
+              }
+            })
+          )}
         </div>
       </div>
 
