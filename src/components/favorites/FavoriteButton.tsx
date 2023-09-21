@@ -9,7 +9,7 @@ import {
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
 import { MovieProps } from "../Movie";
 import { useToast } from "../ui/use-toast";
@@ -22,10 +22,8 @@ interface FavoriteButtonProps {
 function FavoriteButton({ id, movie }: FavoriteButtonProps) {
   const category = useRecoilValue(categoryState);
   const [favoriteShows, setFavoriteShows] = useState([]);
-  const [favoriteMovies, setFavoriteMovies] =
-    useRecoilState(favoriteMoviesState);
-  const [favoriteTvShows, setFavoriteTvShows] =
-    useRecoilState(favoriteTvShowState);
+  const setFavoriteMovies = useSetRecoilState(favoriteMoviesState);
+  const setFavoriteTvShows = useSetRecoilState(favoriteTvShowState);
   const { uid } = useRecoilValue(userDataState);
   const [isAddedToFav, setIsAddedToFav] = useState(false);
   const { toast } = useToast();

@@ -2,7 +2,7 @@ import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
 import RouteHeader from "@/layout/RouteHeader";
 import Navbar from "@/layout/navbar/Navbar";
 import Sidebar from "@/layout/sidebar/Sidebar";
-import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
+import MoviesLoading from "@/loading/MoviesLoading";
 import { firebaseApp } from "@/main";
 import { categoryState } from "@/stores/store";
 import { getFirestore } from "firebase/firestore";
@@ -11,7 +11,6 @@ import { useRecoilValue } from "recoil";
 import Movie from "../Movie";
 import Pagination from "../Pagination";
 import { Toaster } from "../ui/toaster";
-import MoviesLoading from "@/loading/MoviesLoading";
 
 function Favorites() {
   const [favoriteMovies, setFavoriteMovies] = useState([]);
