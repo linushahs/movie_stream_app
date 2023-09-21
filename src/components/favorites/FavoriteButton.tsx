@@ -51,7 +51,7 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
       id: movie.id,
       poster_path: movie.poster_path,
       title: movie.title || movie.name,
-      rating: parseInt(movie.vote_average),
+      rating: movie.vote_average,
       release_date: movie.release_date || movie.first_air_date,
     };
     await setDoc(doc(db, uid, "favorites", coll, docId), movieDetails).then(

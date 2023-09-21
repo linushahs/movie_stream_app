@@ -56,7 +56,7 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
           {category === "movie" ? "Movie" : "Series"}
         </span>
         <span className="flex items-center gap-1">
-          {rating} <AiFillStar className="w-4 h-4" />
+          {`${rating}`.substring(0, 3)} <AiFillStar className="w-4 h-4" />
         </span>
       </div>
       <p className="w-full text-white">{title}</p>
