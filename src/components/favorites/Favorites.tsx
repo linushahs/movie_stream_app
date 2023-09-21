@@ -1,5 +1,5 @@
 import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
-import FavoritesHeader from "@/layout/FavoritesHeader";
+import FavoritesHeader from "@/layout/RouteHeader";
 import Navbar from "@/layout/navbar/Navbar";
 import Sidebar from "@/layout/sidebar/Sidebar";
 import { firebaseApp } from "@/main";

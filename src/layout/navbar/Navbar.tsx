@@ -1,5 +1,5 @@
-import SignInWithGoogle from "@/components/SignInWithGoogle";
-import UserProfile from "@/components/UserProfile";
+import SignInWithGoogle from "@/components/auth/SignInWithGoogle";
+import UserProfile from "@/components/auth/UserProfile";
 import { userDataState } from "@/stores/store";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FiHome, FiSearch } from "react-icons/fi";

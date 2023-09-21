@@ -17,19 +17,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import { A11y, Scrollbar } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { twMerge } from "tailwind-merge";
-import CastItem from "./CastItem";
-import VideoPlayer from "./VideoPlayer";
-import WatchProvider from "./details/movie/WatchProvider";
-import FavoriteButton from "./favorites/FavoriteButton";
-import { ScrollArea } from "./ui/scroll-area";
+import CastItem from "../CastItem";
+import VideoPlayer from "../../VideoPlayer";
+import WatchProvider from "../WatchProvider";
+import FavoriteButton from "../../favorites/FavoriteButton";
+import { ScrollArea } from "../../ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+} from "../../ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});

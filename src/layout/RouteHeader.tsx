@@ -4,25 +4,22 @@ import { useMatches, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
 
-function FavoritesHeader() {
+function RouteHeader() {
   const [{ pathname }] = useMatches();
   const [category, setCategory] = useRecoilState(categoryState);
-  const navigate = useNavigate();
 
   const handleTvShowsClick = () => {
     setCategory("tv");
-    navigate("/favorites/tv-series");
   };
 
   const handleMoviesClick = () => {
     setCategory("movie");
-    navigate("/favorites/movies");
   };
 
   useEffect(() => {
-    if (pathname === "/favorites/movies") {
+    if (pathname.includes("movies")) {
       setCategory("movie");
-    } else if (pathname === "/favorites/tv-series") {
+    } else if (pathname.includes("tv")) {
       setCategory("tv");
     }
   }, [pathname]);
@@ -53,4 +50,4 @@ function FavoritesHeader() {
   );
 }
 
-export default FavoritesHeader;
+export default RouteHeader;

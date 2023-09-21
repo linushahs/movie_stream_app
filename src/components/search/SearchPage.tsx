@@ -1,14 +1,14 @@
 import { movieGenreOptions, searchMoviesOptions } from "@/api/api";
-import Header from "@/layout/Header";
+import RouteHeader from "@/layout/RouteHeader";
 import Navbar from "@/layout/navbar/Navbar";
 import Sidebar from "@/layout/sidebar/Sidebar";
 import years from "@/stores/yearList";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import SearchedMoviesContainer from "../SearchedMoviesContainer";
 import GenreDropdown from "../dropdowns/GenreDropdown";
 import YearDropdown from "../dropdowns/YearDropdown";
 import { Toaster } from "../ui/toaster";
+import SearchedMoviesContainer from "./SearchedMoviesContainer";
 
 export interface Genre {
   id: number;
@@ -102,7 +102,7 @@ function SearchPage() {
       <Navbar />
 
       <div className="main-container">
-        <Header />
+        <RouteHeader />
 
         <div className="flex gap-2 text-white py-8">
           <input

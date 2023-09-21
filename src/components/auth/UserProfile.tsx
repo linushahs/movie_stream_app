@@ -6,9 +6,9 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import { getAuth, signOut } from "firebase/auth";
-import { toast } from "./ui/use-toast";
+import { toast } from "../ui/use-toast";
 import { useSetRecoilState } from "recoil";
 
 function UserProfile({ user }: { user: UserProps }) {

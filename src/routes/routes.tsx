@@ -1,7 +1,7 @@
 import App from "@/App";
 import MovieDetails from "@/components/details/movie/MovieDetails";
 import MoviesContainer from "@/components/MoviesContainer";
-import TVShowDetails from "@/components/TVshowDetails";
+import TVShowDetails from "@/components/details/tv/TVshowDetails";
 import Favorites from "@/components/favorites/Favorites";
 import SearchPage from "@/components/search/SearchPage";
 import { Navigate, createBrowserRouter } from "react-router-dom";

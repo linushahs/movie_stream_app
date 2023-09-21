@@ -1,5 +1,5 @@
 import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
-import Movie from "./Movie";
+import Movie from "../Movie";
 
 interface ContainerProps {
   movies: any[];
