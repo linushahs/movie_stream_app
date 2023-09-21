@@ -1,5 +1,5 @@
 import App from "@/App";
-import MovieDetails from "@/components/MovieDetails";
+import MovieDetails from "@/components/details/movie/MovieDetails";
 import MoviesContainer from "@/components/MoviesContainer";
 import TVShowDetails from "@/components/TVshowDetails";
 import Favorites from "@/components/favorites/Favorites";

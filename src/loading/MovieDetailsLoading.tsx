@@ -6,7 +6,7 @@ export default function MovieDetailsLoading() {
       <Skeleton className="hidden sm:block sm:w-[100px] h-8" />
 
       {/* Details section ------------>  */}
-      <div className="dark text-white flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+      <div className="dark mt-6 text-white flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
         <Skeleton className="w-full aspect-video sm:aspect-[3/4] sm:w-[300px] sm:h-[450px] rounded-xl" />
 
         <article className="w-full">

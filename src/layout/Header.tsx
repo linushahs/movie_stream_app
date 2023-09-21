@@ -5,7 +5,7 @@ import { useSetRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
 
 function Header() {
-  const [{ pathname }] = useMatches();
+  const [, { pathname }] = useMatches();
   const setCategory = useSetRecoilState(categoryState);
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ function Header() {
           onClick={handleTvShowsClick}
           className={twMerge(
             "text-gray-light hover:text-white cursor-pointer",
-            pathname === "/home/tv-series" && "text-white"
+            pathname.includes("tv") && "text-white"
           )}
         >
           TV Series
@@ -45,7 +45,7 @@ function Header() {
           onClick={handleMoviesClick}
           className={twMerge(
             "text-gray-light hover:text-white cursor-pointer",
-            pathname === "/home/movies" && "text-white"
+            pathname.includes("movies") && "text-white"
           )}
         >
           Movies

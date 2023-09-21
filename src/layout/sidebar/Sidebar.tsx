@@ -56,7 +56,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="hidden lg:block py-8 bg-black lg:px-4 lg:w-[300px] xl:px-6 xl:w-[360px]">
+    <div className="sidebar">
       {/* Most rated movies section goes here ------------->  */}
       {/* -------------------------------->  */}
       <main className="">

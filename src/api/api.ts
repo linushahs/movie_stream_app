@@ -129,3 +129,17 @@ export const tvGenreOptions = () => {
     ...getMethod,
   };
 };
+
+export const movieWatchProviderOptions = (id: string) => {
+  return {
+    url: `https://api.themoviedb.org/3/movie/${id}/watch/providers`,
+    ...getMethod,
+  };
+};
+
+export const tvWatchProviderOptions = (id: string) => {
+  return {
+    url: `https://api.themoviedb.org/3/tv/${id}/watch/providers`,
+    ...getMethod,
+  };
+};

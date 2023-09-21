@@ -89,12 +89,16 @@
   .menu {
     @apply flex-1 justify-center sm:flex-grow-0 sm:mt-4 sm:px-8 lg:px-4 xl:px-0;
   }
+
+  .sidebar {
+    @apply hidden lg:block py-8 bg-black lg:px-4 lg:w-[300px] xl:px-6 xl:w-[360px];
+  }
 }
 
 .swiper {
   position: relative !important;
   margin-left: 0 !important;
-  width: calc(100vw - 260px - 420px) !important;
+  width: calc(100vw - 230px - 360px) !important;
 }
 
 .cast-swiper {
