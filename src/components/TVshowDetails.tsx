@@ -3,6 +3,7 @@ import {
   seasonDetailsOptions,
   tvShowDetailsOptions,
   tvShowTrailersOptions,
+  tvWatchProviderOptions,
 } from "@/api/api";
 import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
 import SeasonEpisodeLoading from "@/loading/SeasonEpisodeLoading";
@@ -28,6 +29,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { BsBoxArrowUpRight } from "react-icons/bs";
 
 function TVShowDetails() {
   const [tvShowDetails, setTvShowDetails] = useState<any>({});
@@ -40,6 +42,7 @@ function TVShowDetails() {
   const [seasonDetails, setSeasonDetails] = useState<any>();
   const [isSeasonEpisodeLoading, setIsSeasonEpisodeLoading] = useState(false);
   const [topCast, setTopCast] = useState([]);
+  const [watchProviders, setWatchProviders] = useState<any>({});
   const { tvId } = useParams();
   const navigate = useNavigate();
 
@@ -120,6 +123,23 @@ function TVShowDetails() {
       });
   };
 
+  const getTvWatchProviders = async () => {
+    if (!tvId) return;
+
+    const options = tvWatchProviderOptions(tvId);
+    await axios
+      .request(options)
+      .then((res) => {
+        const results = res.data.results;
+        if (results) {
+          setWatchProviders(results["US"]);
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   const goToNextTrailer = () => {
     if (currentTrailer >= trailers.length - 1) {
       setCurrentTrailer(0);
@@ -141,6 +161,7 @@ function TVShowDetails() {
     getAgeRating();
     getSeasonDetails("1");
     getTvShowTrailers();
+    getTvWatchProviders();
   }, [tvId]);
 
   useEffect(() => {
@@ -231,7 +252,7 @@ function TVShowDetails() {
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
           <Tabs defaultValue="overview" className=" mt-8">
-            <TabsList className="w-full sm:w-[400px] h-auto">
+            <TabsList className="w-full sm:w-[420px] h-auto">
               <TabsTrigger value="overview" className="w-full text-base">
                 Overview
               </TabsTrigger>
@@ -240,6 +261,9 @@ function TVShowDetails() {
               </TabsTrigger>
               <TabsTrigger value="trailers" className="w-full text-base">
                 Trailers
+              </TabsTrigger>
+              <TabsTrigger value="watch" className="text-base flex-1">
+                Watch
               </TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
@@ -274,7 +298,7 @@ function TVShowDetails() {
               </div>
             </TabsContent>
             <TabsContent value="cast">
-              <div className="mt-4 grid grid-cols-3 gap-x-10">
+              <div className="mt-4 grid grid-cols-3 gap-x-10 gap-y-2">
                 {createdBy.map((d: any) => (
                   <CastItem
                     key={d.id}
@@ -285,19 +309,17 @@ function TVShowDetails() {
                   />
                 ))}
               </div>
-              <h2 className="text-lg font-medium text-gray-light mt-4">
-                Top Cast
-              </h2>
+              <h2 className=" font-medium text-gray-light mt-4">Top Cast</h2>
 
               {/* Top cast slider with navigation ---------->  */}
-              <div className="min-w-full grid grid-cols-3  gap-x-2 gap-y-6  mt-4">
+              <div className=" grid grid-cols-3  gap-x-2 gap-y-6  mt-4">
                 {topCast?.map((t: any) => (
                   <CastItem
                     key={t.id}
                     name={t.name || t.title}
                     role={t.character}
                     profile_path={t.profile_path}
-                    className="w-[210px]"
+                    className=""
                   />
                 ))}
               </div>
@@ -324,12 +346,55 @@ function TVShowDetails() {
                 </>
               )}
             </TabsContent>
+            <TabsContent value="watch">
+              <h2 className="mt-4">Stream</h2>
+              <div className="grid grid-cols-3 gap-3 mt-2">
+                {watchProviders?.flatrate?.map((p: any) => (
+                  <a
+                    key={p.provider_id}
+                    className="flex gap-2 items-center text-sm bg-dark rounded-md py-1.5 px-3 cursor-pointer"
+                    href={watchProviders.link}
+                    target="_blank"
+                  >
+                    <img
+                      src={`https://image.tmdb.org/t/p/original/${p.logo_path}`}
+                      alt="logo"
+                      className="w-9 h-9 rounded-full object-cover"
+                    />
+                    {p.provider_name}
+
+                    <BsBoxArrowUpRight className="ml-auto text-sm text-gray-dark" />
+                  </a>
+                ))}
+              </div>
+
+              <h2 className="mt-4">Free</h2>
+              <div className="grid grid-cols-3 gap-3 mt-2">
+                {watchProviders?.free?.map((p: any) => (
+                  <a
+                    key={p.provider_id}
+                    className="flex gap-2 items-center text-sm bg-dark rounded-md py-1.5 px-3 cursor-pointer"
+                    href={watchProviders.link}
+                    target="_blank"
+                  >
+                    <img
+                      src={`https://image.tmdb.org/t/p/original/${p.logo_path}`}
+                      alt="logo"
+                      className="w-9 h-9 rounded-full object-cover"
+                    />
+                    {p.provider_name}
+
+                    <BsBoxArrowUpRight className="flex-grow ml-auto text-sm text-gray-dark" />
+                  </a>
+                ))}
+              </div>
+            </TabsContent>
           </Tabs>
         </article>
       </div>
 
       {/* seasons, episods ------------->  */}
-      <div className="mt-8 w-full !relative">
+      <div className="mt-12 w-full !relative">
         <Select onValueChange={handleSeasonSelection} defaultValue={"1"}>
           <SelectTrigger className="min-w-[125px] sm:min-w-[150px] max-w-fit text-md sm:text-lg text-white bg-dark">
             <SelectValue placeholder="Seasons" />
@@ -369,7 +434,7 @@ function TVShowDetails() {
               seasonDetails.episodes.map((episode: any) => (
                 <SwiperSlide
                   key={episode.id}
-                  className="!w-[350px] !sm:w-[550px] aspect-[16/9] rounded-xl  bg-gray-dark flex items-center justify-center object-cover"
+                  className="!w-[350px] sm:!w-[500px] aspect-[16/9] rounded-xl  bg-gray-dark flex items-center justify-center object-cover"
                 >
                   <div className="absolute w-full h-full top-0 left-0 bg-black/50 z-30"></div>
                   <img

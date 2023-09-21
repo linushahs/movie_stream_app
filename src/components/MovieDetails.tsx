@@ -2,6 +2,7 @@ import {
   ageRatingOptions,
   movieDetailsOptions,
   movieTrailersOptions,
+  movieWatchProviderOptions,
   similarMoviesOptions,
 } from "@/api/api";
 import MovieDetailsLoading from "@/loading/MovieDetailsLoading";
@@ -18,6 +19,8 @@ import Movie from "./Movie";
 import VideoPlayer from "./VideoPlayer";
 import FavoriteButton from "./favorites/FavoriteButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { BsBoxArrowUpRight } from "react-icons/bs";
+import MovieWatchProvider from "./MovieWatchProvider";
 
 function MovieDetails() {
   const [movieDetails, setMovieDetails] = useState<any>({});
@@ -31,6 +34,7 @@ function MovieDetails() {
   const [starringCast, setStarringCast] = useState([]);
   const [topCast, setTopCast] = useState([]);
   const [director, setDirector] = useState<any>([]);
+  const [watchProviders, setWatchProviders] = useState<any>({});
   const { movieId } = useParams();
   const navigate = useNavigate();
 
@@ -109,6 +113,23 @@ function MovieDetails() {
       });
   };
 
+  const getMovieWatchProviders = async () => {
+    if (!movieId) return;
+
+    const options = movieWatchProviderOptions(movieId);
+    await axios
+      .request(options)
+      .then((res) => {
+        const results = res.data.results;
+        if (results) {
+          setWatchProviders(results["US"]);
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   const goToNextTrailer = () => {
     if (currentTrailer >= trailers.length - 1) {
       setCurrentTrailer(0);
@@ -130,6 +151,7 @@ function MovieDetails() {
     getAgeRating();
     getSimilarMovies();
     getMovieTrailers();
+    getMovieWatchProviders();
   }, [movieId]);
 
   useEffect(() => {
@@ -159,6 +181,8 @@ function MovieDetails() {
       setTopCast(cast);
     }
   }, [movieDetails]);
+
+  console.log(watchProviders);
 
   if (isLoading) return <MovieDetailsLoading />;
 
@@ -223,6 +247,9 @@ function MovieDetails() {
               </TabsTrigger>
               <TabsTrigger value="trailers" className="text-base flex-1">
                 Trailers
+              </TabsTrigger>
+              <TabsTrigger value="watch" className="text-base flex-1">
+                Watch
               </TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
@@ -307,6 +334,19 @@ function MovieDetails() {
                     </button>
                   </div>
                 </>
+              )}
+            </TabsContent>
+            <TabsContent value="watch">
+              {watchProviders ? (
+                <MovieWatchProvider watchProviders={watchProviders} />
+              ) : (
+                <button
+                  className="w-fit flex gap-2 items-center text-sm bg-dark rounded-md py-2 px-3 cursor-pointer mt-4"
+                  aria-disabled={true}
+                  disabled={true}
+                >
+                  Watch in theatres...
+                </button>
               )}
             </TabsContent>
           </Tabs>
