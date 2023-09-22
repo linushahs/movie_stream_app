@@ -37,6 +37,16 @@ export const topRatedTvShowOptions = {
   ...getMethod,
 };
 
+export const popularMovieOptions = {
+  url: "https://api.themoviedb.org/3/movie/popular",
+  ...getMethod,
+};
+
+export const popularTvShowOptions = {
+  url: "https://api.themoviedb.org/3/tv/popular",
+  ...getMethod,
+};
+
 export const similarMoviesOptions = (id: string) => {
   return {
     url: `https://api.themoviedb.org/3/movie/${id}/recommendations`,
@@ -50,14 +60,14 @@ export const searchMoviesOptions = (
 ) => {
   // Include selected year as a query parameter
   const queryParams: Record<string, string> = {
-    query: searchString,
+    query: searchString || "",
     include_adult: "false",
     language: "en-US",
     page: "1",
   };
 
   if (selectedYear) {
-    queryParams.year = selectedYear;
+    queryParams.primary_release_year = selectedYear;
   }
 
   return {
@@ -67,9 +77,25 @@ export const searchMoviesOptions = (
   };
 };
 
-export const searchTvShowsOptions = (searchString: string) => {
+export const searchTvShowsOptions = (
+  searchString: string,
+  selectedYear: string | null
+) => {
+  // Include selected year as a query parameter
+  const queryParams: Record<string, string> = {
+    query: searchString || "",
+    include_adult: "false",
+    language: "en-US",
+    page: "1",
+  };
+
+  if (selectedYear) {
+    queryParams.first_air_date_year = selectedYear;
+  }
+
   return {
-    url: `https://api.themoviedb.org/3/search/tv?query=${searchString}&include_adult=false&language=en-US&page=1`,
+    url: `https://api.themoviedb.org/3/search/tv`,
+    params: queryParams,
     ...getMethod,
   };
 };

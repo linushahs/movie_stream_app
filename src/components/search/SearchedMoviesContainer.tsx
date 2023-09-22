@@ -1,5 +1,7 @@
 import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
 import Movie from "../Movie";
+import { useRecoilValue } from "recoil";
+import { categoryState } from "@/stores/store";
 
 interface ContainerProps {
   movies: any[];
@@ -15,6 +17,8 @@ function SearchedMoviesContainer({
   isLoading,
   pagination: { startIndex, endIndex },
 }: ContainerProps) {
+  const category = useRecoilValue(categoryState);
+
   return (
     <main className="movie-container">
       {isLoading ? (
@@ -35,7 +39,9 @@ function SearchedMoviesContainer({
           }
         })
       ) : (
-        <div className="h-20 w-full text-gray-light">No movies found</div>
+        <div className="h-20 w-full text-gray-light">
+          No {category === "movie" ? "movies" : "tv shows"} found
+        </div>
       )}
     </main>
   );

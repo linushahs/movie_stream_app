@@ -1,15 +1,23 @@
-import { movieGenreOptions, searchMoviesOptions } from "@/api/api";
+import {
+  movieGenreOptions,
+  popularMovieOptions,
+  popularTvShowOptions,
+  searchMoviesOptions,
+  searchTvShowsOptions,
+} from "@/api/api";
 import RouteHeader from "@/layout/RouteHeader";
 import Navbar from "@/layout/navbar/Navbar";
 import Sidebar from "@/layout/sidebar/Sidebar";
+import { categoryState } from "@/stores/store";
 import years from "@/stores/yearList";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import Pagination from "../Pagination";
 import GenreDropdown from "../dropdowns/GenreDropdown";
 import YearDropdown from "../dropdowns/YearDropdown";
 import { Toaster } from "../ui/toaster";
 import SearchedMoviesContainer from "./SearchedMoviesContainer";
-import Pagination from "../Pagination";
 
 export interface Genre {
   id: number;
@@ -23,6 +31,7 @@ export interface Year {
 }
 
 function SearchPage() {
+  const category = useRecoilValue(categoryState);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [genreList, setGenreList] = useState<Array<Genre>>([]);
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
@@ -58,13 +67,20 @@ function SearchPage() {
   };
 
   const handleYearClick = (id: string) => {
+    if (id === selectedYear) {
+      setSelectedYear(null);
+      return;
+    }
     setSelectedYear(id);
   };
 
   const fetchFilteredResults = async () => {
     // Call the TMDB API with search query and filter options as parameters
     setIsLoading(true);
-    const options = searchMoviesOptions(searchQuery, selectedYear);
+    const options =
+      category === "movie"
+        ? searchMoviesOptions(searchQuery, selectedYear)
+        : searchTvShowsOptions(searchQuery, selectedYear);
     const isGenreChecked = genreList.reduce(
       (acc, curr) => (curr.checked ? acc + 1 : acc),
       0
@@ -88,10 +104,6 @@ function SearchPage() {
       });
   };
 
-  useEffect(() => {
-    getGenreList();
-  }, []);
-
   const handleFilterClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetchFilteredResults();
@@ -103,6 +115,27 @@ function SearchPage() {
   ) => {
     setSearchQuery(event.target.value);
   };
+
+  const getPopularMovies = async () => {
+    setIsLoading(true);
+    await axios.request(popularMovieOptions).then((res) => {
+      setFilteredResults(res.data.results);
+      setIsLoading(false);
+    });
+  };
+
+  const getPopularTvShows = async () => {
+    setIsLoading(true);
+    await axios.request(popularTvShowOptions).then((res) => {
+      setFilteredResults(res.data.results);
+      setIsLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    getGenreList();
+    category === "movie" ? getPopularMovies() : getPopularTvShows();
+  }, [category]);
 
   return (
     <section className="App flex">
@@ -119,7 +152,9 @@ function SearchPage() {
             <input
               type="text"
               className="text-gray-light px-3 py-2 bg-dark rounded-md"
-              placeholder="eg. avatar"
+              placeholder={
+                category === "movie" ? "e.g. avatar" : "e.g. one piece"
+              }
               value={searchQuery}
               onChange={handleSearchQueryChange}
             />
