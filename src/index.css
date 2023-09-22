@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital@0;1&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -93,6 +95,10 @@
   .sidebar {
     @apply hidden lg:block py-8 bg-black lg:px-4 lg:w-[300px] xl:px-6 xl:w-[360px];
   }
+}
+
+html {
+  font-family: "Inclusive Sans", sans-serif;
 }
 
 .swiper {
