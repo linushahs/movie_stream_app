@@ -3,7 +3,6 @@ import UserProfile from "@/components/auth/UserProfile";
 import { userDataState } from "@/stores/store";
 import { AiOutlineHeart, AiOutlineStar } from "react-icons/ai";
 import { FiHome, FiSearch } from "react-icons/fi";
-import { RxStopwatch } from "react-icons/rx";
 import { useMatches, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { twMerge } from "tailwind-merge";

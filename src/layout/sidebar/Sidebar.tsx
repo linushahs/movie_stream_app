@@ -23,7 +23,8 @@ function Sidebar() {
 
   const getTopRatedMovies = async () => {
     setIsLoading(true);
-    await axios.request(topRatedMovieOptions).then((response) => {
+    const options = topRatedMovieOptions(1);
+    await axios.request(options).then((response) => {
       const threeMovies: any = [];
       for (let i = 0; i < 3; i++) {
         threeMovies.push(response.data.results[i]);

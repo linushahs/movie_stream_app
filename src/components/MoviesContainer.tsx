@@ -6,9 +6,8 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { trendingMovieOptions, trendingTvOptions } from "../api/api";
 import { categoryState } from "../stores/store";
-import Movie from "./Movie";
-import Slider from "./Slider";
 import Pagination from "./Pagination";
+import Slider from "./Slider";
 import TrendingShows from "./TrendingShows";
 
 function MoviesContainer() {
