@@ -1,7 +1,7 @@
 import SignInWithGoogle from "@/components/auth/SignInWithGoogle";
 import UserProfile from "@/components/auth/UserProfile";
 import { userDataState } from "@/stores/store";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineStar } from "react-icons/ai";
 import { FiHome, FiSearch } from "react-icons/fi";
 import { RxStopwatch } from "react-icons/rx";
 import { useMatches, useNavigate } from "react-router-dom";
@@ -26,9 +26,9 @@ const menus = [
     path: "/favorites/movies",
   },
   {
-    name: "Upcoming Shows",
-    icon: <RxStopwatch />,
-    path: "/upcoming",
+    name: "Top Rated Shows",
+    icon: <AiOutlineStar />,
+    path: "/top-rated/movies",
   },
 ];
 function Navbar() {
@@ -66,7 +66,8 @@ function Navbar() {
             <Menu key={id} menu={menu} changeMenuState={changeMenuState}>
               <span
                 className={twMerge(
-                  menu.path.startsWith(pathname) && "text-red",
+                  menu.path.startsWith("/" + pathname.split("/")[1]) &&
+                    "text-red",
                   "text-xl"
                 )}
               >

@@ -60,7 +60,7 @@ const GenreDropdown: React.FC<DropdownProps> = ({
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="w-[420px] bg-dark grid grid-cols-3 grid-rows-8 absolute top-full left-0 mt-2 py-2 px-4 rounded-md"
+          className="w-[460px] bg-dark grid grid-cols-3 grid-rows-8 absolute top-full left-0 mt-2 py-2 px-4 rounded-md"
         >
           {items.map((item, index) => (
             <div

@@ -27,9 +27,11 @@ export const trendingTvOptions = {
   ...getMethod,
 };
 
-export const topRatedMovieOptions = {
-  url: "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1",
-  ...getMethod,
+export const topRatedMovieOptions = (pgNo: number) => {
+  return {
+    url: `https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=${pgNo}`,
+    ...getMethod,
+  };
 };
 
 export const topRatedTvShowOptions = {

@@ -1,29 +1,18 @@
 import SearchedMoviesLoading from "@/loading/SearchedMoviesLoading";
 import Movie from "../Movie";
-import { useRecoilValue } from "recoil";
-import { categoryState } from "@/stores/store";
+import { ContainerProps } from "../search/SearchedMoviesContainer";
 
-export interface ContainerProps {
-  movies: any[];
-  isLoading: boolean;
-  pagination: {
-    startIndex: number;
-    endIndex: number;
-  };
-}
-
-function SearchedMoviesContainer({
+function TopRatedContainer({
   movies,
   isLoading,
   pagination: { startIndex, endIndex },
 }: ContainerProps) {
-  const category = useRecoilValue(categoryState);
-
   return (
     <main className="movie-container">
       {isLoading ? (
         <SearchedMoviesLoading />
-      ) : movies[0] ? (
+      ) : (
+        movies[0] &&
         movies.map((movie: any, idx: number) => {
           if (idx >= startIndex && idx < endIndex) {
             return (
@@ -38,13 +27,9 @@ function SearchedMoviesContainer({
             );
           }
         })
-      ) : (
-        <div className="h-20 w-full text-gray-light">
-          No {category === "movie" ? "movies" : "tv shows"} found
-        </div>
       )}
     </main>
   );
 }
 
-export default SearchedMoviesContainer;
+export default TopRatedContainer;

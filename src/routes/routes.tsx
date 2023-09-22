@@ -5,6 +5,7 @@ import TVShowDetails from "@/components/details/tv/TVshowDetails";
 import Favorites from "@/components/favorites/Favorites";
 import SearchPage from "@/components/search/SearchPage";
 import { Navigate, createBrowserRouter } from "react-router-dom";
+import TopRatedPage from "@/components/top-rated/TopRatedPage";
 
 export const router = createBrowserRouter([
   {
@@ -52,5 +53,13 @@ export const router = createBrowserRouter([
   {
     path: "/search/tv-series",
     element: <SearchPage />,
+  },
+  {
+    path: "/top-rated/movies",
+    element: <TopRatedPage />,
+  },
+  {
+    path: "/top-rated/tv-series",
+    element: <TopRatedPage />,
   },
 ]);

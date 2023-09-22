@@ -55,12 +55,18 @@ function Sidebar() {
     );
   };
 
+  const handleTopRatedNavigation = () => {
+    navigate(
+      category === "movie" ? "/top-rated/movies" : "/top-rated/tv-series"
+    );
+  };
+
   return (
     <div className="sidebar">
       {/* Most rated movies section goes here ------------->  */}
       {/* -------------------------------->  */}
       <main className="">
-        <h2 className=" text-white">Most Rated Movies</h2>
+        <h2 className=" text-white">Top Rated Shows</h2>
         <div className="flex flex-col gap-y-2 mt-4">
           {isLoading ? (
             <SidebarLoading />
@@ -77,7 +83,10 @@ function Sidebar() {
             ))
           )}
         </div>
-        <button className="px-4 py-2 bg-red rounded-lg w-full text-white">
+        <button
+          onClick={handleTopRatedNavigation}
+          className="px-4 py-2 bg-red rounded-lg w-full text-white"
+        >
           See more
         </button>
       </main>
@@ -93,12 +102,14 @@ function Sidebar() {
             <FavoriteMovies movies={favoriteMovies} />
           )}
         </div>
-        <button
-          onClick={handleFavoritesNavigation}
-          className="px-4 py-2 bg-red rounded-lg w-full text-white"
-        >
-          See more
-        </button>
+        {(favoriteMovies || favoriteTvShows) && (
+          <button
+            onClick={handleFavoritesNavigation}
+            className="px-4 py-2 bg-red rounded-lg w-full text-white"
+          >
+            See more
+          </button>
+        )}
       </main>
     </div>
   );
