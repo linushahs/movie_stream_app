@@ -9,6 +9,7 @@ import GenreDropdown from "../dropdowns/GenreDropdown";
 import YearDropdown from "../dropdowns/YearDropdown";
 import { Toaster } from "../ui/toaster";
 import SearchedMoviesContainer from "./SearchedMoviesContainer";
+import Pagination from "../Pagination";
 
 export interface Genre {
   id: number;
@@ -27,6 +28,10 @@ function SearchPage() {
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [filteredResults, setFilteredResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [pagination, setPagination] = useState({
+    startIndex: 0,
+    endIndex: 10,
+  });
 
   const getGenreList = async () => {
     const options = movieGenreOptions();
@@ -87,8 +92,10 @@ function SearchPage() {
     getGenreList();
   }, []);
 
-  const handleFilterClick = () => {
+  const handleFilterClick = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     fetchFilteredResults();
+    setSearchQuery("");
   };
 
   const handleSearchQueryChange = (
@@ -101,45 +108,56 @@ function SearchPage() {
     <section className="App flex">
       <Navbar />
 
-      <div className="main-container">
+      <main className="main-container">
         <RouteHeader />
 
-        <div className="flex gap-2 text-white py-8">
-          <input
-            type="text"
-            className="text-gray-light px-3 py-2 bg-dark rounded-md"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={handleSearchQueryChange}
-          />
-          {/* Genre list -------------->  */}
-          <GenreDropdown
-            label="Genre"
-            items={genreList}
-            onItemClick={handleGenreClick}
-          />
-
-          {/* Year list --------------->  */}
-          <YearDropdown
-            label="Year"
-            years={years}
-            selectedYear={selectedYear}
-            onYearSelect={handleYearClick}
-          />
-          {/* Filter Button */}
-          <button
-            className="bg-red hover:bg-red/80 text-white py-1 px-4 rounded-md"
-            onClick={handleFilterClick}
+        <div className="flex justify-between items-center">
+          <form
+            onSubmit={handleFilterClick}
+            className="flex gap-2 text-white py-8"
           >
-            Filter
-          </button>
+            <input
+              type="text"
+              className="text-gray-light px-3 py-2 bg-dark rounded-md"
+              placeholder="eg. avatar"
+              value={searchQuery}
+              onChange={handleSearchQueryChange}
+            />
+            {/* Genre list -------------->  */}
+            <GenreDropdown
+              label="Genre"
+              items={genreList}
+              onItemClick={handleGenreClick}
+            />
+
+            {/* Year list --------------->  */}
+            <YearDropdown
+              label="Year"
+              years={years}
+              selectedYear={selectedYear}
+              onYearSelect={handleYearClick}
+            />
+            {/* Filter Button */}
+            <button
+              type="submit"
+              className="bg-red hover:bg-red/80 text-white py-1 px-4 rounded-md"
+            >
+              Search
+            </button>
+          </form>
+
+          <Pagination
+            totalItems={filteredResults.length}
+            setPagination={setPagination}
+          />
         </div>
 
         <SearchedMoviesContainer
           movies={filteredResults}
           isLoading={isLoading}
+          pagination={pagination}
         />
-      </div>
+      </main>
 
       <Sidebar />
       <Toaster />

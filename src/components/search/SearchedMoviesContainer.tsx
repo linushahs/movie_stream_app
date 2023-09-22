@@ -4,24 +4,36 @@ import Movie from "../Movie";
 interface ContainerProps {
   movies: any[];
   isLoading: boolean;
+  pagination: {
+    startIndex: number;
+    endIndex: number;
+  };
 }
 
-function SearchedMoviesContainer({ movies, isLoading }: ContainerProps) {
+function SearchedMoviesContainer({
+  movies,
+  isLoading,
+  pagination: { startIndex, endIndex },
+}: ContainerProps) {
   return (
     <main className="movie-container">
       {isLoading ? (
         <SearchedMoviesLoading />
       ) : movies[0] ? (
-        movies.map((movie: any, id) => (
-          <Movie
-            key={id}
-            id={movie.id}
-            poster_path={movie.poster_path}
-            title={movie.title || movie.name}
-            rating={movie.vote_average.toFixed(1)}
-            release_date={movie.release_date || movie.first_air_date}
-          />
-        ))
+        movies.map((movie: any, idx: number) => {
+          if (idx >= startIndex && idx < endIndex) {
+            return (
+              <Movie
+                key={movie.id}
+                id={movie.id}
+                poster_path={movie.poster_path}
+                title={movie.title || movie.name}
+                rating={movie.vote_average.toFixed(1)}
+                release_date={movie.release_date || movie.first_air_date}
+              />
+            );
+          }
+        })
       ) : (
         <div className="h-20 w-full text-gray-light">No movies found</div>
       )}

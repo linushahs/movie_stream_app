@@ -10,7 +10,7 @@ interface PaginationProps {
 function Pagination({ totalItems, setPagination }: PaginationProps) {
   const [pageNo, setPageNo] = useState(1);
   const btnStyle = {
-    nextBtnStyle: totalItems < pageNo * 10 ? "disabled" : "default",
+    nextBtnStyle: totalItems <= pageNo * 10 ? "disabled" : "default",
     prevBtnStyle: pageNo <= 1 ? "disabled" : "default",
   };
 
