@@ -2,14 +2,13 @@ import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
 import { firebaseApp } from "@/main";
 import {
   categoryState,
-  favoriteMoviesState,
-  favoriteTvShowState,
+  favoriteShowsState,
   userDataState,
 } from "@/stores/store";
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { twMerge } from "tailwind-merge";
 import { MovieProps } from "../Movie";
 import { useToast } from "../ui/use-toast";
@@ -21,9 +20,7 @@ interface FavoriteButtonProps {
 
 function FavoriteButton({ id, movie }: FavoriteButtonProps) {
   const category = useRecoilValue(categoryState);
-  const [favoriteShows, setFavoriteShows] = useState([]);
-  const setFavoriteMovies = useSetRecoilState(favoriteMoviesState);
-  const setFavoriteTvShows = useSetRecoilState(favoriteTvShowState);
+  const [favoriteShows, setFavoriteShows] = useRecoilState(favoriteShowsState);
   const { uid } = useRecoilValue(userDataState);
   const [isAddedToFav, setIsAddedToFav] = useState(false);
   const { toast } = useToast();
@@ -62,9 +59,9 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
     );
 
     if (category === "movie") {
-      await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
+      await getFavoriteMovies(uid, db).then((res) => setFavoriteShows(res));
     } else {
-      await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
+      await getFavoriteTvShows(uid, db).then((res) => setFavoriteShows(res));
     }
   };
 
@@ -85,27 +82,11 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
     });
 
     if (category === "movie") {
-      await getFavoriteMovies(uid, db).then((res) => setFavoriteMovies(res));
+      await getFavoriteMovies(uid, db).then((res) => setFavoriteShows(res));
     } else {
-      await getFavoriteTvShows(uid, db).then((res) => setFavoriteTvShows(res));
+      await getFavoriteTvShows(uid, db).then((res) => setFavoriteShows(res));
     }
   };
-
-  const getFavMovies = async () => {
-    await getFavoriteMovies(uid, db).then((movies) => {
-      setFavoriteShows(movies);
-    });
-  };
-
-  const getFavTvShows = async () => {
-    await getFavoriteTvShows(uid, db).then((shows) => {
-      setFavoriteShows(shows);
-    });
-  };
-
-  useEffect(() => {
-    category === "movie" ? getFavMovies() : getFavTvShows();
-  }, [category]);
 
   useEffect(() => {
     const list: any = favoriteShows.find((m: any) => m.id === parseInt(id));

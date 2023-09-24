@@ -1,5 +1,7 @@
-import { UserProps, favoriteMoviesState, userDataState } from "@/stores/store";
+import { UserProps, favoriteShowsState, userDataState } from "@/stores/store";
+import { getAuth, signOut } from "firebase/auth";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useSetRecoilState } from "recoil";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,13 +9,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { getAuth, signOut } from "firebase/auth";
 import { toast } from "../ui/use-toast";
-import { useSetRecoilState } from "recoil";
 
 function UserProfile({ user }: { user: UserProps }) {
   const auth = getAuth();
-  const setFavoriteMovies = useSetRecoilState(favoriteMoviesState);
+  const setFavoriteShows = useSetRecoilState(favoriteShowsState);
   const setUserData = useSetRecoilState(userDataState);
 
   const handleSignOut = async () => {
@@ -28,7 +28,7 @@ function UserProfile({ user }: { user: UserProps }) {
       });
 
     localStorage.removeItem("user");
-    setFavoriteMovies([]);
+    setFavoriteShows([]);
     setUserData({ uid: "", name: "", email: "", photoURL: "" });
   };
 

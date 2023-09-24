@@ -1,14 +1,17 @@
 import { topRatedMovieOptions, topRatedTvShowOptions } from "@/api/api";
+import { getFavoriteMovies, getFavoriteTvShows } from "@/firebase/helpers";
 import SidebarLoading from "@/loading/SidebarLoading";
+import { firebaseApp } from "@/main";
 import {
   categoryState,
-  favoriteMoviesState,
-  favoriteTvShowState,
+  favoriteShowsState,
+  userDataState,
 } from "@/stores/store";
 import axios from "axios";
+import { getFirestore } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import FavoriteMovies from "./FavoriteMovies";
 import FavoriteTvShows from "./FavoriteTvShows";
 import SmallMovieCard from "./SmallMovieCard";
@@ -17,8 +20,9 @@ function Sidebar() {
   const [topRatedShows, setTopRatedShows] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
   const category = useRecoilValue(categoryState);
-  const favoriteMovies = useRecoilValue(favoriteMoviesState);
-  const favoriteTvShows = useRecoilValue(favoriteTvShowState);
+  const [favoriteShows, setFavoriteShows] = useRecoilState(favoriteShowsState);
+  const { uid } = useRecoilValue(userDataState);
+  const db = getFirestore(firebaseApp);
   const navigate = useNavigate();
 
   const getTopRatedMovies = async () => {
@@ -46,9 +50,27 @@ function Sidebar() {
     });
   };
 
+  const getFavMovies = async () => {
+    await getFavoriteMovies(uid, db).then((movies) => {
+      setFavoriteShows(movies);
+    });
+  };
+
+  const getFavTvShows = async () => {
+    await getFavoriteTvShows(uid, db).then((shows) => {
+      setFavoriteShows(shows);
+    });
+  };
+
   useEffect(() => {
-    category === "movie" ? getTopRatedMovies() : getTopRatedTvShows();
-  }, [category]);
+    if (category === "movie") {
+      getTopRatedMovies();
+      uid && getFavMovies();
+    } else {
+      getTopRatedTvShows();
+      uid && getFavTvShows();
+    }
+  }, [category, uid]);
 
   const handleFavoritesNavigation = () => {
     navigate(
@@ -98,12 +120,12 @@ function Sidebar() {
         <h2 className=" text-white">Favorites</h2>
         <div className="movies-list mt-4">
           {category === "tv" ? (
-            <FavoriteTvShows tvShows={favoriteTvShows} />
+            <FavoriteTvShows tvShows={favoriteShows} />
           ) : (
-            <FavoriteMovies movies={favoriteMovies} />
+            <FavoriteMovies movies={favoriteShows} />
           )}
         </div>
-        {(favoriteMovies || favoriteTvShows) && (
+        {favoriteShows.length && (
           <button
             onClick={handleFavoritesNavigation}
             className="px-4 py-2 bg-red rounded-lg w-full text-white"

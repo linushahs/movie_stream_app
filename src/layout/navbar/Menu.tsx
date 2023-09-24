@@ -9,7 +9,6 @@ interface MenuProps {
 
 function Menu({ menu: { name, path }, changeMenuState, children }: MenuProps) {
   const [{ pathname }] = useMatches();
-  console.log(pathname.split("/"));
 
   return (
     <li

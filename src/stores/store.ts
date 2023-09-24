@@ -27,12 +27,7 @@ export const userDataState = atom({
   },
 });
 
-export const favoriteMoviesState = atom({
-  key: "favoriteMovies",
-  default: [],
-});
-
-export const favoriteTvShowState = atom({
-  key: "favoriteTvShows",
+export const favoriteShowsState = atom({
+  key: "favoriteShows",
   default: [],
 });
