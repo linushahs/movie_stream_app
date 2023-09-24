@@ -102,7 +102,7 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
     >
       {isAddedToFav ? (
         <div onClick={(e) => removeFromFavorites(e)}>
-          <AiFillHeart className="text-md text-red" on />
+          <AiFillHeart className="text-md text-red" />
         </div>
       ) : (
         <div onClick={(e) => addToFavorites(e)}>

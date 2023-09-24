@@ -125,7 +125,7 @@ function Sidebar() {
             <FavoriteMovies movies={favoriteShows} />
           )}
         </div>
-        {favoriteShows.length && (
+        {favoriteShows.length !== 0 && (
           <button
             onClick={handleFavoritesNavigation}
             className="px-4 py-2 bg-red rounded-lg w-full text-white"

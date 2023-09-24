@@ -2,20 +2,32 @@ import RouteHeader from "@/layout/RouteHeader";
 import Navbar from "@/layout/navbar/Navbar";
 import Sidebar from "@/layout/sidebar/Sidebar";
 import MoviesLoading from "@/loading/MoviesLoading";
-import { favoriteShowsState } from "@/stores/store";
+import {
+  categoryState,
+  favoriteShowsState,
+  userDataState,
+} from "@/stores/store";
 import { Suspense, lazy, useState } from "react";
 import { useRecoilValue } from "recoil";
 import Pagination from "../Pagination";
 import { Toaster } from "../ui/toaster";
+import { Link, useNavigate } from "react-router-dom";
 
 const DynamicMovie = lazy(() => import("../Movie"));
 
 function Favorites() {
+  const category = useRecoilValue(categoryState);
   const favoriteShows = useRecoilValue(favoriteShowsState);
   const [pagination, setPagination] = useState({
     startIndex: 0,
     endIndex: 10,
   });
+  const { uid } = useRecoilValue(userDataState);
+  const navigate = useNavigate();
+
+  const handleLinkNavigation = () => {
+    navigate(category === "movie" ? "/home/movies" : "/home/tv-series");
+  };
 
   return (
     <section className="App flex">
@@ -30,7 +42,6 @@ function Favorites() {
             setPagination={setPagination}
           />
         </div>
-
         <div className="movie-container mt-6">
           <Suspense fallback={<MoviesLoading />}>
             {favoriteShows.map((movie: any, idx: number) => {
@@ -49,6 +60,30 @@ function Favorites() {
             })}
           </Suspense>
         </div>
+
+        {!uid && (
+          <div className="w-fit text-lg text-gray-light">
+            <h1 className="">It seems like you haven't signed it yet.</h1>
+            <span className="text-white underline">
+              Please{" "}
+              <a href="" className="">
+                signin
+              </a>
+            </span>
+          </div>
+        )}
+
+        {uid && favoriteShows.length === 0 && (
+          <div className="w-fit text-lg text-gray-light">
+            <h1 className="">It seems like you haven't added any shows yet.</h1>
+            <button
+              onClick={handleLinkNavigation}
+              className="underline cursor-pointer text-white"
+            >
+              Explore and add to favorites
+            </button>
+          </div>
+        )}
       </div>
 
       <Sidebar />
