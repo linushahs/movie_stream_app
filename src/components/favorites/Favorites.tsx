@@ -8,10 +8,10 @@ import {
   userDataState,
 } from "@/stores/store";
 import { Suspense, lazy, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import Pagination from "../Pagination";
 import { Toaster } from "../ui/toaster";
-import { Link, useNavigate } from "react-router-dom";
 
 const DynamicMovie = lazy(() => import("../Movie"));
 
