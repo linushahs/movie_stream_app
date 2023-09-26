@@ -62,7 +62,7 @@ function Favorites() {
         </div>
 
         {!uid && (
-          <div className="w-fit text-lg text-gray-light">
+          <div className="w-fit text-[17px] text-gray-light">
             <h1 className="">It seems like you haven't signed it yet.</h1>
             <span className="text-white underline">
               Please{" "}
@@ -74,7 +74,7 @@ function Favorites() {
         )}
 
         {uid && favoriteShows.length === 0 && (
-          <div className="w-fit text-lg text-gray-light">
+          <div className="w-fit text-[17px] text-gray-light">
             <h1 className="">It seems like you haven't added any shows yet.</h1>
             <button
               onClick={handleLinkNavigation}
