@@ -29,7 +29,7 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
   const db = getFirestore(firebaseApp);
 
   const addToFavorites = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.stopPropagation();
     if (!uid) {
@@ -65,7 +65,7 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
   };
 
   const removeFromFavorites = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.stopPropagation();
     if (!localStorage.getItem("user")) return;
@@ -76,7 +76,6 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
     await deleteDoc(doc(db, uid, "favorites", coll, docId)).then(() => {
       toast({
         title: "Removed from favorites",
-        variant: "destructive",
       });
     });
 
@@ -93,22 +92,29 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
   }, [favoriteShows]);
 
   return (
-    <button
-      className={twMerge(
-        "p-1.5 text-xl text-white transition-colors bg-white/40 backdrop-blur-sm hover:bg-gray-light/70 rounded-md z-30",
-        isAddedToFav && " text-white "
-      )}
-    >
+    <>
       {isAddedToFav ? (
-        <div onClick={(e) => removeFromFavorites(e)}>
+        <button
+          className={twMerge(
+            "p-1.5 text-xl text-white transition-colors bg-white/40 backdrop-blur-sm hover:bg-gray-light/70 rounded-md z-30",
+            isAddedToFav && " text-white "
+          )}
+          onClick={(e) => removeFromFavorites(e)}
+        >
           <AiFillHeart className="text-md text-red" />
-        </div>
+        </button>
       ) : (
-        <div onClick={(e) => addToFavorites(e)}>
+        <button
+          className={twMerge(
+            "p-1.5 text-xl text-white transition-colors bg-white/40 backdrop-blur-sm hover:bg-gray-light/70 rounded-md z-30",
+            isAddedToFav && " text-white "
+          )}
+          onClick={(e) => addToFavorites(e)}
+        >
           <AiOutlineHeart className="text-md" />
-        </div>
+        </button>
       )}
-    </button>
+    </>
   );
 }
 
