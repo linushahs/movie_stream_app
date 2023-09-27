@@ -48,13 +48,13 @@ function UserProfile({ user }: { user: UserProps }) {
         <DropdownMenuTrigger className="hidden xl:inline-block xl:ml-[16px] ">
           <BsThreeDotsVertical className="text-xl  cursor-pointer" />
         </DropdownMenuTrigger>
-        <DropdownMenuTrigger className="xl:hidden inline-block ml-auto">
+        {/* <DropdownMenuTrigger className="xl:hidden inline-block ml-auto">
           <img
             src={user.photoURL}
             alt="pic"
             className="w-9 h-9 rounded-full "
           />
-        </DropdownMenuTrigger>
+        </DropdownMenuTrigger> */}
         <DropdownMenuContent>
           <DropdownMenuLabel className="text-md">My Account</DropdownMenuLabel>
           <DropdownMenuItem

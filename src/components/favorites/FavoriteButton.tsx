@@ -32,8 +32,7 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-
-    if (!localStorage.getItem("user")) {
+    if (!uid) {
       toast({
         title: "Please signin first",
       });

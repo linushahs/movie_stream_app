@@ -52,7 +52,7 @@ function Navbar() {
             className="w-6 h-6 sm:w-7 sm:h-7 xl:w-6 xl:h-6"
           />
           <h3 className="text-white text-lg xl:text-lg hidden xl:block ">
-            Peamon
+            MovieStream
           </h3>
         </div>
       </header>
