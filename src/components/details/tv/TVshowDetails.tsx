@@ -157,11 +157,6 @@ function TVShowDetails() {
     setCurrentTrailer(currentTrailer - 1);
   };
 
-  const playEpisode = (season: number, episode: number) => {
-    const url = `https://vidsrc.to/embed/tv/${tvId}/${season}/${episode}`;
-    window.open(url, "_blank");
-  };
-
   useEffect(() => {
     getTVShowDetails();
     getAgeRating();
@@ -425,18 +420,6 @@ function TVShowDetails() {
                       S{episode.season_number}E{episode.episode_number}
                     </h1>
                     <h2 className="text-sm sm:text-lg">{episode.name}</h2>
-                  </div>
-
-                  <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-30">
-                    <BsPlayCircle
-                      className="w-14 h-14 text-white cursor-pointer"
-                      onClick={() =>
-                        playEpisode(
-                          episode.season_number,
-                          episode.episode_number
-                        )
-                      }
-                    />
                   </div>
                 </SwiperSlide>
               ))}

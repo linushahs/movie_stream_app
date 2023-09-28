@@ -146,11 +146,6 @@ function MovieDetails() {
     setCurrentTrailer(currentTrailer - 1);
   };
 
-  const playMovie = () => {
-    const url = `https://vidsrc.to/embed/movie/${movieId}`;
-    window.open(url, "_blank");
-  };
-
   useEffect(() => {
     getMovieDetails();
     getAgeRating();
@@ -201,32 +196,22 @@ function MovieDetails() {
 
       {/* Details section ------------>  */}
       <div className="dark text-white flex sm:flex-row items-start gap-4 sm:gap-6">
-        <div className="relative w-[320px]">
-          <LazyLoadImage
-            src={`https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`}
-            alt="poster"
-            width={320}
-            className="hidden sm:block w-full rounded-xl aspect-[2/3]"
-            loading="lazy"
-          />
-          <LazyLoadImage
-            src={`https://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}`}
-            alt="poster"
-            width={320}
-            className="w-full rounded-xl aspect-video sm:hidden"
-            loading="lazy"
-          />
-          <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-20"></div>
+        <LazyLoadImage
+          src={`https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`}
+          alt="poster"
+          width={320}
+          className="hidden sm:block rounded-xl aspect-[2/3]"
+          loading="lazy"
+        />
+        <LazyLoadImage
+          src={`https://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}`}
+          alt="poster"
+          width={320}
+          className=" rounded-xl aspect-video sm:hidden"
+          loading="lazy"
+        />
 
-          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-30">
-            <BsPlayCircle
-              className="w-14 h-14 cursor-pointer"
-              onClick={playMovie}
-            />
-          </div>
-        </div>
-
-        <article className="flex-1">
+        <article className="w-full">
           <h2 className="flex items-center text-2xl sm:text-3xl">
             {movieDetails.name || movieDetails.title}
             <span className="inline-flex items-center gap-1 text-sm ml-2 px-2 py-1 bg-dark rounded-md font-medium">
