@@ -195,19 +195,18 @@ function MovieDetails() {
       </button>
 
       {/* Details section ------------>  */}
-      <div className="dark text-white flex sm:flex-row items-start gap-4 sm:gap-6">
+      <div className="dark text-white flex flex-col lg:flex-row items-start gap-4 sm:gap-6">
         <LazyLoadImage
           src={`https://image.tmdb.org/t/p/original/${movieDetails.poster_path}`}
           alt="poster"
           width={320}
-          className="hidden sm:block rounded-xl aspect-[2/3]"
+          className="hidden lg:block rounded-xl aspect-[2/3]"
           loading="lazy"
         />
         <LazyLoadImage
           src={`https://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}`}
           alt="poster"
-          width={320}
-          className=" rounded-xl aspect-video sm:hidden"
+          className=" rounded-xl w-full aspect-video lg:hidden"
           loading="lazy"
         />
 
@@ -236,7 +235,7 @@ function MovieDetails() {
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
           <Tabs defaultValue="overview" className="tabs w-full mt-6 sm:mt-8">
-            <TabsList className="w-[calc(100vw-42px)] sm:w-[400px] h-auto">
+            <TabsList className="w-[calc(100vw-42px)] sm:w-[460px] h-auto">
               <TabsTrigger value="overview" className="text-base flex-1">
                 Overview
               </TabsTrigger>

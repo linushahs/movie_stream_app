@@ -209,12 +209,12 @@ function TVShowDetails() {
       </button>
 
       {/* Details section ------------>  */}
-      <div className="dark text-white flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+      <div className="dark text-white flex flex-col lg:flex-row items-start gap-4 sm:gap-6">
         <LazyLoadImage
           src={`https://image.tmdb.org/t/p/original/${tvShowDetails.poster_path}`}
           alt="poster"
           width={330}
-          className="hidden sm:block rounded-xl aspect-[2/3]"
+          className="hidden lg:block rounded-xl aspect-[2/3]"
           loading="lazy"
         />
 
@@ -222,7 +222,7 @@ function TVShowDetails() {
           src={`https://image.tmdb.org/t/p/original/${tvShowDetails.backdrop_path}`}
           alt="poster"
           width={330}
-          className="w-full rounded-xl aspect-video sm:hidden"
+          className="w-full rounded-xl aspect-video lg:hidden"
           loading="lazy"
         />
 
@@ -252,15 +252,15 @@ function TVShowDetails() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="overview" className=" mt-8">
-            <TabsList className="w-full sm:w-[420px] h-auto">
-              <TabsTrigger value="overview" className="w-full text-base">
+          <Tabs defaultValue="overview" className="tabs w-full mt-6 sm:mt-8">
+            <TabsList className="w-[calc(100vw-42px)] sm:w-[460px] h-auto">
+              <TabsTrigger value="overview" className="flex-1 text-base">
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="cast" className="w-full text-base">
+              <TabsTrigger value="cast" className="flex-1 text-base">
                 Cast
               </TabsTrigger>
-              <TabsTrigger value="trailers" className="w-full text-base">
+              <TabsTrigger value="trailers" className="flex-1 text-base">
                 Trailers
               </TabsTrigger>
               <TabsTrigger value="watch" className="text-base flex-1">

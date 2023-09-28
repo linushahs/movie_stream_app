@@ -93,7 +93,7 @@
   }
 
   .sidebar {
-    @apply hidden lg:block py-8 bg-black lg:px-4 lg:w-[300px] xl:px-6 xl:w-[360px];
+    @apply hidden xl:block py-8 bg-black lg:px-4 lg:w-[300px] xl:px-6 xl:w-[360px];
   }
 }
 
@@ -104,7 +104,7 @@ html {
 .swiper {
   position: relative !important;
   margin-left: 0 !important;
-  width: calc(100vw - 230px - 360px) !important;
+  width: 100% !important;
 }
 
 .cast-swiper {
@@ -129,6 +129,12 @@ html {
   }
 
   .swiper {
-    width: 100vw !important;
+    width: 100% !important;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .swiper {
+    width: calc(100vw - 230px - 360px) !important;
   }
 }
