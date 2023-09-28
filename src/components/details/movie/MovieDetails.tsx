@@ -14,13 +14,12 @@ import { BiArrowBack } from "react-icons/bi";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate, useParams } from "react-router-dom";
-import CastItem from "../CastItem";
 import Movie from "../../Movie";
 import VideoPlayer from "../../VideoPlayer";
 import FavoriteButton from "../../favorites/FavoriteButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
+import CastItem from "../CastItem";
 import WatchProvider from "../WatchProvider";
-import { BsPlayCircle } from "react-icons/bs";
 
 function MovieDetails() {
   const [movieDetails, setMovieDetails] = useState<any>({});

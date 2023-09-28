@@ -1,5 +1,3 @@
-import { BsBoxArrowUpRight } from "react-icons/bs";
-
 function WatchProviderGrid({
   title,
   watchProviders,

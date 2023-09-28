@@ -1,5 +1,5 @@
 import { Year } from "@/stores/yearList";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { FiChevronDown, FiPlus } from "react-icons/fi";
 
 interface YearDropdownProps {
