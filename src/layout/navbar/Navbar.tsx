@@ -15,6 +15,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import DropdownNavMenu from "./DropdownNavMenu";
 
 const menus = [
   {
@@ -90,13 +91,17 @@ function Navbar() {
 
         <DropdownMenu>
           <DropdownMenuTrigger className="sm:hidden ml-4">
-            <FaBarsStaggered className=" text-[25px] text-white cursor-pointer" />
+            <FaBarsStaggered className=" text-[22px] text-white cursor-pointer" />
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel className="text-sm">Menu</DropdownMenuLabel>
-            <DropdownMenuItem className="flex flex-col">
-              {menus.map((menu, id) => (
-                <Menu key={id} menu={menu} changeMenuState={changeMenuState}>
+          <DropdownMenuContent className="mt-2 mr-3 p-2">
+            <DropdownMenuLabel className="text-sm mb-2">Menu</DropdownMenuLabel>
+            {menus.map((menu, id) => (
+              <DropdownMenuItem className="focus:bg-transparent">
+                <DropdownNavMenu
+                  key={id}
+                  menu={menu}
+                  changeMenuState={changeMenuState}
+                >
                   <span
                     className={twMerge(
                       menu.path.startsWith("/" + pathname.split("/")[1]) &&
@@ -106,9 +111,9 @@ function Navbar() {
                   >
                     {menu.icon}
                   </span>
-                </Menu>
-              ))}
-            </DropdownMenuItem>
+                </DropdownNavMenu>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </footer>
