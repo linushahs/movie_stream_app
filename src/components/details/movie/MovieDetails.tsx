@@ -329,7 +329,7 @@ function MovieDetails() {
             </TabsContent>
             <TabsContent value="trailers">
               {trailers[currentTrailer] && (
-                <>
+                <div className="w-full">
                   <VideoPlayer videoId={trailers[currentTrailer].key} />
 
                   <div className="flex justify-end gap-2 mt-3">
@@ -346,7 +346,7 @@ function MovieDetails() {
                       <HiOutlineChevronRight className="text-lg sm:text-xl" />
                     </button>
                   </div>
-                </>
+                </div>
               )}
             </TabsContent>
             <TabsContent value="watch">
