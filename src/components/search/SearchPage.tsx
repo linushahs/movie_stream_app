@@ -147,38 +147,42 @@ function SearchPage() {
         <div className="flex justify-between items-center">
           <form
             onSubmit={handleFilterClick}
-            className="flex gap-2 text-white py-8"
+            className="grid grid-cols-1 sm:grid-cols-3 w-full gap-2 text-white pt-4 pb-8 sm:py-8 "
           >
-            <input
-              type="text"
-              className="text-gray-light px-3 py-2 bg-dark rounded-md"
-              placeholder={
-                category === "movie" ? "e.g. avatar" : "e.g. one piece"
-              }
-              value={searchQuery}
-              onChange={handleSearchQueryChange}
-            />
+            <div className="w-full">
+              <input
+                type="text"
+                className="w-full text-gray-light px-3 py-2 bg-dark rounded-md"
+                placeholder={
+                  category === "movie" ? "e.g. avatar" : "e.g. one piece"
+                }
+                value={searchQuery}
+                onChange={handleSearchQueryChange}
+              />
+            </div>
             {/* Genre list -------------->  */}
-            <GenreDropdown
-              label="Genre"
-              items={genreList}
-              onItemClick={handleGenreClick}
-            />
+            <div className="grid grid-cols-search gap-x-3">
+              <GenreDropdown
+                label="Genre"
+                items={genreList}
+                onItemClick={handleGenreClick}
+              />
 
-            {/* Year list --------------->  */}
-            <YearDropdown
-              label="Year"
-              years={years}
-              selectedYear={selectedYear}
-              onYearSelect={handleYearClick}
-            />
-            {/* Filter Button */}
-            <button
-              type="submit"
-              className="bg-red hover:bg-red/80 text-white py-1 px-4 rounded-md"
-            >
-              Search
-            </button>
+              {/* Year list --------------->  */}
+              <YearDropdown
+                label="Year"
+                years={years}
+                selectedYear={selectedYear}
+                onYearSelect={handleYearClick}
+              />
+              {/* Filter Button */}
+              <button
+                type="submit"
+                className="bg-red hover:bg-red/80 text-white py-1 px-4 rounded-md"
+              >
+                Search
+              </button>
+            </div>
           </form>
 
           <Pagination

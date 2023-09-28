@@ -18,7 +18,23 @@ const YearDropdown: React.FC<YearDropdownProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<any>(null);
 
-  const toggleDropdown = () => {
+  const handleClickOutside = (event: Event) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  if (!isOpen) {
+    document.removeEventListener("mousedown", handleClickOutside);
+  } else {
+    document.addEventListener("mousedown", handleClickOutside);
+  }
+
+  const toggleDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     setIsOpen(!isOpen);
   };
 
@@ -26,39 +42,18 @@ const YearDropdown: React.FC<YearDropdownProps> = ({
     onYearSelect(year);
   };
 
-  useEffect(() => {
-    function handleClickOutside(event: Event) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
-
   return (
-    <div className="relative z-50">
+    <div className="relative z-50 ">
       <div
         onClick={toggleDropdown}
         className="bg-dark flex items-center gap-1.5 py-2 px-3 rounded-md cursor-pointer"
       >
-        {label} <FiChevronDown className="text-lg" />
+        {label} <FiChevronDown className="text-lg ml-auto" />
       </div>
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="w-[380px] h-auto bg-dark grid grid-cols-4 grid-rows-6 absolute top-full left-0 mt-2 py-2 px-4 rounded-md"
+          className="w-[380px] h-auto bg-dark grid grid-cols-4 grid-rows-6 absolute top-full -left-20 sm:left-0 mt-2 py-2 px-4 rounded-md"
         >
           {years.map((year, index) => (
             <div

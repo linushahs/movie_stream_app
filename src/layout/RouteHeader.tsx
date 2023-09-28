@@ -26,7 +26,7 @@ function RouteHeader() {
 
   return (
     <header className="">
-      <ul className="flex gap-4  text-gray-light text-sm sm:text-base">
+      <ul className="flex gap-4  text-gray-light text-md sm:text-base">
         <li
           onClick={handleTvShowsClick}
           className={twMerge(

@@ -23,6 +23,9 @@ module.exports = {
       },
     },
     extend: {
+      gridTemplateColumns: {
+        search: "repeat(3, minmax(100px, 1fr))",
+      },
       colors: {
         red: "#D22F27",
         black: "#191A1F",
