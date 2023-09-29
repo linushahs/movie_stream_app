@@ -332,7 +332,10 @@ function MovieDetails() {
                 </div>
               )}
             </TabsContent>
-            <TabsContent value="watch" className="w-[calc(100vw-24px)]">
+            <TabsContent
+              value="watch"
+              className="w-[calc(100vw-24px)] sm:w-full"
+            >
               {watchProviders ? (
                 <WatchProvider watchProviders={watchProviders} />
               ) : (
