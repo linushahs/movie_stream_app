@@ -1,11 +1,8 @@
 import { categoryState } from "@/stores/store";
-import { useEffect } from "react";
-import { useMatches } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { twMerge } from "tailwind-merge";
 
 function RouteHeader() {
-  const [{ pathname }] = useMatches();
   const [category, setCategory] = useRecoilState(categoryState);
 
   const handleTvShowsClick = () => {
