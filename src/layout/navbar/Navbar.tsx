@@ -96,7 +96,7 @@ function Navbar() {
           <DropdownMenuContent className="mt-2 mr-3 p-2">
             <DropdownMenuLabel className="text-sm mb-2">Menu</DropdownMenuLabel>
             {menus.map((menu, id) => (
-              <DropdownMenuItem className="focus:bg-transparent">
+              <DropdownMenuItem key={id} className="focus:bg-transparent">
                 <DropdownNavMenu
                   key={id}
                   menu={menu}
