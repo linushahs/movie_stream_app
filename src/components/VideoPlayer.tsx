@@ -7,7 +7,7 @@ const VideoPlayer = ({ videoId, cn }: { videoId: string; cn?: string }) => {
       <YouTube
         videoId={videoId}
         className={cn}
-        iframeClassName={twMerge("w-full aspect-[16/9]", cn)}
+        iframeClassName={twMerge("w-full aspect-[16/9] ", cn)}
       />
     </div>
   );

@@ -3,6 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useRecoilState } from "recoil";
 import VideoPlayer from "./VideoPlayer";
+import { AiOutlineClose } from "react-icons/ai";
 
 function SliderItemModal({ videoId }: { videoId: string }) {
   const [isOpen, setIsOpen] = useRecoilState(isWatchOpenState);
@@ -37,9 +38,14 @@ function SliderItemModal({ videoId }: { videoId: string }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-[500px] max-w-md transform overflow-hidden rounded-lg p-6 text-left align-middle shadow-xl transition-all">
-                <button onClick={() => setIsOpen(false)}>Close</button>
-                <VideoPlayer videoId={videoId} cn="w-[500px]" />
+              <Dialog.Panel className="w-[calc(100vw-60px)] aspect-video md:w-[600px] transform rounded-lg text-left align-middle shadow-xl transition-all">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-gray-200 border border-gray-500 p-2 rounded-full absolute right-0 -top-12 md:-top-12 md:-right-12"
+                >
+                  <AiOutlineClose className="text-[24px]" />
+                </button>
+                <VideoPlayer videoId={videoId} cn="w-full" />
               </Dialog.Panel>
             </Transition.Child>
           </div>
