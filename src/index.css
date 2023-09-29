@@ -85,7 +85,7 @@
   }
 
   .navbar {
-    @apply flex sm:flex-col fixed sm:border-r-[0.5px] sm:border-r-gray-dark/50 transition-all bg-black sm:h-screen sm:w-[65px] xl:w-[230px];
+    @apply flex sm:flex-col fixed z-50 sm:border-r-[0.5px] sm:border-r-gray-dark/50 transition-all bg-black sm:h-screen sm:w-[65px] xl:w-[230px];
   }
 
   .menu {

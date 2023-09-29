@@ -234,7 +234,7 @@ function MovieDetails() {
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
           <Tabs defaultValue="overview" className="tabs w-full mt-6 sm:mt-8">
-            <TabsList className="w-[calc(100vw-42px)] sm:w-[460px] h-auto">
+            <TabsList className="w-full sm:w-[460px] h-auto">
               <TabsTrigger value="overview" className="text-base flex-1">
                 Overview
               </TabsTrigger>
@@ -332,7 +332,7 @@ function MovieDetails() {
                 </div>
               )}
             </TabsContent>
-            <TabsContent value="watch">
+            <TabsContent value="watch" className="w-[calc(100vw-42px)]">
               {watchProviders ? (
                 <WatchProvider watchProviders={watchProviders} />
               ) : (

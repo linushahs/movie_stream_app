@@ -251,18 +251,18 @@ function TVShowDetails() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="overview" className="tabs w-full mt-6 sm:mt-8">
-            <TabsList className="w-[calc(100vw-42px)] sm:w-[460px] h-auto">
-              <TabsTrigger value="overview" className="flex-1 text-base">
+          <Tabs defaultValue="overview" className="tabs mt-6 sm:mt-8">
+            <TabsList className="w-full sm:w-[460px] h-auto">
+              <TabsTrigger value="overview" className="w-full  text-base">
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="cast" className="flex-1 text-base">
+              <TabsTrigger value="cast" className="w-full text-base">
                 Cast
               </TabsTrigger>
-              <TabsTrigger value="trailers" className="flex-1 text-base">
+              <TabsTrigger value="trailers" className="w-full text-base">
                 Trailers
               </TabsTrigger>
-              <TabsTrigger value="watch" className="text-base flex-1">
+              <TabsTrigger value="watch" className="text-base w-full">
                 Watch
               </TabsTrigger>
             </TabsList>
@@ -346,7 +346,7 @@ function TVShowDetails() {
                 </>
               )}
             </TabsContent>
-            <TabsContent value="watch">
+            <TabsContent value="watch" className="w-[calc(100vw-42px)]">
               {watchProviders ? (
                 <WatchProvider watchProviders={watchProviders} />
               ) : (

@@ -10,7 +10,7 @@ function WatchProviderGrid({
   return (
     <>
       <h2 className="mt-4">{title}</h2>
-      <div className="grid grid-cols-3 gap-3 mt-2 overflow-hidden">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2 overflow-hidden">
         {watchProviders?.[arrayName]?.map((p: any) => (
           <a
             key={p.provider_id}
@@ -21,7 +21,7 @@ function WatchProviderGrid({
             <img
               src={`https://image.tmdb.org/t/p/original/${p.logo_path}`}
               alt="logo"
-              className="rounded-md w-8 h-8 absolute right-2 opacity-30 sm:opacity-100 sm:static sm:rounded-full "
+              className=" w-8 h-8 rounded-full "
             />
             <span className="z-10">{p.provider_name}</span>
           </a>

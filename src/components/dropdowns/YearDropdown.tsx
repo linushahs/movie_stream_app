@@ -43,7 +43,7 @@ const YearDropdown: React.FC<YearDropdownProps> = ({
   };
 
   return (
-    <div className="relative z-50 ">
+    <div className="relative z-40 ">
       <div
         onClick={toggleDropdown}
         className="bg-dark flex items-center gap-1.5 py-2 px-3 rounded-md cursor-pointer"
