@@ -1,11 +1,17 @@
-import { movieDetailsOptions, tvShowDetailsOptions } from "@/api/api";
-import { categoryState } from "@/stores/store";
+import {
+  movieDetailsOptions,
+  movieTrailersOptions,
+  tvShowDetailsOptions,
+  tvShowTrailersOptions,
+} from "@/api/api";
+import { categoryState, isWatchOpenState } from "@/stores/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import FavoriteButton from "./favorites/FavoriteButton";
+import SliderItemModal from "./SliderItemModal";
 
 interface SliderProps {
   movie: any;
@@ -16,6 +22,8 @@ export default function Slider({ movie }: SliderProps) {
   const navigate = useNavigate();
   const [genres, setGenres] = useState([]);
   const category = useRecoilValue(categoryState);
+  const setIsWatchOpen = useSetRecoilState(isWatchOpenState);
+  const [trailer, setTrailer] = useState<any>({});
 
   const getMovieDetails = async () => {
     if (!movie.id) return;
@@ -43,19 +51,62 @@ export default function Slider({ movie }: SliderProps) {
       });
   };
 
+  const getMovieTrailer = async () => {
+    if (!movie.id) return;
+
+    const options = movieTrailersOptions(movie.id);
+    await axios
+      .request(options)
+      .then((res) => {
+        const results = res.data.results;
+        if (results) {
+          setTrailer(results.filter((t: any) => t.type === "Trailer")[0]);
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const getTvShowTrailer = async () => {
+    if (!movie.id) return;
+
+    const options = tvShowTrailersOptions(movie.id);
+    await axios
+      .request(options)
+      .then((res) => {
+        const results = res.data.results;
+        if (results) {
+          setTrailer(results.filter((t: any) => t.type === "Trailer")[0]);
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const handleShowClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    navigate(
+      category === "movie"
+        ? `/home/movies/${movie.id}`
+        : `/home/tv-series/${movie.id}`
+    );
+  };
+
+  const handleWatchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsWatchOpen(true);
+    category === "movie" ? getMovieTrailer() : getTvShowTrailer();
+  };
+
   useEffect(() => {
     category === "movie" ? getMovieDetails() : getTvShowDetails();
   }, []);
 
   return (
     <div
-      onClick={() =>
-        navigate(
-          category === "movie"
-            ? `/home/movies/${movie.id}`
-            : `/home/tv-series/${movie.id}`
-        )
-      }
+      onClick={handleShowClick}
       className="relative w-full aspect-video sm:aspect-[2/1]  bg-cover rounded-xl cursor-pointer"
     >
       <div className="absolute w-full h-full bg-gradient-to-tr from-black/80 rounded-xl"></div>
@@ -73,7 +124,15 @@ export default function Slider({ movie }: SliderProps) {
           {genres?.map((genre: any) => genre.name).join(", ")}
         </p>
         <div className="flex gap-2 mt-2 text-xs sm:text-md">
-          <button className="px-3 py-1 rounded-lg bg-red">Watch</button>
+          <button
+            onClick={handleWatchClick}
+            className="px-3 py-1 rounded-md bg-red"
+          >
+            Watch
+          </button>
+
+          <SliderItemModal videoId={trailer.key} />
+
           {/* Add to favorites section -------  */}
           <FavoriteButton id={movie.id} movie={movie} />
         </div>

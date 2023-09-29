@@ -31,3 +31,8 @@ export const favoriteShowsState = atom({
   key: "favoriteShows",
   default: [],
 });
+
+export const isWatchOpenState = atom({
+  key: "isWatchOpen",
+  default: false,
+});

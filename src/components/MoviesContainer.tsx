@@ -44,6 +44,7 @@ function MoviesContainer() {
   return (
     <div className="main-container">
       <Header />
+
       <main className="mt-4">
         {/* ----------------------------------> */}
         {/* //Latest section of movies slider goes here */}

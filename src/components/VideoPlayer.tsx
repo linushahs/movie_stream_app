@@ -1,9 +1,14 @@
 import YouTube from "react-youtube";
+import { twMerge } from "tailwind-merge";
 
-const VideoPlayer = ({ videoId }: { videoId: string }) => {
+const VideoPlayer = ({ videoId, cn }: { videoId: string; cn?: string }) => {
   return (
     <div className="video-player w-full">
-      <YouTube videoId={videoId} iframeClassName="w-full aspect-[16/9]" />
+      <YouTube
+        videoId={videoId}
+        className={cn}
+        iframeClassName={twMerge("w-full aspect-[16/9]", cn)}
+      />
     </div>
   );
 };
