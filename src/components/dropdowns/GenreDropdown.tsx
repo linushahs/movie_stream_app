@@ -14,11 +14,8 @@ const GenreDropdown: React.FC<DropdownProps> = ({
   onItemClick,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<any>(null);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+  const dropdownRef = useRef<any>();
+  const buttonRef = useRef<any>();
 
   const handleItemClick = (
     e: React.MouseEvent<HTMLDivElement>,
@@ -31,18 +28,14 @@ const GenreDropdown: React.FC<DropdownProps> = ({
   useEffect(() => {
     function handleClickOutside(event: Event) {
       if (
-        dropdownRef.current &&
+        !buttonRef.current.contains(event.target) &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }
     }
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -50,17 +43,19 @@ const GenreDropdown: React.FC<DropdownProps> = ({
   }, [isOpen]);
 
   return (
-    <div className="relative z-40 ">
-      <div
-        onClick={toggleDropdown}
-        className="bg-dark flex items-center gap-1.5 py-2 px-3 rounded-md cursor-pointer"
+    <div className="relative z-40 w-full">
+      <button
+        type="button"
+        ref={buttonRef}
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full bg-dark flex items-center gap-1.5 py-2 px-3 rounded-md cursor-pointer"
       >
         {label} <FiChevronDown className="text-lg ml-auto" />
-      </div>
+      </button>
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="w-[460px] bg-dark grid grid-cols-3 grid-rows-8 absolute top-full left-0 mt-2 py-2 px-4 rounded-md"
+          className="w-[calc(100vw-42px)] sm:w-[460px] bg-dark grid grid-cols-2 sm:grid-cols-3 grid-rows-8 absolute top-full left-0 mt-2 py-2 px-4 rounded-md transition-all"
         >
           {items.map((item, index) => (
             <div

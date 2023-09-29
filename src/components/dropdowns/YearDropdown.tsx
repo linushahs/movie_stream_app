@@ -1,5 +1,5 @@
 import { Year } from "@/stores/yearList";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiChevronDown, FiPlus } from "react-icons/fi";
 
 interface YearDropdownProps {
@@ -17,43 +17,43 @@ const YearDropdown: React.FC<YearDropdownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<any>(null);
-
-  const handleClickOutside = (event: Event) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setIsOpen(false);
-    }
-  };
-
-  if (!isOpen) {
-    document.removeEventListener("mousedown", handleClickOutside);
-  } else {
-    document.addEventListener("mousedown", handleClickOutside);
-  }
-
-  const toggleDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    setIsOpen(!isOpen);
-  };
+  const buttonRef = useRef<any>();
 
   const handleYearSelect = (year: string) => {
     onYearSelect(year);
   };
 
+  useEffect(() => {
+    function handleClickOutside(event: Event) {
+      if (
+        !buttonRef.current.contains(event.target) &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
     <div className="relative z-40 ">
-      <div
-        onClick={toggleDropdown}
-        className="bg-dark flex items-center gap-1.5 py-2 px-3 rounded-md cursor-pointer"
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="bg-dark w-full flex items-center gap-1.5 py-2 px-3 rounded-md cursor-pointer"
       >
         {label} <FiChevronDown className="text-lg ml-auto" />
-      </div>
+      </button>
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="w-[380px] h-auto bg-dark grid grid-cols-4 grid-rows-6 absolute top-full -left-20 sm:left-0 mt-2 py-2 px-4 rounded-md"
+          className="w-[320px] sm:w-[380px] h-auto bg-dark grid grid-cols-3 sm:grid-cols-4 grid-rows-6 absolute top-full -left-24 sm:left-0 mt-2 py-2 px-4 rounded-md transition-all"
         >
           {years.map((year, index) => (
             <div
