@@ -48,6 +48,19 @@ function UserProfile({ user }: { user: UserProps }) {
         <DropdownMenuTrigger className="hidden xl:inline-block xl:ml-[16px] ">
           <BsThreeDotsVertical className="text-xl  cursor-pointer" />
         </DropdownMenuTrigger>
+
+        <DropdownMenuContent>
+          <DropdownMenuLabel className="text-md">My Account</DropdownMenuLabel>
+          <DropdownMenuItem
+            onClick={handleSignOut}
+            className="text-md text-red focus:text-red"
+          >
+            Logout
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <DropdownMenu>
         <DropdownMenuTrigger className="xl:hidden inline-block ml-auto">
           <img
             src={user.photoURL}

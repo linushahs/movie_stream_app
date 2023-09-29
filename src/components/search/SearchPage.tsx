@@ -107,7 +107,6 @@ function SearchPage() {
   const handleFilterClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetchFilteredResults();
-    setSearchQuery("");
   };
 
   const handleSearchQueryChange = (
