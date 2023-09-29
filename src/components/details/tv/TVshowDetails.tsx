@@ -225,7 +225,7 @@ function TVShowDetails() {
           loading="lazy"
         />
 
-        <article>
+        <article className="w-full">
           <h2 className="flex items-center text-2xl sm:text-3xl ">
             {tvShowDetails.name || tvShowDetails.title}
             <span className=" inline-flex items-center gap-1 text-sm ml-2 px-2 py-1 bg-dark rounded-md font-medium">
@@ -251,18 +251,18 @@ function TVShowDetails() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <Tabs defaultValue="overview" className="tabs mt-6 sm:mt-8">
+          <Tabs defaultValue="overview" className="tabs w-full mt-6 sm:mt-8">
             <TabsList className="w-full sm:w-[460px] h-auto">
-              <TabsTrigger value="overview" className="w-full  text-base">
+              <TabsTrigger value="overview" className="flex-1  text-base">
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="cast" className="w-full text-base">
+              <TabsTrigger value="cast" className="flex-1 text-base">
                 Cast
               </TabsTrigger>
-              <TabsTrigger value="trailers" className="w-full text-base">
+              <TabsTrigger value="trailers" className="flex-1 text-base">
                 Trailers
               </TabsTrigger>
-              <TabsTrigger value="watch" className="text-base w-full">
+              <TabsTrigger value="watch" className="text-base flex-1">
                 Watch
               </TabsTrigger>
             </TabsList>
