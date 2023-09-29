@@ -16,14 +16,6 @@ function RouteHeader() {
     setCategory("movie");
   };
 
-  useEffect(() => {
-    if (pathname.includes("movies")) {
-      setCategory("movie");
-    } else if (pathname.includes("tv")) {
-      setCategory("tv");
-    }
-  }, [pathname]);
-
   return (
     <header className="">
       <ul className="flex gap-4  text-gray-light text-md sm:text-base">

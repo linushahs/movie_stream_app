@@ -60,10 +60,13 @@ function MoviesContainer() {
         {/* Trending movies section starts here ---------------->  */}
         <div className="mt-6 text-white w-full overflow-hidden">
           <header className="mb-4 flex justify-between items-center">
-            <h3>Trending {category === "movie" ? "Movies" : "TV Shows"}</h3>
+            <h3 className="text-lg">
+              Trending {category === "movie" ? "Movies" : "TV Shows"}
+            </h3>
             <Pagination
               totalItems={trendingMovies.length}
               setPagination={setPagination}
+              sectionType="trending"
             />
           </header>
           <main className="movie-container">

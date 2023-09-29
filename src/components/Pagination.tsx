@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 interface PaginationProps {
   totalItems: number;
   setPagination: (obj: any) => void;
+  sectionType?: string;
 }
 
-function Pagination({ totalItems, setPagination }: PaginationProps) {
+function Pagination({
+  totalItems,
+  setPagination,
+  sectionType,
+}: PaginationProps) {
   const [pageNo, setPageNo] = useState(1);
   const btnStyle = {
     nextBtnStyle: totalItems <= pageNo * 10 ? "disabled" : "default",
@@ -36,7 +41,12 @@ function Pagination({ totalItems, setPagination }: PaginationProps) {
   }, [pageNo]);
 
   return (
-    <div className="hidden md:flex justify-end gap-2 text-white">
+    <div
+      className={twMerge(
+        "hidden md:flex justify-end gap-2 text-white",
+        sectionType === "trending" && "flex"
+      )}
+    >
       <button
         onClick={goToPreviousPage}
         className={twMerge(
