@@ -7,7 +7,7 @@ export default function MovieDetailsLoading() {
 
       {/* Details section ------------>  */}
       <div className="dark mt-6 text-white flex flex-col lg:flex-row items-start gap-4 lg:gap-6">
-        <Skeleton className="w-full aspect-video lg:aspect-[3/4] lg:w-[300px] lg:h-[450px] rounded-xl" />
+        <Skeleton className="w-full aspect-video lg:aspect-[3/4] lg:w-[330px] lg:h-[450px] rounded-xl" />
 
         <article className="w-full">
           <div className="flex gap-3 items-center">
@@ -18,7 +18,7 @@ export default function MovieDetailsLoading() {
 
           {/* tabs section ----------->  */}
           {/* Overview , cast tabs ---------> */}
-          <div className="w-full flex gap-4 mt-6">
+          <div className="w-full sm:w-[460px] flex gap-4 mt-6">
             <Skeleton className="flex-1 h-8" />
             <Skeleton className="flex-1 h-8" />
             <Skeleton className="flex-1 h-8" />

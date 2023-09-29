@@ -101,7 +101,8 @@ html {
   font-family: "Inclusive Sans", sans-serif;
 }
 
-.swiper {
+.swiper,
+.s-skeleton {
   position: relative !important;
   margin-left: 0 !important;
   width: 100% !important;
@@ -134,7 +135,8 @@ html {
 }
 
 @media screen and (min-width: 1300px) {
-  .swiper {
+  .swiper,
+  .s-skeleton {
     width: calc(100vw - 230px - 360px) !important;
   }
 }

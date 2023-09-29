@@ -40,7 +40,7 @@ function TVShowDetails() {
   const [starringCast, setStarringCast] = useState([]);
   const [createdBy, setCreatedBy] = useState([]);
   const [seasonDetails, setSeasonDetails] = useState<any>();
-  const [isSeasonEpisodeLoading, setIsSeasonEpisodeLoading] = useState(false);
+  const [isSeasonEpisodeLoading, setIsSeasonEpisodeLoading] = useState(true);
   const [topCast, setTopCast] = useState([]);
   const [watchProviders, setWatchProviders] = useState<any>({});
   const { tvId } = useParams();
@@ -213,19 +213,21 @@ function TVShowDetails() {
           src={`https://image.tmdb.org/t/p/original/${tvShowDetails.poster_path}`}
           alt="poster"
           width={330}
-          className="hidden lg:block rounded-xl aspect-[2/3]"
+          className="hidden w-[330px] lg:block rounded-xl aspect-[2/3]"
           loading="lazy"
         />
 
-        <LazyLoadImage
-          src={`https://image.tmdb.org/t/p/original/${tvShowDetails.backdrop_path}`}
-          alt="poster"
-          width={330}
-          className="w-full rounded-xl aspect-video lg:hidden"
-          loading="lazy"
-        />
+        <div className="lg:hidden w-full">
+          <LazyLoadImage
+            src={`https://image.tmdb.org/t/p/original/${tvShowDetails.backdrop_path}`}
+            alt="poster"
+            width={330}
+            className="w-full rounded-xl aspect-video "
+            loading="lazy"
+          />
+        </div>
 
-        <article className="w-full">
+        <article className="flex-1">
           <h2 className="flex items-center text-2xl sm:text-3xl ">
             {tvShowDetails.name || tvShowDetails.title}
             <span className=" inline-flex items-center gap-1 text-sm ml-2 px-2 py-1 bg-dark rounded-md font-medium">
