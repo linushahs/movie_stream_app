@@ -36,7 +36,7 @@ function Pagination({ totalItems, setPagination }: PaginationProps) {
   }, [pageNo]);
 
   return (
-    <div className="hidden sm:flex justify-end gap-2 text-white">
+    <div className="hidden md:flex justify-end gap-2 text-white">
       <button
         onClick={goToPreviousPage}
         className={twMerge(
