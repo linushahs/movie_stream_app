@@ -346,7 +346,7 @@ function TVShowDetails() {
                 </>
               )}
             </TabsContent>
-            <TabsContent value="watch" className="w-[calc(100vw-42px)]">
+            <TabsContent value="watch" className="w-[calc(100vw-24px)]">
               {watchProviders ? (
                 <WatchProvider watchProviders={watchProviders} />
               ) : (
