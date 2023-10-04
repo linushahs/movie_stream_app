@@ -38,7 +38,7 @@ function SliderItemModal({ videoId }: { videoId: string }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-[calc(100vw-60px)] aspect-video md:w-[600px] transform rounded-lg text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-[calc(100vw-60px)] aspect-video md:w-[600px] xl:w-[800px] transform rounded-lg text-left align-middle shadow-xl transition-all">
                 <button
                   onClick={() => setIsOpen(false)}
                   className="text-gray-200 border border-gray-500 p-2 rounded-full absolute right-0 -top-12 md:-top-12 md:-right-12"
