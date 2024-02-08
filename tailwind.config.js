@@ -23,6 +23,11 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        movieCardGradient:
+          "radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 1) 0%, rgba(0, 0, 0, 5) 100%)",
+      },
+
       gridTemplateColumns: {
         search: "repeat(3, minmax(100px, 1fr))",
       },

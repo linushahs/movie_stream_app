@@ -7,5 +7,5 @@ export const firebaseConfig = {
   storageBucket: "peamon-1f987.appspot.com",
   messagingSenderId: "965899116034",
   appId: "1:965899116034:web:dd1a00a05587e0f02c111b",
-  measurementId: "G-397DTTHN8X",
+  measurementId: "G-397DTTHN8X"
 };

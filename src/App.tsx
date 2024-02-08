@@ -10,7 +10,7 @@ function App() {
       <Outlet />
       <Toaster />
       <Sidebar />
-    </section>
+          </section>
   );
 }
 

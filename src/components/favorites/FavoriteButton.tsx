@@ -32,6 +32,7 @@ function FavoriteButton({ id, movie }: FavoriteButtonProps) {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.stopPropagation();
+    
     if (!uid) {
       toast({
         title: "Please signin first",

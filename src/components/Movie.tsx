@@ -29,9 +29,9 @@ function Movie({ id, poster_path, title, rating, release_date }: MovieProps) {
   return (
     <div
       onClick={handleNavigation}
-      className="relative flex flex-col gap-2 cursor-pointer w-full"
+      className="relative flex flex-col gap-2 cursor-pointer w-full "
     >
-      <div className="w-full aspect-[3/4] rounded-lg overflow-hidden">
+      <div className="w-full aspect-[3/4] rounded-lg overflow-hidden ">
         <LazyLoadImage
           src={img_path}
           alt="image"

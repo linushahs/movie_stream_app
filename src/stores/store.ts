@@ -19,11 +19,11 @@ export type UserProps = {
 
 export const userDataState = atom({
   key: "userData",
-  default: <UserProps>{
+  default: JSON.parse(localStorage.getItem("user") as string) || {
     uid: "",
     name: "",
     email: "",
-    photoURL: "",
+    photoURL: ""
   },
 });
 

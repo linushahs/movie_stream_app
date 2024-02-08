@@ -15,6 +15,7 @@ function SignInWithGoogle() {
         const { displayName, email, photoURL, uid } = result.user;
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential?.accessToken;
+        
         if (displayName && token && email && photoURL) {
           const user = {
             uid,
